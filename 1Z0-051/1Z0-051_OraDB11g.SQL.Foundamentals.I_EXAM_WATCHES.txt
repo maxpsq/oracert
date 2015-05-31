@@ -2,8 +2,14 @@
 EXAM WATCHES
 
 ** Read this paper before giving your exam **
+** Furthermore, read all the CERTIFICATION SUMMARY sections at the end of each chapter. **
 
+CH. 2
 A common technique employed by some exam question designers tests attention to detail.A single missing punctuation mark like a semicolon may make the difference between a correct answer and an incorrect one. Incorrect spelling of object names further tests attention to detail. You may be asked to choose the correct statement that queries the REGIONS table. One of the options may appear correct but references the REGION table. This misspelling can lead to an incorrect statement being chosen.
 
 
-Furthermore, read all the CERTIFICATION SUMMARY sections at the end of each chapter
+CH. 3
+
+Conditional clauses compare two terms using comparison operators. It is important to understand the data types of the terms involved so they can be enclosed in single quotes, if necessary. A common mistake is to assume that a WHERE clause is syntactically correct, when in fact, it is missing quotation marks that delimit character or date literals. Another common oversight is not being aware that the terms to the left and right of the comparison operator in a conditional clause may be expressions, columns, or literal values. Both these concepts may be tested in the exam.
+
+

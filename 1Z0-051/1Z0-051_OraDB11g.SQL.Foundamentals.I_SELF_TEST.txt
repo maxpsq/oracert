@@ -1,5 +1,8 @@
 SELF TEST
 
+==============================================================================================
+ CHAPTER 2
+==============================================================================================
 1. Which query creates a projection of the DEPARTMENT_NAME and LOCATION_ID columns from the DEPARTMENTS table? (Choose the best answer.)
  A. SELECT DISTINCT DEPARTMENT_NAME, LOCATION_ID FROM DEPARTMENTS;
 *B. SELECT DEPARTMENT_NAME, LOCATION_ID FROM DEPARTMENTS;
@@ -85,7 +88,7 @@ SELECT ORDER_ID, ORDER_DATE, ORDER_TOTAL
 
 4. The PRODUCT_INFORMATION table stores data regarding the products available for sale in a fictitious IT hardware store. Produce a set of results that will be useful for a sales person. Extract product information in the format <PRODUCT_NAME> with code: <PRODUCT_ ID> has status of: <PRODUCT_STATUS>. Alias the expression as “Product.” The results should provide the LIST_PRICE, the MIN_PRICE, the difference between LIST_PRICE, and MIN_PRICE aliased as “Max Actual Savings,” along with an additional expression that takes the difference between LIST_PRICE and MIN_PRICE and divides it by the LIST_PRICE and then multiplies the total by 100. This last expression should be aliased as “Max Discount %.”
 
-SELECT PRODUCT_NAME ||' with code: '||PRODUCT_ ID||' has status of: '||PRODUCT_STATUS as "Product",
+SELECT PRODUCT_NAME ||' with code: '||PRODUCT_ID||' has status of: '||PRODUCT_STATUS as "Product",
        LIST_PRICE,
        MIN_PRICE,
        LIST_PRICE - MIN_PRICE as "Max Actual Savings",
@@ -95,4 +98,12 @@ SELECT PRODUCT_NAME ||' with code: '||PRODUCT_ ID||' has status of: '||PRODUCT_S
 5. Calculate the surface area of the Earth using the DUAL table. Alias this expression as “Earth's Area.” The formula for calculating the area of a sphere is: 4πr2. Assume, for this example, that the earth is a simple sphere with a radius of 3,958.759 miles and that π is 22/7.
 
  SELECT 4 * (22/7) * 3,958.759 * 3,958.759 AS "Earth's Area." from DUAL ;
+
+ This calculation approximates that planet Earth’s surface area is 197016572.595304 square miles.
+
+
+
+==============================================================================================
+ CHAPTER 3
+==============================================================================================
 
