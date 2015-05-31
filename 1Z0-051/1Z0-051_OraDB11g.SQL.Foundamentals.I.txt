@@ -432,26 +432,217 @@ DATE format: a literal with this format '01-JAN-88' implicitly uses "RR" year 20
 
 "YY" always refer to the current century
 
-  -- 1950/2050
+  /* 1950/2050 */
   select to_char(to_date('01-JAN-50','DD-MON-RR'),'YYYY-MM-DD') as RR
        , to_char(to_date('01-JAN-50','DD-MON-YY'),'YYYY-MM-DD') as YY
   from dual;
   
-  -- 1999/2099
+  /* 1999/2099 */
   select to_char(to_date('01-JAN-99','DD-MON-RR'),'YYYY-MM-DD') as RR
        , to_char(to_date('01-JAN-99','DD-MON-YY'),'YYYY-MM-DD') as YY
   from dual;
   
-  -- 2012/2012
+  /* 2012/2012 */
   select to_char(to_date('01-JAN-12','DD-MON-RR'),'YYYY-MM-DD') as RR
        , to_char(to_date('01-JAN-12','DD-MON-YY'),'YYYY-MM-DD') as YY
   from dual;
 
-Equality	=	equals
-Inequality	>	greather then
-Inequality	<	less then
-Inequality	>=	greather then or equal to
-Inequality	<=	less then or equal to
-Range		in ()	in a given set
-Between		between enclosed in a given range (including range limits)
+Comparison
+------------------
+Equality	=			equals
+Inequality	!=			NOT equals
+Inequality	<>			NOT equals
+Inequality	>			greather then
+Inequality	<			less then
+Inequality	>=			greather then or equal to
+Inequality	<=			less then or equal to
+Range		in ()		in a given set 
+Between		between and	enclosed in a given range (including range limits)
 IS NULL		IS NULL
+			LIKE		pattern matching
+
+Comparison in CHARS
+-------------------------
+Numeric ineqiality is intuitive. The comparison of characters and date is more complex.
+In character comparison all the characters on both sides are converted in to a numeric representation based on
+1. the DB character set
+2. the National Language Support (NLS) settings
+
+SELECT last_name FROM employees WHERE last_name < 'King';
+
+K+i+n+g = 75+105+110+103 = 393
+
+For each row in the employee table the value in last_name is similarly coverted and all columns whose value is less then 393 are selected.
+
+Comparing number and characters on Oracle inolve the same process. The only difference is that characters are implicitly converted to numeric values depending on some database settings.
+
+Inequality comparison on DATEs follow a simila process. Oracle stores dates internally in a numeric format.
+
+SELECT last_name 
+  FROM employees
+ WHERE hire_date < '01-JAN-2000';
+
+a LITERAL is value of any type
+1.  8
+2.  'hello'
+4.  '20-JAN-2011'
+5.  763.762
+
+BETWEEN operator  [ column BETWEEN lower AND upper ]
+1. it's equivalent to a ( column >= lower AND column <= upper )
+2. Operands can be 
+    - literal values
+    - column values
+    - expression
+
+IN operator   [ column IN (v1, v2, v3, .., vN) ]
+1. it's equivalent to a series of `OR` conditions: (column = v1 OR column = v2 OR .. OR column = vN)
+2. there's no limit to elements in the set
+
+
+LIKE operator  [ column LIKE '%abc_e%' ]
+1. pattern matching on characters
+2. wildcards represent any character
+3. % wildcard means zero or more characters
+4. _ wildcard means one character
+5. column LIKE '%' returns every NOT NULL column value
+6. Pattern matching wouldn't be possible without the wildcards symbols
+7. wildcards canbe mixed and use multiple times in the same pattern
+8. column LIKE 'SA\_%' escape '\'  or even  column LIKE 'SA$_%' escape '$'
+9. works on NUMERIC data through implicit cast (if possible): WHERE salary LIKE '%80%'
+
+IS NULL operator [ column IS NULL ]
+1.
+
+Boolean operators
+-----------------
+AND ( x AND y )
+If two conditions are joined wit a AND operator then a row is tested consequtively for conformance to both conditions before being retrieved.
+The more AND conditions you add, the more restrictive your query becomes.
+
+AND truth table
+X	Y	Result
+F	F	FALSE
+F	T	FALSE
+F	N	NULL
+T	F	FALSE
+T	T	TRUE
+T	N	NULL
+N	F	NULL
+N	T	NULL
+N	N	NULL
+
+
+OR ( x OR y )
+If two conditions are joined wit a OR operator then a row is tested consequtively for conformance to either or both conditions before being retrieved.
+The more OR conditions you add, the less restrictive your query becomes.
+
+NOT ( NOT x)
+truth table:
+True False
+False true
+NULL NULL
+
+Boolean operators precedence rules
+----------------------------------
+
+AND take precedence on OR
+NOT just nagate the result so it is neutral to precedence rules
+
+Order by clause
+---------------
+is always the last clause in a SELECT statement
+
+ORDER BY {cols(s) | expr | numeric_pos} [ASC|DESC] [NULL FIRST| LAST]
+
+default is ASCENDING 
+on ASCENDING  > default is NULL LAST
+on DESCENDING > default is NULL FIRST
+
+When "order by" is not specified, the same rows are returned in random order and the order may change running the same query at different times.
+
+Positional sorting uses the position of the column (from left to right) instead of the column name.
+
+composite sorting is possible specifying columns mixing column name and position
+
+select job_id, last_name, salary, hire_date
+  from employees
+ where job_id in ('SA_REP','MK_MAN')
+ order by job_id, desc, last_name, 3 desc ;
+
+It is also possible to specify a ** alias instad of the column name **.
+
+AMPERSAND SUBSTITUTION
+----------------------
+*EVERY* element in a SELECT statement may be subsituted to facilitate reuse.
+
+Substitution variables
+----------------------
+they are placeholders.
+
+&variable (must be enclosed in single quotes foe character and dates '&variable')
+
+Oracle Server
+- processes teh statment
+- notices a substitution variable
+- attempts to resolve the substitution variables in 2 ways:
+	1. First, checks if the variable is defined in the user session (see DEFINE)
+	2. if not defined, the user process prompts for a value to be entered for substitution
+- once the value is submitted, the statement is complete and is executed.
+
+being resolved at runtime, "ampersand substitution" is also known as "runtime substitution" or "runtime binding"
+
+NOTICE the differences:
+
+SELECT employee_id
+  from EMPLOYEES
+ where last_name = &LASTNAME ;  // enter 'King' at prompt for substitution
+    
+SELECT employee_id
+  from EMPLOYEES
+ where last_name = '&LASTNAME' ;  // enter King at prompt for substitution
+
+DOUBLE AMPERSAND SUBSTITUTION
+-----------------------------
+
+select first_name, last_name
+from employees
+where last_name like '%&SEARCH%'
+  or first_name like '%&SEARCH%'
+
+In this query you'll be promped twice for entering the same variable. This in inefficient:
+1. typografical error would make the search criteria different
+2. Oracle does not verify the values you entered are the same
+
+when a variable occoures more then once in your SQL script, you may use the ** DOUBLE AMPERSAND SUBSTITUTION **
+When Oracle Server encounters a double ampersand variable, a session value is defined for that variable and you are not promped to re-enter the value in subsequent occurrences. All subsequent run of the script woun't require to re-enter the values because they will be taken from the session.
+To remove the variable from session, you must use the UNDEFINE command .
+
+Queries with ampersand substitution may potentially benefit from Oracle automatic tuning.
+
+Select &&a, &&a FROM DUAL; // prompts once
+Select &&b,  &b FROM DUAL; // prompts once
+Select  &c, &&c FROM DUAL; // prompts twice
+
+It is also possible to use ampersand substitution in **column substitution**
+
+substituting expressions and text
+Almost any element may be substituted at runtime. The constraint is that Oracle requires at leas the firs word to be static.
+
+SELECT &rest_of_statement ;
+
+Session variables are created when they are initially referenced in SQL statements using DOUBLE AMPERSAND SUBSTITUTION. It won't happen using (SINGLE) AMPERSAND SUBSTITUTION. They'll exist untile the end of the session or untile they are UNDEFINED.
+
+UNDEFINE variable;
+
+DEFINE;		// lists all the session variables
+DEFINE variable=value;	// creates a session variable named "variable" containing "value"
+
+in SQL*Plus there are predefined variables prefixed with underscore (_). this is NOT a special character. You can define your variables prefixed with underscore.
+
+Ampersand substitution may be disabled or anabled in SQL*Plus
+
+SET define off
+Select 'Coda & SID' from dual ;
+SET define on
+

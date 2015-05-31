@@ -26,6 +26,9 @@ My goal
 	** Pass the exam **
 	> Oracle Database 11g: Advanced PL/SQL 1Z0-146
 
-- DBA (?)
 
 http://www.gocertify.com/articles/oracle-sql-certification-1z0-051-or-1z0-047.html
+
+
+Prep test at
+http://www.iheadgo.com
