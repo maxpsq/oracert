@@ -1,0 +1,9 @@
+
+EXAM WATCHES
+
+** Read this paper before giving your exam **
+
+A common technique employed by some exam question designers tests attention to detail.A single missing punctuation mark like a semicolon may make the difference between a correct answer and an incorrect one. Incorrect spelling of object names further tests attention to detail. You may be asked to choose the correct statement that queries the REGIONS table. One of the options may appear correct but references the REGION table. This misspelling can lead to an incorrect statement being chosen.
+
+
+Furthermore, read all the CERTIFICATION SUMMARY sections at the end of each chapter

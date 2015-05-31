@@ -1,0 +1,419 @@
+*****************************************************************
+CHAPTER 1
+*****************************************************************
+
+Ch. 1.02 ~ Position the ServerTechnologies
+
+Oracle DB is a 2 tier technology (client-server)
+1) Client tier (creates SQL statements)
+2) Server tier
+
+Client tier is made by
+1) a user (typically meaning a person)
+2) a user process (client side application)
+
+Server tier is made by
+1) one or more Server Processes (that executes SQL statements)
+2) one or more Database Instance (Oracle Instance)
+3) a Database (Oracle DB)
+
+a ** Server Process ** executes SQL
+a ** Oracle Instance ** is a set of processes and memory structures that can be started and stopped and whose existence is temporary. Oracle instances manage access to the DB. It's not possible to direct access the DB without going through a Oracle Instance.
+
+a ** Oracle Server ** is made by one or more Oracle Instances + a Oracle Database
+
+for a **User process** on the client ther is a ** Server process ** on the server. The communications between user process and server process makes up a ** session **
+Client tier and Server tier are phisically connected by a network. 
+The communication protocol used by user and server prcesses is proprietary ** Oralce Net ** [protocol]
+
+User processes and related server processes can be started or shut down on demand in order to create or terminate sessions.
+
+Schema:
+User -> User process -> Server Process -> Oracle Instance -> Oracle DB
+
+Tools like SQL*Plus and SQL Developer can be considered ** user processes **
+
+The simplest form of Oracle Database is made by ONE Oracle Instance accessing a Oracle Database.
+
+In case of a Real Application Cluster (RAC) system, we'll have a Oracle Batabase opened by MANY Oracle Instances.
+The ability to add dynamically more instances running on more nodes to a database is a major part of the database’s contribution to the Grid.
+
+
+** The Oracle Application Server **
+AS replaces client side software. It runs applications locally that are displayed to end users in their windows browsers. The application makes use of data in one or more ** Database Servers **
+Applications written in Java should conform to the J2EE (Java 2 Enterprise Edition) standard, which defines how such applications should be packaged and deployed.
+
+
+
+
+Ch. 1.02 ~ UNDERSTANDING RELATIONAL STRUCTURES
+
+Table (aka entity / relation)
+Row (aka record / tuple)
+Column (aka attribute / field)
+
+The number of rows in a table is also called "the cardinality of a tuple"
+
+
+Data Normalization
+------------------------
+The process of modeling data into relational tables is known as normalization. There are commonly said to be three levels of normalization: the first, second, and third normal forms. There are higher levels of normalization: fourth and fifth normal forms are well defined, but any normal data analyst will not need to be concerned with them. It is possible for a SQL application to address un-normalized data, but this will usually be inefficient as that is not what the language is designed to do. In most cases, data stored in a relational database and accessed with SQL should be normalized to the third normal form.
+
+Graphical conventions for primary and foreign key
+primary keys (#)
+foreign keys (\)
+optional column (o)
+mandatory column (*)
+
+Ch. 1.03 ~ SQL Commands
+These are the ** 16 SQL commands **, separated into commonly used groups:
+
+The ** Data Manipulation Language (DML) ** commands:
+	■ SELECT (*)
+	■ INSERT
+	■ UPDATE
+	■ DELETE
+	■ MERGE
+
+(*) According to all the docs, SELECT is a DML statement. In practice, no one includes it when they refer to DML—they talk about it as though it were a language in its own right (it almost is) and use DML to mean only the commands that change data.
+
+The ** Data Definition Language (DDL) ** commands:
+	■ CREATE
+	■ ALTER
+	■ DROP
+	■ RENAME
+	■ TRUNCATE
+	■ COMMENT
+
+The ** Data Control Language (DCL) ** commands:
+	■ GRANT
+	■ REVOKE
+
+The ** Transaction Control Language (TCL) ** commands:
+	■ COMMIT
+	■ ROLLBACK
+	■ SAVEPOINT
+
+DML (5 commands)
+DDL (6 commands)
+DCL (2 commands)
+TCL (3 commands)
+
+
+3GLs (procedural) languages manipulate rows one at the time.
+SQL is a "set oriented" language meaning the action of one of its commands affects groups of rows in one statement. SQL is only able to access data, so it is not an application development language but is invoked by such languages when they need to access data.
+Set oriented languages are more efficient then procedural languages as regard both development and execution.
+
+Where SQL fails to provide a complete solution is that it is purely a data access language. Most applications will need procedural constructs, such as flow control: conditional branching and iteration. In this case PL/SQL gives the fetures SQL is missing.
+
+
+====================================================
+Ch. 1.04 ~ Client Tools
+====================================================
+
+SQL*Plus (on Linux)
+-----------------------
+Located in /u01/app/oracle/product/db_1/bin/sqlplus
+
+There are some environment variables that will need to be set. These are
+ORACLE_HOME			Oracle software installation: executables and configuration files
+PATH 				must include the ORACLE_HOME directory
+LD_LIBRARY_PATH		should include the `bin` directory in ORACLE_HOME (optional)
+
+Connecting to SQL*Plus giving credentials
+user/password@OracleNetID	is a Oracle Net Identifier
+
+
+SQL*Plus (on Windows)
+-----------------------
+SQL*Plus historically had come in two flavours on Windows
+	sqlplus.exe		is the character version
+	sqlplusw.exe	was the graphical version (no longer shipped since 11g)
+
+The /NOLOG switch (`sqlplus /nolog`) prevents the terminal from immediately presenting a login prompt (you'll need to run a `connect` command providing valid credentials to login.
+
+The tests of the environment and the need to set the variables if they are not correct, previously described for a Linux installation, are not usually necessary on a Windows installation. This is because the variables are set in the Windows Registry by the Oracle Universal Installer when the software is installed. If SQL*Plus does not launch successfully, check the Registry variables
+Check Windows regedit.exe
+	HKEY_LOCAL_MACHINE
+	SOFTWARE
+	ORACLE
+	KEY_OraDb11g_home1
+Note the values of the Registry variables ORACLE_HOME and ORACLE_ HOME_NAME. These will relate to location of the sqlplus.exe executable and the Start menu navigation path to reach the shortcut that will launch it.
+
+
+More on SQL*Plus
+--------------------
+sqlplus / as sysdba
+	to connect to the DB as sysdba. It will work only if you are on the same machine where the Oralce Server is running
+
+
+SQL> @?/demo/schema/human_resources/hr_main.sql
+	"@" symbol will run a SQL script. The "?" character is a variable that SQL*Plus will expand to ORACHE_HOME
+	On Windows it's teh same but back slashes are required @?\demo\schema\human_resources\hr_main.sql
+
+show users
+	lists all the users i the DB
+
+
+Creating and Testing a Database Connection
+-------------------------------------------
+SQL*Plus does not have any way of storing database connection details. You must enter user/password each time.
+SQL*Plus needs to know
+	1. Who you are
+	2. Where the database is
+** Notice there are variations depending on site-specific security facilities **
+There are 2 forms of connect identifier
+	1. Using a Alias (requires the database administrator to configure a name resolution mechanism)
+	2. entering the full details(requires the user to know all the details to connect the DB Server)
+
+	sqlplus scott/tiger@orcl		(`orcl` is an alias)
+	sqlplus scott/tiger@linsrv1.bplc.co.za:1521/orcl.bplc.com	(full details)
+
+The usual techniques are to store this info in a local file named `tnsnames.ora` or to contact an LDAP directory.
+
+The connection details nedded are
+	1. host name of the machine on which the DB is running (linsrv1.bplc.co.za)
+	2. TCP port on which the Oracle Net Listener can be contacted (1521)
+	3. The database service to which the user wishes the database listener to connect him (orcl.bplc.com)
+
+Common connection errors are:
+
+	ORA-1254: TNS: could not resolve the connect identifier specified
+	The given alias cannot be resolved into database connection details by the Transparent Network Substrate (TNS) that is a layer of Oracle Net. In this case the user gave a wrong alias.
+
+	ORA-12541: TNS:no listener
+	This indicates that the connect identifier has resolved correctly into the address of a database listener but
+	A) the listener is not running
+	B) the address resolution is faulty and is sending SQL*Plus to the wrong address
+
+	ORA-12514: TNS:listener does not currently know of service requested in connect descriptor
+	This error is generated by the database listener. SQL*Plus has found the listener with no problems, but the listener cannot make the onward connection to the database service. The most likely reason for this is that the database instance has not been started.
+
+	ORA-01017: invalid username/password; logon denied
+	Invalid credentials provided by the user (it can be either user or password or even both)
+	Notice if you get this message you have connected the database
+
+
+SQL Developer
+---------------------
+Graphical IDE written in Java require JRE
+sqldeveloper.exe (WIN) / sqldeveloper.sh (Linux)
+
+Main menu
+■ File A normal Windows-like file menu, from which one can save work and exit from the tool.
+■ Edit A normal Windows-like edit menu, from which one can undo, redo, copy, paste, find, and so on.
+■ View The options for customizing the SQL Developer user interface.
+■ Navigate Facilities for moving between panes and for moving around code
+that is being edited.
+■ Run Forces execution of the SQL statements, SQL script, or PL/SQL block that is being worked on.
+■ Debug Rather than running a whole block of code, steps through it line by line with breakpoints.
+■ Source Options for use when writing SQL and PL/SQL code, such as keyword completion and automatic indenting.
+■ Tools Links to external programs, including SQL*Plus.
+■ Migrate Tools for converting applications designed for third-party databases
+(Microsoft Access, SQL Server, and MySQL) to the Oracle environment.
+■ Help It’s pretty good.
+
+
+========================================================
+1.05 ~ Create the Demonstration Schemas
+========================================================
+
+Users and Schemas
+-----------------
+a ** user ** is a person who can login to the Database, a ** schema ** is the set of objects owned by a user. The two terms can often be used interchangeably, as there is a one-to-one relationship between users and schemas.
+Note that while there is in fact a CREATE SCHEMA command, this does not actually create a schema, it is only a quick way of creating objects in a schema. 
+
+*** NOTICE ***
+A schema is initially created empty, when a user is created with the CREATE USER command.
+
+The unique identifier for any schema object is the username, followed by the object name (USER.OBJECT). Objects with the same name cannot reside in the same schema but they can resides in different schemas. For accessing a object from ina different schema is necessary to use the unique identifier.
+
+** WARNING **
+The demonstration schemas should not exist in production databases. It is not good, for security reasons, to have unnecessary schemas in a database that have well known usernames, capabilities, and (possibly) passwords.
+** WARNING **
+
+
+========================================================
+SELF TEST
+========================================================
+
+Question 9
+
+Where may the demonstration schemas be created? (Choose the best answer.)
+A. The demonstration schemas must be created in a demonstration database.
+B. The demonstration schemas cannot be created in a production database.
+C. The demonstration schemas can be created in any database.
+D. The demonstration schemas can be created in any database if the demonstration user is created first.
+
+Answer 9
+
+✓ C. The demonstration schemas can be created in any database, either at database creation time or by running scripts later.
+x A, B, D. A and B are wrong because, while they may be good practice, they are not a technical requirement. D is wrong because it fails to understand that a schema can only be (and always is) created with a user.
+
+
+*****************************************************************
+CHAPTER 2
+*****************************************************************
+
+table data are the data containd in table rows.
+table metadata are information about a table structure, size, ecc... containd in the * data dictionary *
+
+DESC[RIBE] <SCHEMA>.tablename
+
+all schemas have access to a special table called DUAL, which belongs to the SYS schema. This table can be structurally described with the command: DESCRIBE SYS.DUAL
+
+
+DATA TYPES
+--------------------
+NUMBER(p,s) precision, scale
+This means that the values stored in this column can have at most "p" digits. Of these "p" digits, "s" must be to the right of the decimal point.
+
+	Number(8,2)
+	 999999.99	OK	(6+2)
+	 999999.9 	OK	(6+1)
+	9999999.9 	KO	(7+1)
+
+VARCHAR2(length) variable length alphanumeric character data (up to "length")
+
+	VARCHAR2(20)
+	means it can store employees’ names of up to 20 characters
+
+CHAR(size) fixed-length columns where row space is preallocated to contain a fixed number of characters regardless
+of its contents (inefficient for storage)
+
+DATE
+stores a moment in time with precision including day, month, year, hours, minutes, and seconds
+
+TIMESTAMP(f)
+same as DATE but is capable of storinf fractional seconds
+
+BLOB (Binary Large Object)
+
+CLOB (Character Large Object)
+
+NULL meand "No Data". blank spaces DO NOT count as NULL since they're present inthe row.
+
+Capabilities of the SELECT Statement
+-------------------------------------
+Relational database tables are built on a strong mathematical foundation called relational theory. In this theory, relations, or tables, are operated on by a formal language called relational algebra. SQL is a commercial interpretation of the relational algebraic constructs. Three concepts from relational theory encompass the capability of the SELECT statement: projection, selection, and joining.
+
+	Projection: refers to the restriction of attributes (columns) selected from a relation or table.
+	Selection: refers to the restriction of the tuples or rows selected from a relation (table).
+	Joining: refers to the interaction of tables with each other in a query.
+
+In its most primitive form, the SELECT statement supports the projection of columns and the creation of arithmetic, character, and date expressions. It also facilitates the elimination of duplicate values from the results set.
+
+	SELECT *|{[DISTINCT] column|expression [alias],...}
+	  FROM table;
+
+Use of the asterisk in a SELECT statement is sometimes referred to as a “blind” query because the exact columns to be fetched are not specified.
+
+Be careful, though, when using blind queries to select data from large tables. Executing a SELECT * FROM HUGE_TABLE; statement may cause performance issues if the table contains millions of rows of data.
+
+SQL*Plus always requires a statement terminator, and usually a semicolon is used. Individual statements in SQL scripts are commonly terminated by a line break and a forward slash on the next line, instead of a semicolon. You can create a SELECT statement, terminate it with a line break, include a forward slash to execute the statement, and save it in a script file. The script file can then be called from within SQL*Plus.
+
+
+Arithmetic operations precedence
+--------------------------------------
+
+If more than one operator with the same level of precedence is present in an expression, then these will be evaluated from left to right.
+
+Precedence level	Operator symbol		Operation
+Highest				()					Brackets or parentheses
+Medium				/					Division
+Medium				∗					Multiplication
+Lowest				−					Subtraction
+Lowest				+					Addition
+
+Example
+region_id * 100/5 + 20 / 10 − 5		region_id * 100/5 + 20 / (10 − 5)
+3 * 100 /5 + 20 / 10 − 5			3 * 100 / 5 + 20 / (10 − 5)
+300 / 5 + 20 / 10 − 5				3*100/5 + 20/5
+60 + 20/10 − 5						300/5 + 20/5
+60 + 2 − 5							60 + 20/5
+62 − 5=57							60 + 4 = 64
+
+
+Column aliasing
+--------------------
+Enclosing a alias in double quotes (") makes possible to
+	use spaces in alias name (multi-worded alias)
+	preserve case sensitivity
+typing a alias like mYalIAs will be displayed as MYALIAS when not enclosed in double quotes
+Notie also aliases may be precedeed by the keyword `AS` that improves readability.
+
+	Select column_name [AS] alias
+	Select column_name [AS] aLiAS
+	Select column_name [AS] "aLiAS"
+	Select column_name [AS] "my aLiAS"
+
+NOTICE:
+Failure to double quote a multiworded alias will raise an Oracle error. 
+Failure to double quote a single-word alias will result in the alias being returned in uppercase.
+
+
+DATA TYPES
+-----------
+The data types of the columns being queried determine how SQL*Plus and SQL Developer present their default data outputs. 
+	numeric		the column data is formatted to be RIGHT aligned
+	character	the column data is formatted to be LEFT aligned.
+	date		the column data is formatted to be LEFT aligned.
+
+
+Literals and the DUAL Table
+---------------------------
+Oracle chose the single quote characters as the special pair of symbols that enclose or wrap any other character literal. In case you need to write a quote ina string literal, you have two options:
+	1. doubling the single quotes in your string
+	2. uning the `alternative quote` operator q'delim' delim can be any single-byte or multibyte character or the four brackets: (round brackets), {curly braces}, [square brackets], or <angle brackets>
+
+
+	select 'Plural's have one quote too many' from dual;	ERROR
+	select 'Plural''s have one quote too many' from dual;	OK (doubling)
+
+	SQL> select q'<'Plural's can also be specified with alternate quote operators>' AS "q<>" from dual ;
+
+	q<>
+	--------------------------------------------------------------
+	'Plural's can also be specified with alternate quote operators
+
+	1 row selected
+
+
+	SQL> select q'['Even square brackets' [] can also be used for Plural's]' AS "q[]" from dual ;
+
+	q[]
+	-------------------------------------------------------
+	'Even square brackets' [] can also be used for Plural's
+
+	1 row selected
+	
+
+	SQL> select q'X'What about UPPER CASE X' Plural'sX' AS "qX" from dual ;
+
+	qX
+	----------------------------------
+	'What about UPPER CASE X' Plural's
+
+	1 row selected
+
+
+NULL Is Nothing
+----------------
+Both the number zero and a blank space are different from null since they occupy space. NULL refers to an absence of data. A row that contains a null value lacks data for that column. Null is formally defined as a value that is unavailable, unassigned, unknown, or inapplicable. The rules of engaging with null values need careful examination. Null is a placeholder in a nonmandatory column until some real data is stored in its place.
+
+Any ** arithmetic calculation ** with a NULL value always returns NULL. Even division by a null value results in null, unlike division by zero, which results in an error.
+
+The character concatenation operators ignore null. 
+
+	SQL> Select 'A' || NULL || 'B' from dual as "NullConcat";
+
+	NullConcat
+	----------
+	AB
+
+	1 row selected
+
+Foreign Keys and Nullable Columns
+---------------------------------
+Can the DEPARTMENT_ID column in the DEPARTMENTS table contain nulls? The answer is no. Oracle insists that any column that is a primary key is implicitly constrained to be mandatory.
+But what about implicit constraints on foreign key columns? This is a quandary for Oracle, since in order to remain flexible and cater to the widest audience, it cannot insist that columns related through referential integrity constraints must be mandatory. Further, not all situations demand this functionality.

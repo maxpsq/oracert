@@ -1,0 +1,31 @@
+GETTING CERTIFIED
+
+My goal
+
+1. Oracle Database SQL Certified Expert
+	** Requirements **
+	> None
+
+	** Pass the exam **
+	> 1Z0-047 Oracle Database SQL Expert
+
+2. Oracle PL/SQL Developer Certified Associate
+	** Requiremets **
+	> Oracle Database 12c: SQL Fundamentals 1Z0-061
+	> Oracle Database 11g: SQL Fundamentals I 1Z0-051
+	> Oracle Database SQL Expert 1Z0-047
+
+	** Pass one of this exams **
+	> Oracle Database 11g: Program with PL/SQL 1Z0-144
+	> Program with PL/SQL 1Z0-147
+
+2. Oracle PL/SQL Developer Certified Professional
+	** Requirements **
+	> Oracle PL/SQL Developer Certified Associate
+
+	** Pass the exam **
+	> Oracle Database 11g: Advanced PL/SQL 1Z0-146
+
+- DBA (?)
+
+http://www.gocertify.com/articles/oracle-sql-certification-1z0-051-or-1z0-047.html

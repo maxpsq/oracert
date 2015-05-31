@@ -1,0 +1,98 @@
+SELF TEST
+
+1. Which query creates a projection of the DEPARTMENT_NAME and LOCATION_ID columns from the DEPARTMENTS table? (Choose the best answer.)
+ A. SELECT DISTINCT DEPARTMENT_NAME, LOCATION_ID FROM DEPARTMENTS;
+*B. SELECT DEPARTMENT_NAME, LOCATION_ID FROM DEPARTMENTS;
+ C. SELECT DEPT_NAME, LOC_ID FROM DEPT;
+ D. SELECT DEPARTMENT_NAME AS “LOCATION_ID” FROM DEPARTMENTS;
+
+2. After describing the EMPLOYEES table, you discover that the SALARY column has a data type of NUMBER(8,2). Which SALARY value(s) will not be permitted in this column? (Choose all that apply.)
+*A. SALARY=12345678 
+ B. SALARY=123456.78 
+*C. SALARY=12345.678
+ D. SALARY=123456
+ E. SALARY=12.34
+
+3. After describing the JOB_HISTORY table, you discover that the START_DATE and END_ DATE columns have a data type of DATE. Consider the expression END_DATE-START_ DATE. (Choose two correct statements.)
+ A. A value of DATE data type is returned.
+*B. A value of type NUMBER is returned.
+ C. A value of type VARCHAR2 is returned.
+ D. The expression is invalid since arithmetic cannot be performed on columns with DATE data types.
+*E. The expression represents the days between the END_DATE and START_DATE less one day.
+
+4. The DEPARTMENTS table contains a DEPARTMENT_NAME column with data type VARCHAR2(30). (Choose two true statements about this column.)
+*A. This column can store character data up to a maximum of 30 characters.
+ B. This column must store character data that is at least 30 characters long.
+ C. The VARCHAR2 data type is replaced by the CHAR data type.
+*D. This column can store data in a column with data type VARCHAR2(50) provided that the contents are at most 30 characters long.
+
+5. Which statement reports on unique JOB_ID values from the EMPLOYEES table? (Choose all that apply.)
+ A. SELECT JOB_ID FROM EMPLOYEES;
+ B. SELECT UNIQUE JOB_ID FROM EMPLOYEES;
+ C. SELECT DISTINCT JOB_ID, EMPLOYEE_ID FROM EMPLOYEES;
+*D. SELECT DISTINCT JOB_ID FROM EMPLOYEES;
+
+6. Choose the two illegal statements. The two correct statements produce identical results. The two illegal statements will cause an error to be raised:
+ A. SELECT DEPARTMENT_ID|| ' represents the '|| DEPARTMENT_NAME||' Department' as "Department Info" FROM DEPARTMENTS;
+*B. SELECT DEPARTMENT_ID|| ' represents the || DEPARTMENT_NAME||' Department' as "Department Info" FROM DEPARTMENTS;
+ C. select department_id|| ' represents the '||department_name|| ' Department' "Department Info"
+from departments;
+*D. SELECT DEPARTMENT_ID represents the DEPARTMENT_NAME Department as "Department Info"
+FROM DEPARTMENTS;
+
+7. Which expressions do not return NULL values? (Choose all that apply.)
+ A. select ((10 + 20) * 50) + null from dual;
+*B. select 'this is a '||null||'test with nulls' from dual;
+ C. select null/0 from dual;
+*D. select null||'test'||null as “Test” from dual;
+
+8. Choose the correct syntax to return all columns and rows of data from the EMPLOYEES table.
+ A. select all from employees;
+ B. select employee_id, first_name, last_name, first_name, department_id from employees;
+ C. select % from employees;
+*D. select * from employees;
+ E. select *.* from employees;
+
+9. The following character literal expression is selected from the DUAL table: SELECT 'Coda''s favorite fetch toy is his orange ring' FROM DUAL; (Choose the result that is returned.)
+ A. An error would be returned due to the presence of two adjacent quotes
+*B. Coda's favorite fetch toy is his orange ring
+ C. Coda''s favorite fetch toy is his orange ring
+ D. 'Coda''s favorite fetch toy is his orange ring'
+
+10. There are four rows of data in the REGIONS table. Consider the following SQL statement: SELECT '6 * 6' “Area” FROM REGIONS;
+How many rows of results are returned and what value is returned by the Area column? (Choose the best answer.)
+ A. 1 row returned, Area column contains value 36
+ B. 4 rows returned, Area column contains value 36 for all 4 rows
+ C. 1 row returned, Area column contains value 6 * 6
+*D. 4 rows returned, Area column contains value 6 * 6 for all 4 rows
+ E. A syntax error is returned.
+
+LABS
+1. Obtain structural information for the PRODUCT_INFORMATION and ORDERS tables.
+
+	desc PRODUCT_INFORMATION ;
+	desc ORDERS ;
+
+2. Select the unique SALES_REP_ID values from the ORDERS table. How many different sales representatives have been assigned to orders in the ORDERS table?
+
+	SELECT DISTINCT SALES_REP_ID 
+	  from ORDERS ;
+
+3. Create a results set based on the ORDERS table that includes the ORDER_ID, ORDER_DATE, and ORDER_TOTAL columns. Notice how the ORDER_DATE output is formatted differently from the START_DATE and END_DATE columns in the HR.JOB_ID table.
+
+SELECT ORDER_ID, ORDER_DATE, ORDER_TOTAL 
+ from ORDERS ;
+
+4. The PRODUCT_INFORMATION table stores data regarding the products available for sale in a fictitious IT hardware store. Produce a set of results that will be useful for a sales person. Extract product information in the format <PRODUCT_NAME> with code: <PRODUCT_ ID> has status of: <PRODUCT_STATUS>. Alias the expression as “Product.” The results should provide the LIST_PRICE, the MIN_PRICE, the difference between LIST_PRICE, and MIN_PRICE aliased as “Max Actual Savings,” along with an additional expression that takes the difference between LIST_PRICE and MIN_PRICE and divides it by the LIST_PRICE and then multiplies the total by 100. This last expression should be aliased as “Max Discount %.”
+
+SELECT PRODUCT_NAME ||' with code: '||PRODUCT_ ID||' has status of: '||PRODUCT_STATUS as "Product",
+       LIST_PRICE,
+       MIN_PRICE,
+       LIST_PRICE - MIN_PRICE as "Max Actual Savings",
+       (LIST_PRICE - MIN_PRICE) / LIST_PRICE * 100 as "Max Discount %"
+  FROM PRODUCT_INFORMATION ;
+
+5. Calculate the surface area of the Earth using the DUAL table. Alias this expression as “Earth's Area.” The formula for calculating the area of a sphere is: 4πr2. Assume, for this example, that the earth is a simple sphere with a radius of 3,958.759 miles and that π is 22/7.
+
+ SELECT 4 * (22/7) * 3,958.759 * 3,958.759 AS "Earth's Area." from DUAL ;
+
