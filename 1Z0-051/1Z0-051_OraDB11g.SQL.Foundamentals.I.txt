@@ -425,6 +425,9 @@ CHAPTER 3 - Restrictions (WHERE clause)
 *****************************************************************
 
 DATE format: a literal with this format '01-JAN-88' implicitly uses "RR" year 2000 compliant -> if it is between 50 and 99, will return the previous century, otherwise the current one.
+
+00-49  /  50-99 
+
 '01-JAN-01' -> 01-JAN-2001
 '01-JAN-99' -> 01-JAN-1999
 '01-JAN-50' -> 01-JAN-1950
@@ -645,4 +648,329 @@ Ampersand substitution may be disabled or anabled in SQL*Plus
 SET define off
 Select 'Coda & SID' from dual ;
 SET define on
+
+*****************************************************************
+CHAPTER 4 - SINGLE ROW FUNCTIONS
+*****************************************************************
+
+round(42.39, 1) = 42.4
+trunc(42.39, 1) = 42.3
+
+mod(42, 10) = 2
+
+months_between('01-FEB-2008', '01-JAN-2008') = 1
+add_months('01-JAN-2008', 1) = 01-FEB-2008
+
+LAST_DAY('01-FEB-2008') = 29-FEB-2008
+NEXT_DAY('01-FEB-2008', 'Friday') = 08-FEB-2008
+
+SYSDATE = 17-DEC-2007
+ROUND(SYSDATE, 'MONTH') = 01-JAN-2008
+TRUNC(SYSDATE, 'MONTH') = 01-DEC-2007
+
+ORACLE SQL is complieant with ANSI:1999 and ISO:2003 standard
+
+NVL2(), NULLIF(), COALESCE(), CASE()
+
+** EXAM WATCH **
+Singele row finctions are executed for each row in the dataset. This concept is implicitly tested via practical examples in the exam.
+Functions line SUBSTR, INSTR and LENGTH are often used together and a thorought understanding of these is required. Remeber that implicit parameters that can be implicitly converted to data types required by functions are acceptable to Oracle.
+
+LOWER('a MiXed CASE strING') = 'a mixed case string'  // lower case
+UPPER('a MiXed CASE strING') = 'A MIXED CASE STRING'  // upper case
+INITCAP('a MiXed CASE strING') = 'A Mixed Case String' // title case
+
+select CONCAT(1+2.14, ' approximates pi') from dual;
+> 3.14 approximates pi
+
+select CONCAT('Today is ', SYSDATE) from dual;
+> Today is 17-DEC-07
+
+select LENGTH(1+2.14, ' approximates pi') from dual;
+> 20
+
+select LENGTH(SYSDATE) from dual;  // SYSDATE is implicitly converted to a CHAR (17-DEC-07)
+> 9
+
+select lpad(1000+200.55, 14, '*') from dual ;  // *******1200.55
+select rpad(1000+200.55, 14, '*') from dual ;  // 1200.55*******
+select lpad(sysdate, 14, '$#') from dual ;  // $#$#$01-JUN-15
+select rpad(sysdate,  4, '$#') from dual ;  // 01-J
+
+select TRIM('   no spaces   ') from dual ;  // [no spaces]
+select TRIM(trailing 'e' from 1 + 2.14 || ' is pie') from dual ;  // [2.14 is pi]
+select TRIM(leading '*' from '****Hidden****') from dual ;  // [Hidden****]
+select TRIM(trailing '*' from '****Hidden****') from dual ;  // [****Hidden]
+select TRIM(both '*' from '****Hidden****') from dual ;  // [Hidden]
+// sysdate 01-JUN-10
+select TRIM(0 from sysdate) from dual ;  // 1-JUN-1
+
+NOTICE:
+TRIM(s) = TRIM(both ' ' from s)
+LTRIM(s) = TRIM(leading ' ' from s)
+RTRIM(s) = TRIM(trailing ' ' from s)
+
+
+INSTR(string, substring, [position], [occurrence])
+returns 0 (zero) when no occurrence is found
+`position` and `occurrence` default both to 1
++--------------------------------------------------------------------+
+| WARNING: don't mix up with Java's String.indexOf() thet returns -1 |
++--------------------------------------------------------------------+
+select INSTR('1#3#5#7#9#', '#') from dual ;  // 2
+select INSTR('1#3#5#7#9#', '#', 5) from dual ;  // 6
+select INSTR('1#3#5#7#9#', '#', 3, 4) from dual ;  // 10 (4th occurence since the 3rd character)
+select INSTR('1#3#5#7#9#', '#', 5, 4) from dual ;  // 0  (4th occurence since the 5th character)
+select INSTR('1#3#5#7#9#', '#', 1, 4) from dual ;  // 8  (4th occurence since the 1st character)
+
+
+
+SUBSTR(source, start, [number of chars to extract])
+if statr_position is negative, Oracle starts from the end of the string going backward. Number of chars to extract must be greater then zero (>0) otherwise NULL will be returned.
+
+select SUBSTR(10000 - 3, 3, 2) from dual ;  // 97
+select SUBSTR(sysdate, 4, 3) from dual ;  // JUN
+select SUBSTR(10000 - 3, 8, 2) from dual ;  // NULL
+
+select SUBSTR('1#3#5#7#9#',  5) from dual ;  // 5#7#9#
+select SUBSTR('1#3#5#7#9#',  5, 6) from dual ;  // 5#7#9#
+select SUBSTR('1#3#5#7#9#', -3) from dual ;  // #9#
+select SUBSTR('1#3#5#7#9#', -3, 2) from dual ;  // #9
+select SUBSTR('1#3#5#7#9#', -3, -2) from dual ;  // NULL
+select SUBSTR('1#3#5#7#9#', -3, 0) from dual ;  // NULL
+
+SUBSTR('1#3#5#7#9#', -3) = SUBSTR('1#3#5#7#9#', -3, 3)
+
+REPLACE(source, search_string, [replace_term])
+if replace term is omitted, the serch term is removed from the string
+
+REPLACE('as a whole word', ' ', '') = REPLACE('as a whole word', ' ')
+
+select REPLACE(10000 - 3, '9', '85') from dual ;  // 8585857
+select REPLACE(10000 - 3,  9 ,  85 ) from dual ;  // 8585857
+select REPLACE(sysdate, 'JUN', 'NOV') from dual ;  // 01-NOV-15
+select REPLACE('1#3#5#7#9#', '#', '->') from dual ;  // 1->3->5->7->9->
+select REPLACE('1#3#5#7#9#', '#') from dual ;  // 13579
+
+SELECT FIRST_NAME, LAST_NAME, substr(first_name, 1, 1)||' '||substr(LAST_NAME,1,14) as formal_name FROM EMPLOYEES WHERE LENGTH(FIRST_NAME||LAST_NAME) > 15;
+
+ROUND(source, decimal_precision);
+
+select ROUND(1601.916718, 1) from dual ;  // 1601.9
+select ROUND(1601.916718, 2) from dual ;  // 1601.92
+select ROUND(1601.916718, -3) from dual ;  // 2000     *** NOTICE THIS ***
+select ROUND(1601.916718) from dual ;  // 1602
+
+
+TRUNC(source, decimal_precision);
+
+select TRUNC(1601.916718, 1) from dual ;  // 1601.9
+select TRUNC(1601.916718, 2) from dual ;  // 1601.91
+select TRUNC(1601.916718, -3) from dual ;  // 1000     *** NOTICE THIS ***
+select TRUNC(1601.916718) from dual ;  // 1601
+
+
+MOD(dividend, divisor)   [modulus function]
+MOD function is often used to classify even (pari) and odd (dispari) numbers
+MOD(even_number, 2) = 0
+MOD( odd_number, 2) = 1
+
+select MOD(6,2) from dual ;  // 0
+select MOD(5,3) from dual ;  // 2
+select MOD(7,35) from dual ;  // 7
+select MOD(5.2,3) from dual ;  // 2.2
+
+Negative dividend negates the result sign (except 0)
+select MOD(-6,2) from dual ;  // 0  ** NOTICE: -0 doesn't exist
+select MOD(-5,3) from dual ;  // -2
+select MOD(-7,35) from dual ;  // -7
+select MOD(-5.2,3) from dual ;  // -2.2
+
+Negative divisor doesn't negate the result sign
+select MOD(6,-2) from dual ;  // 0    ** NOTICE THIS **
+select MOD(5,-3) from dual ;  // 2    ** NOTICE THIS **
+select MOD(7,-35) from dual ;  // 7    ** NOTICE THIS **
+select MOD(5.2,-3) from dual ;  // 2.2    ** NOTICE THIS **
+
+select first_name, last_name, MOD(employee_id, 4) as "Team#" from EMPLOYEES where employee_id between 100 and 111;
+
+MONTHS_BETWEEN(start_date, end_date)
+Notice MONTHS_BETWEEN is based on 31 days
+
+select MONTHS_BETWEEN('18-AUG-15', '18-JUL-15') from dual ;  //  1  
+select MONTHS_BETWEEN('18-JUL-15', '18-AUG-15') from dual ;  // -1  
+select MONTHS_BETWEEN('18-JUL-15', '18-JUN-15') from dual ;  //  1  
+select MONTHS_BETWEEN('18-JUL-15', '18-JUN-15') from dual ;  //  1  
+select MONTHS_BETWEEN('18-JUN-15', '18-MAY-15') from dual ;  //  1  
+select MONTHS_BETWEEN('18-AUG-15', '18-JUN-15') from dual ;  //  2  
+select MONTHS_BETWEEN('18-AUG-15', '18-MAY-15') from dual ;  //  3  
+
+select MONTHS_BETWEEN('29-MAR-2008', '28-FEB-2008') from dual ;  //  1.03225806
+select MONTHS_BETWEEN('29-MAR-2008', '28-FEB-2008') * 31 from dual ; // 32
+
+
+ADD_MONTHS(start_date, number_of_months)
+if `number_of_months` has a fractional part, it will be ignored (truncated at the integer)
+select ADD_MONTHS('07-APR-2009', 1) from dual ;  //  07-MAY-09
+select ADD_MONTHS('31-DEC-2008', 2.01) from dual ;  //  28-FEB-09  ** NOTICE THIS **
+select ADD_MONTHS('31-DEC-2008', 2.99) from dual ;  //  28-FEB-09  ** NOTICE THIS **
+select ADD_MONTHS('07-APR-2009', -12) from dual ;  //  07-APR-08
+
+SELECT employee_id, last_name, hire_date FROM employees WHERE months_between('01-JAN-2000', hire_date) > 100 ;
+
+NEXT_DAY(start_date, day_of_the_week)
+
+the 'day_of_the_week' value may be a character or a numeric. The acceptable values are determined by the NLS_DATE_LANGUEGE database parameter. Defaults are the three forst char of the day or an integer
+
+select NEXT_DAY('01-JAN-2009', 't') from dual ;  // ERROR ORA-01846 invalid day of the week
+select NEXT_DAY('01-JAN-2009', 'tu') from dual ;  // ERROR ORA-01846 invalid day of the week
+select NEXT_DAY('01-JAN-2009', 'tue') from dual ;  // 06-JAN-09
+select NEXT_DAY('01-JAN-2009', 'tues') from dual ;  // 06-JAN-09
+select NEXT_DAY('01-JAN-2009', 'tuesd') from dual ;  // 06-JAN-09
+select NEXT_DAY('01-JAN-2009', 'tuesday') from dual ;  // 06-JAN-09
+
+select NEXT_DAY('01-JAN-2009',  3 ) from dual ;  // 06-JAN-09
+select NEXT_DAY('01-JAN-2009', '3') from dual ;  // ERROR ORA-01846 invalid day of the week (it obviously cannot be cast)
+
+
+LAST_DAY(start_date)
+
+
+ROUND(start_date, [date_precision_format])
+
+Rounds a date UP or DOWN to another date
+`date_precision_format` defaults to 'day'
+
+CC		century (NEAREST first day of the century)
+YYYY	year (NEAREST first day of the year)
+Q		Quarter (NEAREST first day of the quarter [trimestre])
+MM		Month (NEAREST first day of the month)
+W		Week (NEAREST first day of the week)
+DD		Day [default] (NEAREST midnight )
+HH		Hour (NEAREST sharp Hour)
+MI		Minute (NEAREST sharp Minute)
+
+select round('09-AUG-12', 'MM') from dual ;  // ERROR  ORA-01722: invalid number   ** NOTICE THIS **
+select round(to_date('09-AUG-2012','DD-MM-YYYY'), 'MM') from dual ;  // rounds DOWN to 01-AUG-12
+select round(to_date('09-AUG-2012','DD-MM-YYYY'), 'Q') from dual ;  // rounds DOWN to 01-JUL-12
+select round(to_date('09-AUG-2012','DD-MM-YYYY'), 'W') from dual ;  // rounds DOWN to 08-AUG-12
+select round(to_date('09-AUG-2012','DD-MM-YYYY'), 'CC') from dual ;  // rounds DOWN to 01-JAN-01  ** NOTICE THIS **
+select round(to_date('09-AUG-2012','DD-MM-YYYY'), 'YYYY') from dual ;  // rounds UP to 01-JAN-13  ** NOTICE THIS **
+
+
+TRUNC(start_date, [date_precision_format])
+
+truncate a date DOWN to another date
+`date_precision_format` defaults to 'day'
+
+CC		century (first day of the DATE century)
+YYYY	year (first day of the DATE year)
+Q		Quarter (first day of the DATE quarter [trimestre])
+MM		Month (first day of the DATE Month)
+W		Week (first day of the DATE week)
+DD		Day [default] (midnight of the DATE day)
+HH		Hour (minute 00 of the DATE hour)
+MI		Minute (second 00 of the DATE minute)
+
+select TRUNC('09-AUG-12', 'MM') from dual ;  // ERROR  ORA-01722: invalid number   ** NOTICE THIS **
+select TRUNC(to_date('09-AUG-2012','DD-MM-YYYY'), 'MM') from dual ;  // rounds DOWN to 01-AUG-12
+select TRUNC(to_date('09-AUG-2012','DD-MM-YYYY'), 'Q') from dual ;  // rounds DOWN to 01-JUL-12
+select TRUNC(to_date('09-AUG-2012','DD-MM-YYYY'), 'W') from dual ;  // rounds DOWN to 08-AUG-12
+select TRUNC(to_date('09-AUG-2012','DD-MM-YYYY'), 'CC') from dual ;  // rounds DOWN to 01-JAN-01  ** NOTICE THIS **
+select TRUNC(to_date('09-AUG-2012','DD-MM-YYYY'), 'YYYY') from dual ;  // rounds DOWN to 01-JAN-12
+
+SELF TEST
+1. B,C
+2. A,D
+3. B
+4. A
+5. B
+6. C
+7. C
+8. A
+9. A
+10. C
+LAB
+select product_name, catalog_url, substr(catalog_url, 17, 6) as "SUP#"
+  from product_information
+  where instr(lower(product_description), 'color') > 0
+    and instr(lower(product_description), 'printer') > 0
+
+
+*****************************************************************
+CHAPTER 5 - 
+*****************************************************************
+
+Converting dates to characters
+---------------------------------
+
+TO_CHAR(number, [format_mask], [nls_parameter])
+
+Format masks
+
+9		Numeric width					9999 					12					12
+0		leading zeroes					09999 					12					00012
+.		Position of decimal point 		09999.999				030.40				00030.400
+D		Position of decimal separator	09999D999				030.40				00030.400
+,		Position of comma simbol		09999,999				03040				00003,040
+G		Position of group separator		09999G999				03040				00003,040
+$		Dollar sign						$099999					03040				$003040
+L		Local currency 					L099999					03040				EUR003040 (if NLS_CURRENCY is set to EUR)
+MI		Position of minus sign for 		99999MI					-03040				3040-
+		negatives						
+PR		Wrap negatives i parenthesis	99999PR					-03040				<3040>
+EEEE	Scientific notation				99.99999EEEE			121.976				1.21976E+02
+U		nls_dual_currency				U099999					03040				EUR003040 (if NLS_DUAL_CURRENCY is set to EUR)
+V		multiplies by 10n times (n 		9999V99					3040				304000
+		is the number of nines after V)	
+S		+ or - sign is prefixed			S999999					3040				+3040
+
+Converting dates to characters
+TO_CHAR(date, [date_format], [nls_parameter])
+
+Y											5
+YY											15
+YYY											015
+YYYY										2015
+RR											15
+YEAR										NINETEEN SEVENTY-FIVE
+MM		numeric months 						06
+MON											JUN
+MONTH	case sensitive month				JUNE
+D		Day of the week 					7
+DD		2-digits day of the month			31
+DDD		day of the year 					153
+DY		Three-letters abbr.					MON
+DAY		Case sensitive						MONDEY
+Day		Case sensitive						Mondey
+W		Week of month 						4
+WW		Week of year 						39
+Q		Quarter of year 					4
+CC		century 							20
+S		Sign (preceding CC,YYYY or YEAR)	-1984
+IYYY 	ISO date							1984
+IYY 	ISO date							984
+IY		ISO date							84
+I		ISO date							4
+BC,B.C.	
+AD,A.D.	
+J		Julian day (days since 31-dec-4713 B.C.)
+IW		ISO week of the year
+RM		Roman numeral month
+
+AM,A.M.	Meridian indicator					
+PM,P.M.	Meridian indicator					
+HH		Hour of day (0..12)					
+HH12	Hour of day (0..12)					
+HH24	Hour of day (0..24)					
+MI		Minutes (0..59)
+SS		Seconds (0..59)
+SSSSS	Seconds past midnight (0..86399)
+
+
+-/.,?#! 						
+"any character literal" 		
+TH 						Positional or ordinal text
+SP 						Spelled out number
+THSP or SPTH			Spelled out positional or ordinal number
 
