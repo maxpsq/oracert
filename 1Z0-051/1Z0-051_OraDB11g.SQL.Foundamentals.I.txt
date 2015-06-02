@@ -1211,9 +1211,79 @@ SELF TEST
 - 
 
 LABS
-select product_status, count(*), sum(list_price) from product_information where lower(product_status) != 'orderable' group by product_status having sum(list_price) > 4000 ;
+select product_status, count(*), sum(list_price) 
+  from product_information 
+ where lower(product_status) != 'orderable' 
+ group by product_status 
+ having sum(list_price) > 4000 ;
 
 *****************************************************************
 CHAPTER 7 - JOINING TABLES
 *****************************************************************
 
+NATURAL JOIN
+--------------------
+
+Oracle notation: returns 5 columns in which there are two occurences of REGION_ID (from both tables)
+
+ select * 
+  from regions r, countries c
+ WHERE REGIoN_NAME = 'Americas'
+   and r.region_id = c.region_id ; 
+
+NATURAL JOIN removes automatically columns with the same name. NATURAL JOIN automatically joins over ALL columns with the same name, so it is not needed to specify what are the columns that make up the relation.
+
+select * 
+  from regions r NATURAL JOIN countries c
+ WHERE r.REGION_NAME = 'Americas'; 
+
+select r.REGION_NAME
+  from regions r NATURAL JOIN countries c
+ WHERE r.REGION_NAME = 'Americas'; 
+
+** NOTICE **
+Columns that are used for a named-join (either NATURAL JOIN or with the USING clause) cannot have an explicit qualifier.
+
+** THIS IS NOT POSSIBLE ( alias.* ) **
+select r.* 
+  from regions r NATURAL JOIN countries c
+ WHERE r.REGION_NAME = 'Americas';       // ERROR
+
+SELECT * 
+  FROM regions NATURAL JOIN sale_regions ;
+
+JOIN ... USING
+----------------------
+sometimes more control is needed. It's possible to specify the colums on which make up the join condition with USING
+
+select * 
+  from regions r JOIN countries c USING (region_id)
+ WHERE r.REGION_NAME = 'Americas'; 
+
+
+JOIN ... ON
+----------------------
+JOIN ... ON allows to specify the columns o both sides of the relation.
+This form is the most widely used
+
+select * 
+  from regions r JOIN countries c ON (r.region_id = c.region_id)
+ WHERE r.REGION_NAME = 'Americas'; 
+
+
+ALIASING
+-------------
+SELECT emp.employee_id, department_id, emp.manager_id, departments.manager_id
+  FROM employees emp JOIN departments USING (department_id)
+ WHERE department_id > 80 ;
+
+SELECT emp.employee_id, department_id, emp.manager_id, manager_id
+  FROM employees emp JOIN departments USING (department_id)
+ WHERE department_id > 80 ;  // ERROR: column manager_id ambiguously defined
+
+** NOTICE **
+Columns that are used for a named-join (either NATURAL JOIN or with the USING clause) cannot have an explicit qualifier.
+
+SELECT emp.employee_id, dep.department_id, emp.manager_id, dep.manager_id
+  FROM employees emp JOIN departments dep USING (department_id)
+ WHERE department_id > 80 ;  // ERROR on dep.department_id because of the explicit qualifier
