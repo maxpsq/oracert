@@ -1131,3 +1131,89 @@ SELF TEST
 9. C
 10. B
 LABS
+
+SELECT CUST_FIRST_NAME, CUST_LAST_NAME, CUST_EMAIL, CUST_DATE_OF_BIRTH, 
+case sysdate - date_of_birth
+end birthday 
+from customers 
+where to_char(date_of_birth,'DAY') between to_char(SYSDATE - 2,'DAY') AND to_char(SYSDATE + 7, 'DAY') 
+order by to_char(CUST_DATE_OF_BIRTH,'DD'), to_char(CUST_DATE_OF_BIRTH,'MM');
+
+
+*****************************************************************
+CHAPTER 6 - Group functions
+*****************************************************************
+
+NOTICE: Group funcion can be nested two levels deep !!
+
+Select MIN(AVG(SUM(column))) from TABLE ;  // ERROR
+
+COUNT(*|[ALL|DISTINCT] expr)
+
+
+
+AVG([ALL|DISTINCT] expr)
+expr MUST be NUMERIC
+
+AVG(ALL expr) sums nonnull values and divides by the number of nonnull values.
+AVG(DISTINCT expr) sums the distinct nonnull values and divides by the number of the distinct nonnull values.
+
+
+SUM([ALL|DISTINCT] expr)
+expr MUST be NUMERIC
+
+MIN(ALL|DISTINCT expr)
+MAX(ALL|DISTINCT expr)
+expr may be NUMERIC, DATE or CHARACTER
+
+select Max(first_name) from employees;
+select Max(hire_date) from employees;
+select Max(salary) from employees;
+
+VARIANCE(DISTINCT|ALL expr)   ** Study this function **
+expr MUST be NUMERIC
+
+
+STDDEV(DISTINCT|ALL expr)     ** Study this function **
+expr MUST be NUMERIC
+
+
+Nested group functions
+------------------------
+
+
+GROUP BY and HAVING
+
+select department_id 
+  from employees 
+ group by department_id 
+having mod(department_id,20) = 0;  // OK department_id is in the projection
+
+select department_id 
+  from employees 
+ group by department_id 
+having length(last_name) > 12;  // ERROR: not a group by expression (last_name)
+
+SELF TEST
+1. C
+2. B
+3. A
+4. C
+5. C
+6. D -> C
+7. A
+8. C
+9. B
+10. D -> B
+
+** EXERCISE ON **
+- Having clause with column not present in select statement or slightly different because of different functions.
+- 
+
+LABS
+select product_status, count(*), sum(list_price) from product_information where lower(product_status) != 'orderable' group by product_status having sum(list_price) > 4000 ;
+
+*****************************************************************
+CHAPTER 7 - JOINING TABLES
+*****************************************************************
+
