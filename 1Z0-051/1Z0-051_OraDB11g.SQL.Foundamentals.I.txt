@@ -941,8 +941,8 @@ D		Day of the week 					7
 DD		2-digits day of the month			31
 DDD		day of the year 					153
 DY		Three-letters abbr.					MON
-DAY		Case sensitive						MONDEY
-Day		Case sensitive						Mondey
+DAY		Case sensitive						MONDAY
+Day		Case sensitive						Monday
 W		Week of month 						4
 WW		Week of year 						39
 Q		Quarter of year 					4
@@ -973,4 +973,108 @@ SSSSS	Seconds past midnight (0..86399)
 TH 						Positional or ordinal text
 SP 						Spelled out number
 THSP or SPTH			Spelled out positional or ordinal number
+
+Select first_name, last_name, to_char(hire_date,'fmDay, "the "ddth "of" Month, Yyyysp') as START_DATE from employees where to_char(hire_date, 'fmDay') = 'Saturday' ;
+
+Samples:
+
+DEFINE birthday=to_date('27-MAR-1977','dd-mon-yyyy')
+
+select '>'||TO_CHAR(&birthday, 'Day')||'<' from DUAL;  // >Friday   <
+
+// 'fm' modifier removes trailing (on the right side) blanks 
+select '>'||TO_CHAR(&birthday, 'fmDay')||'<' from DUAL;  // >Friday<
+
+select '>'||TO_CHAR(&birthday, 'YEAR')||'<' from DUAL;  // >NINETEEN SEVENTY-SEVEN<
+select '>'||TO_CHAR(&birthday, 'YYYYsp')||'<' from DUAL;  // >ONE THOUSAND NINE HUNDRED SEVENTY-SEVEN<
+select '>'||TO_CHAR(&birthday, 'Yyyysp')||'<' from DUAL;  // >One Thousand Nine Hundred Seventy-Seven<
+
+// TH for ordinal number: notice case is given by DD end not by TH
+select '>'||TO_CHAR(&birthday, 'DDth')||'<' from DUAL;  // >27TH<
+select '>'||TO_CHAR(&birthday, 'DDTH')||'<' from DUAL;  // >27TH<
+select '>'||TO_CHAR(&birthday, 'ddth')||'<' from DUAL;  // >27th<
+select '>'||TO_CHAR(&birthday, 'ddTH')||'<' from DUAL;  // >27th<
+
+// use 'fm' when formatting with DAY or MONTH
+select '>'||TO_CHAR(&birthday, 'Month, "the" ddth YYYY')||'<' from DUAL;  // >March	  , the 27th 1977<
+select '>'||TO_CHAR(&birthday, 'fmMonth, "the" ddth YYYY')||'<' from DUAL;  // >March, the 27th 1977<
+
+select '>'||TO_CHAR(&birthday, 'Day "the" ddth "of" Month YYYY')||'<' from DUAL;  // >Friday    the 27th of March	 1977<
+select '>'||TO_CHAR(&birthday, 'fmDay "the" ddth "of" Month YYYY')||'<' from DUAL;  // >Friday the 27th of March 1977<
+
+// SP spelled out number
+select '>'||TO_CHAR(&birthday, 'DDsp MMsp YYYYsp')||'<' from DUAL;  // >TWENTY-SEVEN THREE ONE THOUSAND NINE HUNDRED SEVENTY-SEVEN<
+select '>'||TO_CHAR(&birthday, 'ddsp mmsp yyyysp')||'<' from DUAL;  // >twenty-seven three one thousand nine hundred seventy-seven<
+select '>'||TO_CHAR(&birthday, 'Ddsp Mmsp Yyyysp')||'<' from DUAL;  // >Twenty-Seven Three One Thousand Nine Hundred Seventy-Seven<
+
+// RM Roman numeral MONTH
+select '>'||TO_CHAR(&birthday, 'DD RM YYYY')||'<' from DUAL;    // >27 III  1977<
+select '>'||TO_CHAR(&birthday, 'fmDD RM YYYY')||'<' from DUAL;  // >27 III 1977<
+
+// >27 March 1977 was the 86th day of the year<
+select '>'||TO_CHAR(&birthday, 'fmDD Month YYYY "was the" dddth "day of the year"')||'<' from DUAL;
+// >27 March 1977 was the eighty-sixth day of the year<
+select '>'||TO_CHAR(&birthday, 'fmDD Month YYYY "was the" dddspth "day of the year"')||'<' from DUAL;
+
+
+
+TO_DATE(string, [format], [nls_parameter])
+
+the ** `fx` modifier **
+
+select TO_DATE('25-DEC-2010') from dual; // 25-DEC-10 (it uses teh default mask DD-MON-YYYY)
+select TO_DATE('25/DEC/2010') from dual;
+select TO_DATE('25-DEC') from dual;  // ERROR
+select TO_DATE('25-DEC', 'DD-MON') from dual; // 25-DEC-10
+select TO_DATE('25-DEC-2010 18:03:45', 'DD-MON-YYYY HH24:MI:SS') from dual;  // OK
+select TO_DATE('25-DEC-10',   'DD-MON-YYYY') from dual;  // OK ** Notice the difference in format
+select TO_DATE('25-DEC-10', 'fxDD-MON-YYYY') from dual;  // ERROR 
+
+TO_DATE and DEFAULTS
+select TO_DATE('25-DEC-2015', 'DD-MON-YYYY') from dual;  // time DEFAULTS to midnight 00:00:00
+select TO_DATE('25-DEC', 'DD-MON') from dual; // 25-DEC-10
+select TO_DATE('2003', 'YYYY') from dual; // 01-JAN-03
+
+TO_NUMBER(string, [format], [nls_parameter])
+
+select to_number('$1,000.55') from dual; // ERROR
+select to_number('$1,000.55', '$9G999D99') from dual; // OK
+select to_number('$1,000.55', 'L9G999D99') from dual; 
+alter session set 'NLS_NUMERIC_CHARACTERS=''.,'' '
+select to_number('USD1,000.55', 'L9G999D99', 'NLS_CURRENCY=''USD''') from dual; 
+select to_number('$1,000.55', 'L9G999D99', 'NLS_NUMERIC_CHARACTERS=''.,'' ') from dual;
+select to_number('€1,000.55', 'L9G999D99', 'NLS_NUMERIC_CHARACTERS=''.,'' NLS_CURRENCY=''€'' ') from dual;
+
+
+select NVL('B', 'A') from dual;   // B
+select NVL(NULL, 'A') from dual;  // A
+
+NVL2(original, ifnotnul, ifnull)
+select NVL2('Z', 'A', 'B') from dual ;  // A
+select NVL2(NULL, 'A', 'B') from dual ;  // B
+
+COALESCE(term1, term2, ..., termN)
+returns the first NOT NULL term from left to right
+select COALESCE('A','B','C') from dual ;  // A
+select COALESCE('A',NULL,NULL) from dual ; // A
+select COALESCE(NULL,NULL,NULL) from dual ;  // NULL
+select COALESCE(NULL,'B',NULL) from dual ;  // B
+
+Notice
+COALESCE(t1,t2) = NVL(t1,t2)
+COALESCE(t1,t2,t3) = NVL(t1,NVL(t2,t3))
+
+NULLIF(ifunequal, comparison_term)
+select NULLIF(123,123) from dual;  // NULL
+select NULLIF(123,122+1) from dual;  // NULL
+select NULLIF(123,124) from dual;  // 123
+select NULLIF('12-JUN-15','12-JUN-2015') from dual;  // 12-JUN-15 ** NOTICE THIS **
+select NULLIF('123',123) from dual;  // ERROR: inconsistent data types ** NOTICE THIS **
+
+Nesting NULLIF and NVL2 for simple condition logic
+
+SELECT first_name, last_name, NVL2(NULLIF(length(first_name), length(last_name)), 'Different lenght', 'Same length') as name_lengths FROM EMPLOYEES WHERE DEPARTMENT_ID = 100 ;
+
+DECODE()
+** NOTICE ** DECODE() considers two NULLs to be equivalent
 
