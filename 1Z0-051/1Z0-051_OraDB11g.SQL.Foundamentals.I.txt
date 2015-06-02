@@ -901,7 +901,7 @@ select product_name, catalog_url, substr(catalog_url, 17, 6) as "SUP#"
 CHAPTER 5 - 
 *****************************************************************
 
-Converting dates to characters
+Converting numbers to characters
 ---------------------------------
 
 TO_CHAR(number, [format_mask], [nls_parameter])
@@ -925,7 +925,17 @@ V		multiplies by 10n times (n 		9999V99					3040				304000
 		is the number of nines after V)	
 S		+ or - sign is prefixed			S999999					3040				+3040
 
+
+select TO_CHAR(1234.49, '99999.9') from DUAL; // 1234.5  ** NOTICE ** rounds UP !!
+select TO_CHAR(1234.31, '99999.9') from DUAL; // 1234.3 
+select TO_CHAR(1234.30001, '99999.9') from DUAL; // 1234.3 
+select TO_CHAR(1234.30000, '99999.9') from DUAL; // 1234.3 
+select TO_CHAR(1234.30, '99999.9') from DUAL; // 1234.3
+select TO_CHAR(1234.3, '99999.9') from DUAL; // 1234.3
+select TO_CHAR(1234.3076, '99999.999') from DUAL; // 1234.308  ** NOTICE ** rounds UP !!
+
 Converting dates to characters
+------------------------------
 TO_CHAR(date, [date_format], [nls_parameter])
 
 Y											5
@@ -1003,9 +1013,22 @@ select '>'||TO_CHAR(&birthday, 'Day "the" ddth "of" Month YYYY')||'<' from DUAL;
 select '>'||TO_CHAR(&birthday, 'fmDay "the" ddth "of" Month YYYY')||'<' from DUAL;  // >Friday the 27th of March 1977<
 
 // SP spelled out number
-select '>'||TO_CHAR(&birthday, 'DDsp MMsp YYYYsp')||'<' from DUAL;  // >TWENTY-SEVEN THREE ONE THOUSAND NINE HUNDRED SEVENTY-SEVEN<
+select '>'||TO_CHAR(&birthday, 'DDsp MMsp YYYYsp')||'<' from DUAL;  // >TWENTY-SEVEN THREE ONE THOUSAND NINE HUNDRED SEVENTY-SEVEN<<
 select '>'||TO_CHAR(&birthday, 'ddsp mmsp yyyysp')||'<' from DUAL;  // >twenty-seven three one thousand nine hundred seventy-seven<
 select '>'||TO_CHAR(&birthday, 'Ddsp Mmsp Yyyysp')||'<' from DUAL;  // >Twenty-Seven Three One Thousand Nine Hundred Seventy-Seven<
+
+
+** NOTICE THE DIFFERENCE **
+'YEAR' and 'YYYYsp' returns the same value for years between xx00 and xx09 ...
+select to_char(to_date('01-SEP-1909'), 'YEAR') from dual;   // ONE THOUSAND NINE HUNDRED NINE
+select to_char(to_date('01-SEP-1909'), 'YYYYsp') from dual; // ONE THOUSAND NINE HUNDRED NINE
+select to_char(to_date('01-SEP-2009'), 'YEAR') from dual;   // TWO THOUSAND NINE
+select to_char(to_date('01-SEP-2009'), 'YYYYsp') from dual; // TWO THOUSAND NINE
+... but different values for other years
+select to_char(to_date('01-SEP-1910'), 'YEAR') from dual;   // NINETEEN TEN
+select to_char(to_date('01-SEP-1910'), 'YYYYsp') from dual; // NINETEEN TEN
+select to_char(to_date('01-SEP-2010'), 'YEAR') from dual;   // TWENTY TEN
+select to_char(to_date('01-SEP-2010'), 'YYYYsp') from dual; // TWO THOUSAND TEN
 
 // RM Roman numeral MONTH
 select '>'||TO_CHAR(&birthday, 'DD RM YYYY')||'<' from DUAL;    // >27 III  1977<
@@ -1031,9 +1054,20 @@ select TO_DATE('25-DEC-10',   'DD-MON-YYYY') from dual;  // OK ** Notice the dif
 select TO_DATE('25-DEC-10', 'fxDD-MON-YYYY') from dual;  // ERROR 
 
 TO_DATE and DEFAULTS
+
+Day, when omitted defaults to 1
+Month, when omitted is taken from SYSDATE
+Year, when omitted is taken from SYSDATE
+hour, minute, second: when omitted defaults to 0
+
 select TO_DATE('25-DEC-2015', 'DD-MON-YYYY') from dual;  // time DEFAULTS to midnight 00:00:00
-select TO_DATE('25-DEC', 'DD-MON') from dual; // 25-DEC-10
-select TO_DATE('2003', 'YYYY') from dual; // 01-JAN-03
+select TO_DATE('25-DEC', 'DD-MON') from dual; // 25-DEC-15
+select TO_DATE('25', 'DD') from dual; // 25-JUN-15  ** NOTICE ** MONTH AND YEAR FROM SYSDATE
+select TO_DATE('04', 'MM') from dual; // 01-APR-15 DD DEFAULTS TO 1 AND YEAR FROM SYSDATE
+select TO_DATE('1988', 'YYYY') from dual;  // 01-JUN-1988  ** NOTICE ** DD DEFAULTS TO 1 AND MONTH FROM SYSDATE
+select to_date('18','CC') from dual ;  // ERROR
+
+
 
 TO_NUMBER(string, [format], [nls_parameter])
 
@@ -1078,3 +1112,22 @@ SELECT first_name, last_name, NVL2(NULLIF(length(first_name), length(last_name))
 DECODE()
 ** NOTICE ** DECODE() considers two NULLs to be equivalent
 
+
+CASE statement comes in two variants
+
+simple CASE expression
+searched CASE expression
+
+
+SELF TEST
+1. B
+2. D
+3. D
+4. C
+5. B
+6. A
+7. B
+8. A
+9. C
+10. B
+LABS
