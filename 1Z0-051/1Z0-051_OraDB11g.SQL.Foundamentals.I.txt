@@ -1221,6 +1221,8 @@ select product_status, count(*), sum(list_price)
 CHAPTER 7 - JOINING TABLES
 *****************************************************************
 
+EQUIJOIN
+
 NATURAL JOIN
 --------------------
 
@@ -1231,7 +1233,9 @@ Oracle notation: returns 5 columns in which there are two occurences of REGION_I
  WHERE REGIoN_NAME = 'Americas'
    and r.region_id = c.region_id ; 
 
-NATURAL JOIN removes automatically columns with the same name. NATURAL JOIN automatically joins over ALL columns with the same name, so it is not needed to specify what are the columns that make up the relation.
+NATURAL JOIN automatically joins over ALL columns with the same name. If there is no common column name, a cartesian join is performed. 
+NATURAL JOIN removes automatically columns with the same name. 
+
 
 select * 
   from regions r NATURAL JOIN countries c
@@ -1287,3 +1291,47 @@ Columns that are used for a named-join (either NATURAL JOIN or with the USING cl
 SELECT emp.employee_id, dep.department_id, emp.manager_id, dep.manager_id
   FROM employees emp JOIN departments dep USING (department_id)
  WHERE department_id > 80 ;  // ERROR on dep.department_id because of the explicit qualifier
+
+
+Notice the JOIN ... ON clause may also be used to specify conditions that limit the number of rows returned.
+These two select give the same result. It is not possible using the other two equijoin styles:
+
+SELECT department_name from departments d
+JOIN locations l ON (l.location_id = d.location_id)
+WHERE d.department_name like 'P%';
+
+SELECT department_name from departments d
+JOIN locations l ON (l.location_id = d.location_id AND d.department_name like 'P%' );
+
+
+REMEMBER: the keywords NATURAL, USING and ON are mutually exclusive in the context of the same join.
+
+It is possible to use the three different techniques in the same SELECT statement, though.
+
+
+SELECT * 
+  FROM LOCATIONS L
+  NATURAL JOIN COUNTRIES C  // NATURAL JOIN
+  JOIN REGIONS R USING (REGION_ID)  // JOIN ... USING
+  ;  -- 23 ROWS  
+  
+SELECT * 
+  FROM LOCATIONS L
+  JOIN COUNTRIES C USING (COUNTRY_ID)  // JOIN ... USING
+  JOIN REGIONS R ON (R.REGION_ID = C.REGION_ID)  // JOIN ... ON
+  ;  -- 23 ROWS  
+
+
+NONEQUIJOINs
+--------------------
+
+
+
+
+OUTER JOINS
+--------------------
+
+LEFT OUTER JOIN
+RIGHT OUTER JOIN
+FULL OUTER JOIN
+
