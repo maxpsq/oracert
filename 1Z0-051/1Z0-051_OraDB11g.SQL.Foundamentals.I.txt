@@ -1335,3 +1335,36 @@ LEFT OUTER JOIN
 RIGHT OUTER JOIN
 FULL OUTER JOIN
 
+OUTER JOINS work like this: first a INNER JOIN is performed, second :
+- on LEFT OUTER JOIN - rows from the table on the LEFT side of the JOIN keyword excluded by the INNER JOIN are merged to the inner join result set.
+- on RIGHT OUTER JOIN - rows from the table on the RIGHT side of the JOIN keyword excluded by the INNER JOIN are merged to the inner join result set.
+- on FULL OUTER JOIN - rows from the table on both sides of the JOIN keyword excluded by the INNER JOIN are merged to the inner join result set.
+
+NOTICE: in traditional Oracle notation a FULL OUTER JOIN is not supported
+
+
+CROSS JOIN (Cartesian Product)
+-------------------------------
+
+in ANSI SQL:1999 a CROSS JOIN must be created explicitly
+
+SELECT * 
+  FROM regions
+  CROSS JOIN countries ;
+
+CROSS JOINS may inadvertently performed:
+- when there are less then N-1 join conditions in a query on N tables
+- using NATURAL JOIN on tables that don't share common named columns
+
+SELF TEST
+1. D
+2. A, B, C
+3. B
+4. A, B, C --> A
+5. A, B --> B
+6. C
+7. B
+8. A, B --> A
+9. A, C --> A
+10. A
+
