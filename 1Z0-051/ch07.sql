@@ -371,3 +371,11 @@ UPDATE employees o SET o.employee_id = o.employee_id
  WHERE o.department_id = ANY (SELECT i.department_id from employees i 
                             WHERE i.first_name = 'John' );  -- 85 rows
 
+
+-- MERGE
+
+
+insert into regions (region_id, region_name) values ((select max(region_id)+1 from regions), 'Great Britain');
+
+insert into regions (region_id, region_name)  ( select region_id+10000 , 'Great Britain' from regions);
+

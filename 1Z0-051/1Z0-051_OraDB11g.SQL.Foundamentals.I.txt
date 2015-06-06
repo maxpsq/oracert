@@ -273,6 +273,8 @@ This means that the values stored in this column can have at most "p" digits. Of
 	 999999.9 	OK	(6+1)
 	9999999.9 	KO	(7+1)
 
+	NUMBER(8,-2)
+
 VARCHAR2(length) variable length alphanumeric character data (up to "length")
 
 	VARCHAR2(20)
@@ -1614,3 +1616,17 @@ SELF TEST
 ============================================
 Ch. 11 - Using DDL statements
 ============================================
+
+
+SELF TEST
+1. D
+2. A
+3. A, D, E  --> D, E
+4. A, C
+5. A, C, F   --> A, C, D, E, F
+6. D
+7. D
+8. C
+9. A  -->  D
+10. C, D
+11. C
