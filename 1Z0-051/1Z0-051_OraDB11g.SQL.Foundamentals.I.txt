@@ -1617,6 +1617,29 @@ SELF TEST
 Ch. 11 - Using DDL statements
 ============================================
 
+Data types
+
+- RAW (up to 4kb)
+- NUMBER (precision from 1 up to 38, scale from -84 to 127)
+- FLOAT
+- BINARY_FLOAT
+- BINARY_DOUBLE
+- INTEGER
+- DATE 0 (when empty) to 7 bytes. Ranges from "January, 1, 4712 BC" to " "December, 31 9999 AD"
+  always includes century, year, mont, day, hour, minute, second
+- TIMESTAMP always includes century, year, mont, day, hour, minute, second, fractional
+- TIMESTAMP WITH TIMEZONE
+- TIMESTAMP WITH LOCAL TIMEZONE
+- INTERVAL YEAR TO MONTH
+- INTERVAL DAY TO SECOND
+- CLOB
+- NCLOB
+- BLOB
+- BFILE a locatore pointing to a file on the filesystem (fime must be up to 4GB in size)
+- LONG up to 2GB (deprecated, use CLOB)
+- LONG RAW (deprecated, use BLOB)
+- ROWID base 64 and encripted value that is a pointer to a physical address of a specific table row.
+
 
 SELF TEST
 1. D
