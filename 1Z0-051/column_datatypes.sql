@@ -34,3 +34,7 @@ insert into data_type_test (number03) values (123);  -- SUCCESS (inserts 100)
 insert into data_type_test (number03) values (975);  -- SUCCESS (inserts 1000)
 
 select number03 from data_type_test where number03 is not null ;
+
+
+
+create table "SELECT" (c1  number);
