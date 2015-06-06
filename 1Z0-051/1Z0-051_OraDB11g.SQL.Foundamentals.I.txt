@@ -1368,3 +1368,249 @@ SELF TEST
 9. A, C --> A
 10. A
 
+
+
+========================================================================
+Ch. 8 - Subqueries
+========================================================================
+
+a SUBQUERY is a query that is nested inside a queryo or another subquery.
+
+a SCALAR SUBQUERY is a query 
+
+
+ALL operator
+------------
+Assuming subqueries don't return zero rows, the following statements can be made for both list and subquery versions:/p>
+
+"x = ALL (...)": The value must match all the values in the list to evaluate to TRUE.
+"x != ALL (...)": The value must not match any values in the list to evaluate to TRUE.
+"x > ALL (...)": The value must be greater than the biggest value in the list to evaluate to TRUE.
+"x < ALL (...)": The value must be smaller than the smallest value in the list to evaluate to TRUE.
+"x >= ALL (...)": The value must be greater than or equal to the biggest value in the list to evaluate to TRUE.
+"x <= ALL (...)": The value must be smaller than or equal to the smallest value in the list to evaluate to TRUE.
+
+If a subquery returns zero rows, the condition evaluates to TRUE.
+
+
+ANY operator
+------------
+Assuming subqueries don't return zero rows, the following statements can be made for both list and subquery versions:
+
+"x = ANY (...)": The value must match one or more values in the list to evaluate to TRUE.
+"x != ANY (...)": The value must not match one or more values in the list to evaluate to TRUE.
+"x > ANY (...)": The value must be greater than the smallest value in the list to evaluate to TRUE.
+"x < ANY (...)": The value must be smaller than the biggest value in the list to evaluate to TRUE.
+"x >= ANY (...)": The value must be greater than or equal to the smallest value in the list to evaluate to TRUE.
+"x <= ANY (...)": The value must be smaller than or equal to the biggest value in the list to evaluate to TRUE.
+
+If a subquery returns zero rows, the condition evaluates to FALSE.
+
+
+SOME operator
+-------------
+The SOME and ANY comparison conditions do exactly the same thing and are completely interchangeable.
+
+
+SELF TEST
+1. A, C, D, E, F   -> A, B, C, D, E
+2. D
+3. A
+4. D
+5. A, D
+6. A, B
+7. E
+8. C
+9. A, B
+10. C
+
+=========================================================
+Ch. 9 - SET operators
+=========================================================
+
+UNION
+UNION ALL
+INTERSECT
+MINUS
+
+Data types sre not required to be the same on corresponding columns from the combined queries: they'll be implicitly casted to the common compatible type with the higher level of precsion.
+
+DATE + TIMESTAMP -> TIMESTAMP
+DATE + TIMESTAMP(3) -> TIMESTAMP(3)
+CHAR(5) + VARCHAR2(3) -> VARCHAR2(8)   *** Trailing spaces from CHAR will NOT be removed (*) ***
+INTEGER + NUMBER -> NUMBER
+INTEGER + NUMBER(9) -> NUMBER(32)
+INTEGER + NUMBER(9,3) -> NUMBER(32,3)
+INTEGER + NUMBER(40,3) -> NUMBER(40,3)
+
+(*) trailing SPACES in CHAR columns will affect the order by clause
+
+  create table t1 (name  CHAR(10) );
+  insert into t1 (name) values ('Thomson   ');
+  insert into t1 (name) values ('Smith     ');
+
+  create table t2 (name  VARCHAR2(10) );
+  insert into t2 (name) values ('Thomson');
+  insert into t2 (name) values ('Smith');
+  
+/* trailing spaces from t1 makes the values different. Rows are ordered ascending by default */
+  select name from t1
+  UNION
+  select name from t2;
+
+  Smith
+  Smith
+  Thomson
+  Thomson
+
+/* UNION ALL will return rows grouped from each query in their natural order */ 
+  select name from t1
+  UNION ALL
+  select name from t2;
+
+  Thomson
+  Smith  
+  Thomson
+  Smith   
+
+/* Rows are ordered ascending by default */ 
+  select trim(name) from t1
+  UNION 
+  select name from t2;
+
+  Smith  
+  Thomson
+
+/* UNION ALL will return rows grouped from each query in their natural order */ 
+  select trim(name) from t1
+  UNION ALL
+  select name from t2;
+
+  Thomson
+  Smith  
+  Thomson
+  Smith   
+
+SELF TEST
+1. D
+2. A, B, C
+3. C
+4. 4, 8, 0, 4
+5. C
+6. B
+7. B
+
+============================================
+Ch. 10 - Manipulating data
+============================================
+
+The INSERT command
+------------------
+
+INSERT [ALL] INTO table (value1, value2, ..., valueN);
+INSERT [ALL] INTO table (column1, column2, ..., columnN) values (value1, value2, ..., valueN);
+
+INSERT ALL  -- Every row must be considered for ALL the tables following,
+            -- not just the table matchng the first condition
+  WHEN 1=1 THEN  -- always TRUE: this insert will be executed for each row
+    INTO emp_no_name (department_id, job_id,salary,commition_pct,hire_date)  -- emp_no_name table columns
+    VALUES (department_id, job_id,salary,commition_pct,hire_date)            -- Select projection columns
+  WHEN department_id <> 80 THEN 
+    INTO emp_no_name (employee_id, department_id, salary, hire_date)  -- emp_no_name table columns
+    VALUES (employee_id, department_id, salary, hire_date)            -- Select projection columns
+  WHEN department_id = 80 THEN
+    INTO emp_sales (employee_id, salary, commition_pct, hire_date)  -- emp_sales table columns
+    VALUES (employee_id, salary, commition_pct, hire_date)          -- Select projection columns
+  SELECT employee_id, department_id, job_id, salary, commition_pct, hire_date
+    FROM employees
+   WHERE hire_date > sysdate - 30 ;
+
+INSERT and SUBQUERIES
+
+insert into regions (region_id      , region_name) 
+             (select region_id+10000, 'Great Britain' from regions);
+
+insert into regions (region_id      , region_name) 
+      VALUES (select region_id+10000, 'Great Britain' from regions);
+      ^-- ERROR !!! Don't use VALUES keyword with subqueries
+
+MERGE command
+--------------
+Can UPDATE, INSERT or (since 10g that is ISO-SQL:2002 compliant) even DELETE
+
+-- INSERT OR UPDATE
+MERGE INTO employees e 
+USING new_employees n
+   ON (e.employee_id = n.employee_id )
+ WHEN MATCHED THEN
+   UPDATE SET e.salary = n.salary
+ WHEN NOT MATCHED THEN
+   INSERT (employee_id, last_name, salary)
+   VALUES (n.employee_id, n.last_name, n.salary);
+
+
+-- DELETE OR UPDATE
+MERGE INTO employees e 
+USING new_employees n
+   ON (e.employee_id = n.employee_id )
+ WHEN MATCHED THEN
+   DELETE WHERE e.employee_id = n.employee_id
+ WHEN NOT MATCHED THEN
+   INSERT (employee_id, last_name, salary)
+   VALUES (n.employee_id, n.last_name, n.salary);
+
+Notice UPDATE and DELETE may be combined
+see this example
+http://oracle-base.com/articles/10g/merge-enhancements-10g.php#delete_clause
+
+For a full explainaion of the MERGE statement, please refer to
+
+http://oracle-base.com/articles/10g/merge-enhancements-10g.php
+
+
+TRANSACTION control
+----------------------
+COMMIT
+ROLLBACK
+SAVEPOINT
+
+A relational Database must pass the ACID test:
+
+A Atomicity: all partes of a transaction must complete on none of them
+C Consistency: the results of a query must be coonsistent with the state of the DB at the time when it started.
+I Isolation: a not yet committed transaction must be invisible to the rest ofthe world.
+D Durability: once a transaction completes, it must be impossible for the database to loose it.
+
+Start and End of a transaction
+a session begins a transaction when a DML command (INSERT, UPDATE, DELETE or MERGE) is issued (but NOT TRUNCATE) and ends when a COMMIT or ROLLBACK takes place.
+During a transaction the other sessions accessing the same data will be redirected to copies of that data consistent to the instant before the transaction begun.
+
+COMMIT;
+Commit completes instantly becaus it just does nothing because the job was alrey done by DML statemens.
+
+ROLLBACK [to SAVEPOINT savepoint];
+Rollbacks may take up to the time the the DML statements took to or even longer complete.
+
+
+SELECT ... FOR UPDATE
+it will place a lock on all the rows retrieved. No changes can be made to the them by any session other than that which issued the command.
+The lock will be released either issuing a COMMIT or ROLLBACK.
+
+SELF TEST
+1. B, C, D, F
+2. B
+3. C
+4. D
+5. E --> D
+6. A --> C
+7. A 
+8. D
+9. C
+10. A, C
+11. B
+12. C ????
+13. A, C, F
+
+============================================
+Ch. 11 - Using DDL statements
+============================================

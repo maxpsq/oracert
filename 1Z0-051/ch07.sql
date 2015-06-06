@@ -167,3 +167,207 @@ SELECT COUNT(DISTINCT D.DEPARTMENT_ID) "#DEP"
      , COUNT(*) AS "#CARTESIAN"
   FROM DEPARTMENTS D
   CROSS JOIN EMPLOYEES E ;
+  
+  
+SELECT *
+  from departments 
+ where department_id IN 
+ (SELECT department_id FROM ( SELECT department_id, COUNT(EMPLOYEE_ID) "#EMPLOYEES" FROM EMPLOYEES GROUP BY department_id HAVING COUNT(EMPLOYEE_ID) > 5 ) )
+ ;
+   
+   
+   
+/** ALL is meant to be used with multi-rows subqueries 
+
+If a subquery returns zero rows, the condition evaluates to TRUE.
+
+**/
+
+select * from employees 
+  where salary > ALL( 9000, 12000, 13000);
+  
+select * from employees 
+  where salary > 9000
+    and salary > 12000
+    and salary > 13000 ;
+
+select * from employees 
+  where salary > 13000 ;
+
+
+  
+select * from employees 
+  where salary < ALL( 2500, 5000, 3000);
+  
+select * from employees 
+  where salary < 2500
+    and salary < 5000
+    and salary < 3000 ;
+
+select * from employees 
+  where salary < 2500 ;
+
+
+/* Greater: The value must be greater than the biggest value in the list to evaluate to TRUE. 
+
+  > ALL()  ->   > (select max() ... )
+ >= ALL()  ->  >= (select max() ... )
+
+*/
+select * from employees 
+where salary > ALL (select salary from employees where last_name like 'A%')
+order by employee_id ;
+  
+select * from employees 
+where salary > (select max(salary) from employees where last_name like 'A%')
+order by employee_id ;
+  
+
+  
+select salary from employees where last_name like 'C%' ;
+
+/* Less: The value must be smaller than the smallest value in the list to evaluate to TRUE. 
+
+  < ALL()  ->   < (select min() ... )
+ <= ALL()  ->  <= (select min() ... )
+
+*/
+
+select * from employees 
+where salary < ALL (select salary from employees where last_name like 'C%')
+order by employee_id ;
+  
+select * from employees 
+where salary < (select min(salary) from employees where last_name like 'C%')
+order by employee_id ;
+  
+/* Equal: The value must match ALL the values in the list to evaluate to TRUE
+salary = v1 AND salary = v2 ... AND salary = vN
+*/
+select * from employees 
+where salary = ALL (select salary from employees where last_name like 'C%')
+order by employee_id ; -- NO ROWS
+
+/* NOT Equal: The value must match ALL the values in the list to evaluate to TRUE
+salary != v1 AND salary != v2 ... AND salary != vN
+
+ != ALL()  ->  NOT IN ()
+*/
+select * from employees 
+where salary != ALL (select salary from employees where last_name like 'C%')
+order by employee_id ; -- 91 ROWS
+
+select * from employees 
+where salary NOT IN (select salary from employees where last_name like 'C%')
+order by employee_id ; -- 91 ROWS
+
+
+/** ANY is meant to be used with multi-rows subqueries **/
+
+select * from employees 
+  where salary = ANY( 9000, 12000, 13000);
+  
+select * from employees 
+  where salary = 9000
+     OR salary = 12000
+     OR salary = 13000 ;
+
+select * from employees 
+  where salary IN ( 9000, 12000, 13000);
+
+/* EQUAL: The value must match one or more values in the list to evaluate to TRUE. */
+
+select * from employees 
+where salary = ANY (select salary from employees where last_name like 'C%')
+order by employee_id ; -- 16 ROWS
+
+/* EQUAL: The value must NOT match one or more values in the list to evaluate to TRUE. 
+
+NOTICE the behaviour depends on how many distinct values are returned from the SUBQUERY
+
+     only 1 value -> excludes the rows mathing that value
+more than 1 value -> includes anything
+*/
+
+select * from employees 
+where salary != ANY (select salary from employees where last_name like 'Z%') -- 1 value
+order by employee_id ; -- 105 ROWS
+
+-- .. but ...
+select * from employees 
+where salary != ANY (select salary from employees where last_name like 'C%') -- more then one value
+order by employee_id ; -- 107 ROWS
+
+select * from employees 
+order by employee_id ; -- 107 ROWS  
+
+
+/* GREATER: The value must be greater than the smallest value in the list to evaluate to TRUE.
+
+ > ANY()  ->  > (select min() ... )
+ 
+If a subquery returns zero rows, the condition evaluates to FALSE. 
+*/
+
+select * from employees 
+where salary > ANY (select salary from employees where last_name like 'C%')
+order by employee_id ;  -- 96 rows
+  
+select * from employees 
+where salary > (select min(salary) from employees where last_name like 'C%')
+order by employee_id ;  -- 96 rows
+  
+/* LESS: The value must be smaller than the biggest value in the list to evaluate to TRUE
+
+ < ANY()  ->  < (select max() ... )
+*/
+
+select * from employees 
+where salary < ANY (select salary from employees where last_name like 'C%')
+order by employee_id ;  -- 94 rows
+  
+select * from employees 
+where salary < (select max(salary) from employees where last_name like 'C%')
+order by employee_id ;  -- 94 rows
+
+
+/** SOME operator 
+The SOME and ANY comparison conditions do exactly the same thing and are completely interchangeable.
+*/  
+select * from employees 
+where salary < SOME (select salary from employees where last_name like 'C%')
+order by employee_id ;  -- 94 rows
+  
+  
+  
+select name from t1
+  UNION ALL
+  select name from t2;
+
+  select trim(name) from t1
+  UNION ALl
+  select name from t2;
+
+
+select first_name from employees 
+ where first_name = 'John' and salary > 10000
+intersect
+select first_name from employees 
+ where first_name = 'John' and salary < 10000;  -- 1 row
+
+select first_name from employees 
+ where first_name = 'John' and salary < 10000
+intersect
+select first_name from employees 
+ where first_name = 'John' and salary > 10000 ;  -- 1 row
+
+
+
+UPDATE employees o SET o.employee_id = o.employee_id
+ WHERE o.department_id IN (SELECT i.department_id from employees i 
+                            WHERE i.first_name = 'John' );  -- 85 rows
+                            
+UPDATE employees o SET o.employee_id = o.employee_id
+ WHERE o.department_id = ANY (SELECT i.department_id from employees i 
+                            WHERE i.first_name = 'John' );  -- 85 rows
+
