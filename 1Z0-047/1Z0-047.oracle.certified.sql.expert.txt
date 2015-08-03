@@ -1,0 +1,289 @@
+Database Object
+-----------------
+Clusters
+Constraints*
+Contexts
+Database links
+Database triggers 
+Dimensions
+Directories
+External procedure libraries 
+Indexes*
+Index-organized tables 
+Indextypes
+Java classes, etc. 
+Materialized view logs 
+Materialized views 
+Mining models 
+Object tables
+Object types 
+Object views
+Operators 
+Packages
+Profiles
+Restore points 
+Roles*
+Rollback segments 
+Sequences*
+Stored functions/procedures 
+Synonyms*
+Tables*
+Tablespaces
+Users* 
+Views*
+
+
+the EXAM will only test for:
+
+Users			Non schema
+Roles			Non schema
+Public Synonyms	Non schema (Public synonyms are owned by the user PUBLIC)
+Synonyms		Schema
+Constraints		Schema
+Indexes			Schema
+Tables			Schema
+Sequences		Schema
+Views			Schema
+
+What is a Schema
+A schema is a collection of certain database objects
+
+Creating a Database Object
+
+Naming conventions
+- from 1 up to 30 characters in length
+- must begin with a letter
+- after first letter, letters, numbers, dollar ($), pund (#) and underscore (_) are allowed.
+- Names cannot be reserved words that are set aside for use in SQL statements
+
+
+Case sensitivity and Double Quotation Marks
+Whn enclosed in double quotes
+- object name become case sensitive.
+- reserved words becomes valid names
+- you no longer are bound to obey the "first letter then letters, numbers, dollar ($), pund (#) and underscore (_) rule.
+
+
+
+
+2. SELF TEST
+
+1. A
+2. A, C
+3. A
+4. B, C, D
+5. A, B, D
+6. E
+7. C
+8. D
+9. A
+10. B
+11. C 	--> B
+12. B
+13. D
+14. A
+
+
+
+3. SELF TEST
+1. C  -> A, C
+2. B
+3. B
+4. C
+5. D
+6. C
+7. C
+8. C, D
+9. C
+10. A
+11. C
+12. D
+13. B
+14. B
+15. C
+
+
+
+4. SELF TEST
+1. B
+2. B
+3. B
+4. B, C
+5. A, B, C
+6. A, D
+7. B
+8. B --> C 
+9. C
+10. D
+11. B
+12. B
+13. D
+14. A
+15. A
+
+
+
+5. SELF TEST
+1. D
+2. C
+3. C
+4. C, D
+5. B
+6. A
+7. D
+8. D
+9. A
+10. B
+11. C
+12. A, C
+13. B
+14. C
+15. B
+
+
+6. SINGLE ROW FUNCTIONS
+1. C
+2. C
+3. A, C, D
+4. A
+5. A
+6. A  --> C 
+7. C
+8. B
+9. C
+10. D  --> B
+11. A, D --> A
+12. B
+13. A
+14. B
+15. A
+
+7. 
+1. A, B
+2. B
+3. A, B
+4. B
+5. D
+6. C
+7. A
+8. A, B, D  --> **** ERRATA NEEDED
+9. A, B, D  --> B, D  *** TRICKY QUESTION ***
+10. A
+11. C
+12. C  --> D   *** TRICKY QUESTION *** Aggregate of an aggregate function
+13. B, D  --> A, C
+14. A   --> C  *** I didn't know this ***
+15. A 
+
+8. JOINS
+==================
+1. A, C
+2. B, D
+3. B
+4. A
+5. A, D
+6. C, D
+7. B, C  --> B, D
+8. B, C
+9. C
+10. B
+11. B, C
+12. A, C, D
+13. C
+14. B
+15. A
+
+9. SUBQUERIES
+==================
+1. A
+2. D  --> B
+3. B, D
+4. B, D  --> B  ERRORE STUPIDO!!
+5. B, D
+6. A
+7. C
+8. D
+9. A, C
+10. D
+11. A, B, C
+12. A
+13. D
+14. A
+15. A, B
+
+10. Creating Other Schema Objects
+====================================
+1. A, B, C, D  --> A  (LEGGERE CON PIU ATTENZIONE)
+2. D   -->  A (se uso una funzione su uno colonna devo attribuire un alias !!)
+3. A
+4. D
+5. C
+6. D
+7. B
+8. B
+9. B
+10. B
+11. D
+12. C
+13. A
+14. B
+15. C
+
+11. Managing Schema Objects
+====================================
+1. B, C   --> A, B
+2. B, C
+3. B
+4. B
+5. A   --> C
+6. D
+7. C
+8. B
+9. C
+10. A
+11. D   --> C
+12. B
+13. A
+14. D
+15. D
+
+- Rivedere le varie sintassi per ALTER TABLE ADD/MODIFY 
+nelle varianti in-line e out-of-line.
+- Rivedere sintassi per creare indici in-line
+- ALTER TABLE tabname SET UNUSED COLUMN colname;
+
+12. Using te SET operator
+====================================
+1. B
+2. C
+3. C
+4. A
+5. C
+6. A
+7. B
+8. A
+9. D  
+10. D -->  A 
+11. D
+12. B, D
+13. B, C  --> A, C 
+14. B
+15. C, D
+
+13. Generating Reports by Grouping Related Data
+===============================================
+1. D
+2. D
+3. B
+4. B   --> A  ( distinguish between aggregate and superaggregate!!)
+5. C
+6. A, C
+7. C
+8. B
+9. C
+10. B
+11. A
+12. B
+13. A
+14. C
+15. A
