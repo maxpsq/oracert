@@ -287,3 +287,79 @@ nelle varianti in-line e out-of-line.
 13. A
 14. C
 15. A
+
+14. Data Dictionary
+==============================
+1. A
+2. C   -> A
+3. D
+4. B
+5. B, D
+6. A
+7. C
+8. B
+9. D
+10. C
+11. B
+12. A, C, D  --> A, B, C, D
+13. A
+14. A
+15. B
+
+15. Large Data Sets
+==============================
+1. D
+2. D
+3. A, B
+4. C
+5. C
+6. C
+7. C
+8. D
+9. D  --> A
+10. C
+11. C  --> B
+12. C
+13. A
+14. D
+15. A,B,C,D  --> A, D
+
+16. Hierarchical retrieval
+==============================
+1. C
+2. A
+3. A   --> A, B, C, D
+4. B
+5. A
+6. C
+7. A
+8. A, C
+9. B
+10. B
+11. B
+12. C  --> D
+13. A
+14. B
+15. C  --> B
+
+17. Regular Expressions
+===============================
+1. D
+2. A
+3. D
+4. D
+5. A
+6. B
+7. B
+8. A
+9. A
+10. C       --> A
+11. A, D
+12. B
+13. A
+14. A
+15. B, C, D
+
+18. Controlling user Access
+==============================
+
