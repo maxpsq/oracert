@@ -203,6 +203,168 @@ ALTER TABLE my_table1 ADD CONSTRAINT CK_ID2 CHECK ( id2 > 0 );
 ALTER TABLE my_table1 DISABLE CONSTRAINT CK_ID2;
 ALTER TABLE my_table1 ENABLE CONSTRAINT CK_ID2;
 
+
+/*
+DELETE and ON DELETE
+*/
+ALTER TABLE my_table1 ADD CONSTRAINT zz_fk FOREIGN KEY (id1)
+      REFERENCES my_table2 (id1) ON DELETE CASCADE;
+
+ALTER TABLE my_table1 ADD CONSTRAINT zz_fk FOREIGN KEY (id1)
+      REFERENCES my_table2 (id1) ON DELETE SET NULL;
+
+
+/*******************************************************************************
+  DEFERRED and DEFERRABLE 
+*******************************************************************************/
+ALTER TABLE my_table1 ADD CONSTRAINT zz_fk FOREIGN KEY (id1)
+      REFERENCES my_table2 (id1) DEFERRABLE; -- default: NOT DEFERRABLE
+
+-- Now you can defer the constraint issuing the command...
+SET CONSTRAINT zz_fk DEFERRED;
+-- ... or the command ...
+SET CONSTRAINT ALL DEFERRED;
+
+-- here you can modify the data in the table, not taking care of the DEFERRED
+-- constraints: they will validate the data on the execution of the first COMMIT
+-- (either explicit or implicit). In case of failure, the modified data will be 
+-- rolled back.
+
+
+-- Then the constraint can be set to validate the data during the execution of
+-- any DML statement issuing the command...
+SET CONSTRAINT zz_fk IMMEDIATE;
+-- ... or the command ...
+SET CONSTRAINT ALL IMMEDIATE;
+
+
+/*******************************************************************************
+  renaming constraints
+*******************************************************************************/
+ALTER TABLE CRUISE_ORDERS
+        RENAME CONSTRAINT SYS_C0015489 TO PK_CRUISE_ORDER_ID;
+
+
+/*******************************************************************************
+  Creating indexes
+*******************************************************************************/
+-- In-Line anonymous
+CREATE TABLE my_table3 (id1   NUMBER(11) PRIMARY KEY);
+DROP TABLE my_table3;
+
+-- In-Line named
+CREATE TABLE my_table3 (id1   NUMBER(11) PRIMARY KEY
+       USING INDEX (CREATE INDEX JJ_PK
+                              ON my_table3(id));
+DROP TABLE my_table3;
+
+-- Out-Of-Line
+CREATE TABLE my_table3 (
+  id1   NUMBER(11),
+  id2   NUMBER(11),
+  CONSTRAINT JJ_PK PRIMARY KEY(id1)
+       USING INDEX (CREATE INDEX JJ_IX ON my_table3(id1),
+  CONSTRAINT KK_UN PRIMARY KEY(id2)
+       USING INDEX (CREATE INDEX KK_IX ON my_table3(id2)
+);
+       
+DROP TABLE my_table3;
+
+-- Out-Of-Line with 2 constraints sharing the same index
+CREATE TABLE my_table3 (
+  id1   NUMBER(11),
+  id2   NUMBER(11),
+  CONSTRAINT JJ_PK PRIMARY KEY(id1)
+       USING INDEX (CREATE INDEX JJ_IX ON my_table3(id1),
+  CONSTRAINT JJ_UN PRIMARY KEY(id1)
+       USING JJ_PK
+);
+       
+DROP TABLE my_table3;
+
+
+/*******************************************************************************
+  Function based indexes
+*******************************************************************************/
+CREATE TABLE MY_TABLE3 (LAST_NAME  VARCHAR2(30));
+
+CREATE INDEX FB1_IX ON my_table3(UPPER(LAST_NAME));
+INSERT INTO my_table3 VALUES ('SMITH');
+INSERT INTO my_table3 VALUES ('SULLIVAN');
+INSERT INTO my_table3 VALUES ('FERGUSON');
+COMMIT;
+
+SELECT * FROM my_table3 WHERE UPPER(LAST_NAME) = 'SMITH';
+
+DROP TABLE my_table3;
+
+
+CREATE TABLE GAS_TANKS (
+  GAS_TANK_ID NUMBER(7), 
+  TANK_GALLONS NUMBER(9), 
+  MILEAGE NUMBER(9)
+);
+CREATE INDEX IX_GAS_TANKS_001 ON GAS_TANKS (TANK_GALLONS * MILEAGE);
+
+-- Notice that this expression reverts the position of the columns on which the
+-- index is built. SQL is smart enough to recognize the index is built on the
+-- same columns used in the expression and that the result won't change.
+SELECT * FROM GAS_TANKS WHERE MILEAGE*TANK_GALLONS > 750;
+
+DROP TABLE GAS_TANKS ;
+
+/*******************************************************************************
+   FLASHBACK OPERATIONS
+*******************************************************************************/
+/* FLASHBACK TABLE */
+CREATE TABLE REC_TAB (GREETING  VARCHAR2(20));
+INSERT INTO REC_TAB VALUES ('HELLO');
+COMMIT;
+DROP TABLE REC_TAB;
+FLASHBACK TABLE REC_TAB TO BEFORE DROP;
+select * from REC_TAB;
+DROP TABLE REC_TAB;
+FLASHBACK TABLE REC_TAB TO BEFORE DROP RENAME TO REC_TAB2;
+select * from REC_TAB2;
+DROP TABLE REC_TAB2;
+PURGE TABLE REC_TAB2;  -- removes the dropped table from RECYCLEBIN
+
+/* Recovering table in time */
+-- ENABLE FLASHBACK OPERATIONS TO RESTORE AN EXISTING TABLE TO AN OLDER STATE
+CREATE TABLE REC_TAB (GREETING  VARCHAR2(20)) ENABLE ROW MOVEMENT; 
+-- or even 'ALTER TABLE REC_TAB ENABLE ROW MOVEMENT;' on an existing table
+INSERT INTO REC_TAB VALUES ('HELLO');
+COMMIT;
+execute dbms_lock.sleep(15);
+DELETE FROM REC_TAB;
+COMMIT;
+execute dbms_lock.sleep(15);
+FLASHBACK TABLE REC_TAB TO TIMESTAMP SYSTIMESTAMP - INTERVAL '0 00:00:20' DAY TO SECOND ;
+select ORA_ROWSCN, greeting from REC_TAB;
+DROP TABLE REC_TAB;
+
+/* RESTORE POINTS */
+
+CREATE TABLE REC_TAB (GREETING  VARCHAR2(20)) ENABLE ROW MOVEMENT; 
+-- or even 'ALTER TABLE REC_TAB ENABLE ROW MOVEMENT;' on an existing table
+INSERT INTO REC_TAB VALUES ('HELLO');
+COMMIT;
+CREATE RESTORE POINT point_01;
+
+execute dbms_lock.sleep(15);
+
+DELETE FROM REC_TAB;
+COMMIT;
+execute dbms_lock.sleep(15);
+FLASHBACK TABLE REC_TAB TO RESTORE POINT point_01;
+select ORA_ROWSCN, greeting from REC_TAB;
+
+DROP TABLE REC_TAB;
+DROP RESTORE POINT point_01;
+
+
 /* TEAR DOWN script */
 DROP TABLE my_table1 ;
 DROP TABLE my_table2 ;
+DROP TABLE my_table3 ;
+
