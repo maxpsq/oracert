@@ -1,0 +1,9 @@
+SelfTest Software
+
+** IMPORTANT NOTE **
+This Activation Key is generated on the provided System-ID and will
+not work if you try to install this software on a different machine.
+
+System-ID:		102B 510F 05C4 1B84
+Activation Key:	2947 3254 8159 453B 4521 E401 DB32 F04F 82B6 6519
+
