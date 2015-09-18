@@ -76,9 +76,9 @@ select sys_connect_by_path(employee_id||' '||first_name||' '||last_name, ' > ') 
  ;
 
 -- connect_by_root() 
--- Nota 
+-- Note 
 -- 1. it is only valid in hierarchical queries.
--- 2. si può invocare senza parentesi (vedi root2)
+-- 2. parentheses may be omitted (see 'root2')
 select employee_id||' '||first_name||' '||last_name as x
      , connect_by_root(employee_id) as root1
      , connect_by_root employee_id  as root2
@@ -88,15 +88,24 @@ select employee_id||' '||first_name||' '||last_name as x
  order siblings by last_name
  ;
 
-/* escludere un ramo dai risutati */
+/* excluda a branch from the hierarchical tree */
 select lpad(' ',level*3,' ')||employee_id||' '||first_name||' '||last_name||' ('||manager_id||')' as x 
   from employees 
  start with manager_id is null
  connect by manager_id = prior employee_id 
-        and employee_id <> 108
+        and employee_id <> 108 -- the 'connect by' clause may exclude a branch given a its root node
  ;
 
 
+/* 
+A note on 'connect by' clause 
+'connect by' connects a row to another one given a condition to follow the
+hierarchy.
+If we use a always true condition, we'll get an infinite set of rows made by the
+first row retrieved by the query itself.
+Here's an example on DUAL table that contains only one row:
+*/
+select level, x from dual connect by 1 = 1;
 
-select * from dual connect by 1 = 1;
-
+-- here's another interesting use of 'connect by' on dual
+select level from dual connect by level <= 10;
