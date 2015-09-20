@@ -11,7 +11,7 @@ Restricting and Sorting Data
 - [OK] Use substitution variables
 - [OK] Use the SQL row limiting clause (https://oracle-base.com/articles/12c/row-limiting-clause-for-top-n-queries-12cr1)
 - [..] Create queries using the PIVOT and UNPIVOT clause
-- [] Use pattern matching to recognize patterns across multiple rows in a table
+- [..] Use pattern matching to recognize patterns across multiple rows in a table (http://docs.oracle.com/database/121/DWHSG/pattern.htm#DWHSG8957)
 
 
 Using Single-Row Functions to Customize Output
