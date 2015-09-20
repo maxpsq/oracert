@@ -1,5 +1,5 @@
 
-From time o time, check for updates on this list here:
+** From time o time, check for updates on this list here: **
 http://education.oracle.com/pls/web_prod-plq-dad/db_pages.getpage?page_id=5001&get_params=p_exam_id:1Z0-047
 
 EXAM TOPICS
