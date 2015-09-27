@@ -124,11 +124,18 @@ SELECT *
 FROM   unpivot_test
 UNPIVOT (quantity FOR product_code IN (product_code_a AS 'A', product_code_b AS 'B', product_code_c AS 'C', product_code_d AS 'D'));
 
+/* 
+Notice the IN clause acts as a normal IN() operator and restricts the returned 
+rows to the ones matching the values in the set passed to the IN operator. 
+Only
+*/
+SELECT *
+FROM   unpivot_test
+UNPIVOT (quantity FOR product_code IN (product_code_a AS 'A'));
+
 -- INCLUDE NULLS
 SELECT *
 FROM   unpivot_test
 UNPIVOT INCLUDE NULLS (quantity FOR product_code IN (product_code_a AS 'A', product_code_b AS 'B', product_code_c AS 'C', product_code_d AS 'D'));
 
 
-
-SELECT level AS unpivot_row FROM dual CONNECT BY level <= 4;
