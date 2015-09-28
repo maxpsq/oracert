@@ -1,5 +1,5 @@
 /*
-Recursively trunacte child tables
+Recursively trunacate child tables
 */
 
 /*
