@@ -35,7 +35,7 @@ Displaying Data from Multiple Tables
 - [OK] Join a table to itself by using a self-join 
 - [OK] View data that generally does not meet a join condition by using outer joins 
 - [OK] Generate a Cartesian product of all rows from two or more tables 
-- [!!] Use the cross_outer_apply_clause
+- [OK] Use the cross_outer_apply_clause (https://oracle-base.com/articles/12c/lateral-inline-views-cross-apply-and-outer-apply-joins-12cr1)
 
 
 Using Subqueries to Solve Queries
@@ -43,7 +43,7 @@ Using Subqueries to Solve Queries
 - [OK] Use subqueries
 - [OK] List the types of subqueries 
 - [OK] Write single-row and multiple-row subqueries
-- [!!] Create a lateral inline view in a query (https://oracle-base.com/articles/12c/lateral-inline-views-cross-apply-and-outer-apply-joins-12cr1)
+- [OK] Create a lateral inline view in a query (https://oracle-base.com/articles/12c/lateral-inline-views-cross-apply-and-outer-apply-joins-12cr1)
 
 
 Using the Set Operators
@@ -71,12 +71,12 @@ Using DDL Statements to Create and Manage Tables
 - [OK] Create constraints for tables
 - [OK] Describe how schema objects work
 - [OK] Truncate tables, and recursively truncate child tables
-- [!!] Use 12c enhancements to the DEFAULT clause, invisible columns, virtual columns and identity columns in table creation/alteration
+- [OK] Use 12c enhancements to the DEFAULT clause, invisible columns, virtual columns and identity columns in table creation/alteration
 
 
 Creating Other Schema Objects
 
-- [!!] Create simple and complex views with visible/invisible columns
+- [OK] Create simple and complex views with visible/invisible columns
 - [OK] Retrieve data from views 
 - [OK] Create, maintain, and use sequences 
 - [OK] Create private and public synonyms
@@ -110,14 +110,14 @@ Manipulating Large Data Sets
 
 - [OK] Manipulate data using subqueries
 - [OK] Describe the features of multitable INSERTs 
-- [..] Use multitable INSERTs
-- [..] Unconditional INSERT
-- [..] Pivoting INSERT
+- [OK] Use multitable INSERTs
+- [OK] Unconditional INSERT
+- [OK] Pivoting INSERT
 - [OK] Conditional ALL INSERT
 - [OK] Conditional FIRST INSERT
 - [..] Merge rows in a table
 - [..] Track the changes to data over a period of time
-- [!!] Use explicit default values in INSERT and UPDATE statements (https://oraclepress.wordpress.com/2015/08/14/use-explicit-default-values-in-insert-and-update-statements/)
+- [OK] Use explicit default values in INSERT and UPDATE statements (https://oraclepress.wordpress.com/2015/08/14/use-explicit-default-values-in-insert-and-update-statements/)
 
 
 Generating Reports by Grouping Related Data
