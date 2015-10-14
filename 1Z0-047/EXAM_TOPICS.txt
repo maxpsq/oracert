@@ -124,7 +124,7 @@ Generating Reports by Grouping Related Data
 
 - [..] Use the ROLLUP operation to produce subtotal values
 - [..] Use the CUBE operation to produce crosstabulation values 
-- [OK] Use the GROUPING function to identify the row values created by ROLLUP or CUBE 
+- [..] Use the GROUPING function to identify the row values created by ROLLUP or CUBE 
 - [..] Use GROUPING SETS to produce a single result set
 
 
@@ -166,6 +166,6 @@ Hierarchical Retrieval
 Regular Expression Support
 
 - [OK] Use Meta Characters
-- [..] Regular Expression Functions to search, match and replace
-- [..] Use replacing Patterns 
-- [..] Use regular expressions and check constraints
+- [OK] Regular Expression Functions to search, match and replace
+- [OK] Use replacing Patterns 
+- [OK] Use regular expressions and check constraints

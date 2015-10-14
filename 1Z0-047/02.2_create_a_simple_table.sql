@@ -239,5 +239,5 @@ drop table numtab;
 -- stores a span of time defined in days, hours, minutes and seconds where
 -- n1 is the precision for days and n2 is the precision for seconds.
 -- n1 ranges from 0 to 9 and defaults to 2
--- n2 ranges from 0 t0 9 and defaults to 6 (is the fractional value precision
+-- n2 ranges from 0 t0 9 and defaults to 6 (it's the fractional value precision
 -- for seconds). 

@@ -28,18 +28,25 @@ FROM DUAL;
 /* Regexp Match Parameter Text Literals 
 c: case sensitive
 i: case insensitive
-n: make . match new lines
+n: make "." match new lines
 m: multiline, make ^ and $ to be assumed to be the beginning and end
    of lines within the string
-x: ignores whitespace characters   
+x: ignores whitespace characters
 
 Note that if the match parameter text literals (Table 17-5) are used in a 
 conflicting combination, such as ‘ic’, the last value will take precedence and 
 any prior conflicting values will be ignored.
+
+The default case sensitivity is determined by the value of the NLS_SORT parameter.
+BINARY: case sensitive
+OTHER VALUES: case insensitive
 */
+select sys_context ('userenv', 'nls_sort') from sys.dual;
 
-
-/* REGEXP_SUBSTR(s1, pattern1, p1, n1, m1) */
+/*
+REGEXP_SUBSTR(s1, pattern1, p1, n1, m1)
+The default case sensitivity is determined by the value of the NLS_SORT parameter.
+*/
 SELECT REGEXP_SUBSTR('she sells sea shells down by the seashore', 'sh[[:alpha:]]+') AS THE_RESULT
 FROM DUAL;          -- ????
 
@@ -53,7 +60,10 @@ SELECT REGEXP_SUBSTR('SHE SELLS SEA SHELLS DOWN BY THE SEASHORE', 'sh[[:alpha:]]
 FROM DUAL;          -- ????
 
 
-/* REGEXP_INSTR(s1, pattern1, p1, n1, opt1, m1) */
+/*
+REGEXP_INSTR(s1, pattern1, p1, n1, opt1, m1, s1)
+The default case sensitivity is determined by the value of the NLS_SORT parameter.
+*/
 SELECT REGEXP_INSTR('she sells sea shells down by the seashore', 'sh[[:alpha:]]+') AS THE_RESULT
 FROM DUAL;          -- 1
 
@@ -74,8 +84,16 @@ FROM DUAL;          -- 21
 SELECT REGEXP_INSTR('SHE SELLS SEA SHELLS DOWN BY THE SEASHORE', 'sh[[:alpha:]]+', 1, 2, 0, 'i') AS THE_RESULT
 FROM DUAL;          -- 15
 
+-- Subexpression (since Oracle 11gR1)
+SELECT REGEXP_INSTR('1234567890', '(123)(4(56)(78))', 1, 1, 0, 'i', 1) FROM dual;
+--                                  ^
+SELECT REGEXP_INSTR('1234567890', '(123)(4(56)(78))', 1, 1, 0, 'i', 3) FROM dual;
+--                                         ^
 
-/* REGEXP_REPLACE(s1, pattern1, rep1, p1, o1, m1) */
+/* 
+REGEXP_REPLACE(s1, pattern1, rep1, p1, o1, m1) 
+The default case sensitivity is determined by the value of the NLS_SORT parameter.
+*/
 
 -- No sobstitution specified, occurrences are replaced with NULL
 SELECT REGEXP_REPLACE('she sells sea shells down by the seashore', 'sh[[:alpha:]]+') AS THE_RESULT
@@ -103,12 +121,42 @@ SELECT REGEXP_REPLACE('SHE SELLS SEA SHELLS DOWN BY THE SEASHORE', 'sh[[:alpha:]
 FROM DUAL;          -- *** SELLS SEA *** DOWN BY THE SEA***
 
 
+-- Using sub-expressions [enclosing in parentheses ()]
+-- The default case sensitivity is determined by the value of the NLS_SORT parameter.
 
+SELECT REGEXP_REPLACE('SocialSecurityNumber', '([A-Z])', ' \1', 2) AS hyphen_text
+FROM   DUAL;
+
+SELECT REGEXP_REPLACE('SocialSecurityNumber', '([A-Z])', ' \1', 2, 0, 'c') AS hyphen_text
+FROM   DUAL;
+
+alter session set nls_sort = 'BINARY';
+
+SELECT REGEXP_REPLACE('SocialSecurityNumber', '([A-Z])', ' \1', 2) AS hyphen_text
+FROM   DUAL;
 
 /* 
 REGEXP_LIKE (s1, pattern1, m1) returns TRUE or FALSE 
 best use in WHERE conditions or CHECK constraints
 */
 
-select * from employees
+select * from hr.employees
  where REGEXP_LIKE(last_name, 'c.e', 'i');
+
+
+CREATE TABLE EMAIL_LIST
+(  EMAIL_LIST_ID    NUMBER(7)  PRIMARY KEY,
+   EMAIL1           VARCHAR2(120),
+   CONSTRAINT CK_EL_EMAIL1
+     CHECK (
+       REGEXP_LIKE (EMAIL1, '^([[:alnum:]]+)@[[:alnum:]]+.(com|net|org|edu|gov|mil)$')
+     )
+);
+
+
+/*
+REGEXP_COUNT(s1, pattern1, p1, m1) [since Oracle 11gR1]
+*/
+
+SELECT REGEXP_COUNT('SHE SELLS SEA SHELLS DOWN BY THE SEASHORE','S[EH]A')
+  FROM dual;
