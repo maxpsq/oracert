@@ -186,9 +186,9 @@ drop table numtab;
 /*
 Long and raw datatypes
 ---------------
-LONG
-LONG RAW
-RAW(size)
+LONG        CHARACTER --> DEPRECATED: Use CLOB or NCLOB instead
+LONG RAW    BINARY    --> DEPRECATED: Use BLOB instead
+RAW(size)   BINARY    (max 2000 bytes)
 */
 
 /*

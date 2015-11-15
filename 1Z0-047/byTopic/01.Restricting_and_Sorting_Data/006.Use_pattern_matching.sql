@@ -2,9 +2,16 @@
 
 Oracle's Analytic functions
 ============================================
+A simple explenaition of MATCH_RECOGNIZE clause
+https://oraclepress.wordpress.com/2015/08/18/use-pattern-matching-to-recognize-patterns-across-multiple-rows-in-a-table/
+============================================
+
+
+
+============================================
             Pattern Matching
 ============================================
-https://oracle-base.com/articles/12c/pattern-matching-in-oracle-database-12cr1#syntax-made-simple
+https://oracle-base.com/articles/12c/pattern-matching-in-oracle-database-12cr1
 
 Since Oracle 12c has been introduced the MATCH_RECOGNIZE clause to make pattern matching
 simple.
@@ -112,7 +119,8 @@ CREATE TABLE sales_history (
   CONSTRAINT sales_history_pk PRIMARY KEY (id)
 );
 
-ALTER SESSION SET nls_timestamp_format = 'DD-MON-YYYY';
+ALTER SESSION SET NLS_DATE_LANGUAGE='AMERICAN';
+ALTER SESSION SET nls_date_format = 'DD-MON-YYYY';
 
 INSERT INTO sales_history VALUES ( 1, 'TWINKIES', '01-OCT-2014', 17);
 INSERT INTO sales_history VALUES ( 2, 'TWINKIES', '02-OCT-2014', 19);
@@ -240,7 +248,7 @@ COLUMN start_tstamp FORMAT A11
 COLUMN peak_tstamp  FORMAT A11
 COLUMN end_tstamp   FORMAT A11
 
-SELECT *
+SELECT MR.*
 FROM   sales_history MATCH_RECOGNIZE (
          PARTITION BY product
          ORDER BY tstamp
@@ -654,4 +662,4 @@ value for the last row mapped to UP.
 */
 
 /* tear down */
-drop table Ticker;
+drop table Ticker purge;
