@@ -115,3 +115,15 @@ Output: A value of the datatype INTERVAL DAY TO SECOND.
 */
 select NUMTODSINTERVAL(36, 'HOUR') from dual; --> +01 12:00:00.000000 means 1 day and 12 hours
 
+/*
+TO_DSINTERVAL(chr, nlsparam)
+converts a character string of CHAR, VARCHAR2, NCHAR, or NVARCHAR2 datatype 
+to an INTERVAL DAY TO SECOND value
+
+The only valid nlsparam you can specify in this function is NLS_NUMERIC_CHARACTERS. 
+This argument can have the form:
+   NLS_NUMERIC_CHARACTERS = "dg" 
+*/
+SELECT employee_id, last_name FROM hr.employees
+   WHERE hire_date + TO_DSINTERVAL('100 10:00:00');
+   

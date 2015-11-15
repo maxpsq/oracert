@@ -1,3 +1,65 @@
+
+/*******************************************************************************
+   FLASHBACK OPERATIONS
+*******************************************************************************/
+
+/* 
+FLASHBACK TABLE 
+========================================
+*/
+CREATE TABLE REC_TAB (GREETING  VARCHAR2(20));
+INSERT INTO REC_TAB VALUES ('HELLO');
+COMMIT;
+DROP TABLE REC_TAB;
+FLASHBACK TABLE REC_TAB TO BEFORE DROP;
+select * from REC_TAB;
+DROP TABLE REC_TAB;
+FLASHBACK TABLE REC_TAB TO BEFORE DROP RENAME TO REC_TAB2;
+select * from REC_TAB2;
+DROP TABLE REC_TAB2;
+PURGE TABLE REC_TAB2;  -- removes the dropped table from RECYCLEBIN
+
+/* 
+Recovering table in time 
+========================================
+*/
+-- ENABLE FLASHBACK OPERATIONS TO RESTORE AN EXISTING TABLE TO AN OLDER STATE
+CREATE TABLE REC_TAB (GREETING  VARCHAR2(20)) ENABLE ROW MOVEMENT; 
+-- or even 'ALTER TABLE REC_TAB ENABLE ROW MOVEMENT;' on an existing table
+INSERT INTO REC_TAB VALUES ('HELLO');
+COMMIT;
+execute dbms_lock.sleep(15);
+DELETE FROM REC_TAB;
+COMMIT;
+execute dbms_lock.sleep(15);
+FLASHBACK TABLE REC_TAB TO TIMESTAMP SYSTIMESTAMP - INTERVAL '0 00:00:20' DAY TO SECOND ;
+select ORA_ROWSCN, greeting from REC_TAB;
+DROP TABLE REC_TAB;
+
+/* 
+RESTORE POINTS 
+========================================
+*/
+
+CREATE TABLE REC_TAB (GREETING  VARCHAR2(20)) ENABLE ROW MOVEMENT; 
+-- or even 'ALTER TABLE REC_TAB ENABLE ROW MOVEMENT;' on an existing table
+INSERT INTO REC_TAB VALUES ('HELLO');
+COMMIT;
+CREATE RESTORE POINT point_01;
+
+execute dbms_lock.sleep(15);
+
+DELETE FROM REC_TAB;
+COMMIT;
+execute dbms_lock.sleep(15);
+FLASHBACK TABLE REC_TAB TO RESTORE POINT point_01;
+select ORA_ROWSCN, greeting from REC_TAB;
+
+DROP TABLE REC_TAB;
+DROP RESTORE POINT point_01;
+
+
+
 /*
 FLASHBACK TABLE
 

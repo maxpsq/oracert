@@ -1,4 +1,12 @@
+/*
+A subquery in the place of a column name in a SELECT is expected to 
+be a single-row subquery. If it is not, the result is an error message.
+*/
 
+SELECT col1,
+     , (select dummy from dual ) as col2 -- single row/single column subquery
+     , col3
+  from mytab ;
 
 /*
 The WITH Clause
