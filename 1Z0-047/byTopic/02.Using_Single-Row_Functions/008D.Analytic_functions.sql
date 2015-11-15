@@ -529,6 +529,7 @@ the OVER clause. Neither do they support any <window> clause. The ranking done
 in FIRST and LAST is always DENSE_RANK. 
 
 The query below shows the usage of FIRST function. 
+
 The LAST function is used in similar context to perform computations 
 on last ranked records.
 */
@@ -547,6 +548,25 @@ FROM hr.employees
 WHERE department_id IN (20, 10)
 ORDER BY department_id, employee_id, HIRE_YR;
 
+
+/*
+This function has two arguments and two modes. Modes are FIRST e LAST. 
+In case FIRST is used, the table will be sort ascending and the minimum 
+value of the column on which rows are ordered will be kept, meaning: 
+the lowest value. 
+Then the rows containing the value just found earlier will be passed to 
+the gouping function specified before KEEP. 
+
+Vejamos um exemplo para ficar mais claro:
+We sort the rows by commission_pct in ascending order, we keep the first 
+value (the lowest NOT NULL in the table). Then we send the rows matching
+the value we found on the commission_pct column to the MAX(salary) function,
+getting as a result the maximum salary among the employees having the 
+lowest commission_pct.
+
+*/
+Select max(salary) KEEP (DENSE_RANK FIRST ORDER BY commission_pct)
+  FROM hr.employees ;
 
 /*
 How to specify the Window clause (ROWS type or RANGE type windows)?

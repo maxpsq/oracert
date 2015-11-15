@@ -28,18 +28,25 @@ middle of the list and perform linear interpolation between them to
 locate a result.
 */
 
+-- set up
 CREATE TABLE TEST_MEDIAN(a NUMBER(3));
 INSERT INTO TEST_MEDIAN VALUES (1);
 INSERT INTO TEST_MEDIAN VALUES (10);
 INSERT INTO TEST_MEDIAN VALUES (3);
+
+-- test
 SELECT MEDIAN(A) FROM TEST_MEDIAN; -- 3
 
 INSERT INTO TEST_MEDIAN VALUES (4); -- 3.5  (3+4)/2
+
 SELECT MEDIAN(A) FROM TEST_MEDIAN;
 
-drop table TEST_MEDIAN;
+-- tear down
+drop table TEST_MEDIAN purge;
 
-/* RANK(c1) WITHIN GROUP (ORDER BY e1)
+/* 
+RANK(c1) WITHIN GROUP (ORDER BY e1)
+---------------------------------------
 Parameters: c1 is a constant; e1 is an expression with a datatype matching the
 corresponding c1 datatype. Numeric and character pairs are allowed.
 In this format, the parameters can be repeated in such a way that for each c1, 
@@ -72,6 +79,7 @@ existing rows, would be the sixth row in the listing. In other words, there are
 five rows with a SQ_FT value less than 300.
 */
 
+-- set up
 create table rank_test(a number, b number);
 insert into rank_test values (3,5);
 insert into rank_test values (4,7);
@@ -80,6 +88,9 @@ insert into rank_test values (13,11);
 insert into rank_test values (15,13);
 insert into rank_test values (21,18);
 insert into rank_test values (23,20);
+commit;
+
+-- test
 
   SELECT   RANK(4,7) WITHIN GROUP (ORDER BY a,b)
   FROM     rank_test; -- 2 means 4,7 is the second value according to the sorting criteria
@@ -108,7 +119,8 @@ insert into rank_test values (23,20);
   SELECT   RANK(80) WITHIN GROUP (ORDER BY a)
   FROM     rank_test; -- 1 means 80 would be the first value according to the sorting criteria
 
-  drop table rank_test;
+-- tear down
+drop table rank_test purge;
   
 /* FIRST and LAST
 
@@ -121,13 +133,12 @@ The aggregate functions FIRST and LAST are similar. For a given range of sorted
 values, they return either the first value (FIRST) or the last value (LAST) of 
 the population of rows defining e1, in the sorted order. For example:
 
-                SELECT   MAX(SQ_FT) KEEP (DENSE_RANK FIRST ORDER BY GUESTS)
-                         "Largest"
-                FROM     SHIP_CABINS;
-                
-                Largest
-                ----------------------
-                225
+        SELECT   MAX(SQ_FT) KEEP (DENSE_RANK FIRST ORDER BY GUESTS) "Largest"
+        FROM     SHIP_CABINS;
+        
+        Largest
+        ----------------------
+        225
                 
 In this example, we are doing the following:
 
@@ -170,7 +181,7 @@ select max(sq_mt) keep (dense_rank first order by guests) "largest for mininum #
 select max(sq_mt) keep (dense_rank last order by guests) "largest for maximum # guests"
   from SHIP_CABINS;
   
-drop table SHIP_CABINS;
+drop table SHIP_CABINS purge;
 
 
 
@@ -219,27 +230,8 @@ COVAR_POP
 COVAR_SAMP
 CUME_DIST
 */
-/*
-GROUP_ID()  ** no arguments **
-GROUP_ID distinguishes duplicate groups resulting from a GROUP BY specification. 
-It is useful in filtering out duplicate groupings from the query result. 
-It returns an Oracle NUMBER to uniquely identify duplicate groups. This function 
-is applicable only in a SELECT statement that contains a GROUP BY clause.
-
-If n duplicates exist for a particular grouping, then GROUP_ID returns numbers 
-in the range 0 to n-1.
-*/
-select manager_id, sum(salary), group_id() from hr.employees
-group by manager_id
-order by manager_id, group_id();
-
-select manager_id, sum(salary), group_id() from hr.employees
-group by grouping sets ( (manager_id), (manager_id), (manager_id)) -- reapeted groups
-order by manager_id, group_id();
 
 /*
-GROUPING
-GROUPING_ID
 LISTAGG
 PERCENT_RANK
 PERCENTILE_CONT

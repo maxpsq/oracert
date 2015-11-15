@@ -23,7 +23,7 @@ Using Single-Row Functions to Customize Output
 
 Reporting Aggregated Data Using the Group Functions
 
-- [..] Identify the available group functions (RANK WITHIN GROUP, etc...)
+- [OK] Identify the available group functions (RANK WITHIN GROUP, etc...)
 - [OK] Describe the use of group functions 
 - [OK] Group data by using the GROUP BY clause 
 - [OK] Include or exclude grouped rows by using the HAVING clause 
