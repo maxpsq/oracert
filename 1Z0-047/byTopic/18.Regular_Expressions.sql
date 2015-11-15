@@ -1,3 +1,22 @@
+/*
+POSIX CHARACTER CLASSES
+
+[:alnum:] Alphanumeric characters. Includes letters and numbers. Omits punctuation marks.
+[:alpha:] Alphabetic characters. Includes letters only.
+[:blank:] Blank space characters.
+[:cntrl:] Control (non-printing) characters.
+[:digit:] Numeric characters.
+[:graph:] All [:punct:], [:upper:], [:lower:], [:digit:] character classes combined.
+[:lower:] Lowercase alphabetic characters.
+[:print:] Printable characters.
+[:punct:] Punctuation characters.
+[:space:] Space (non-printing) characters.
+[:upper:] Uppercase alphabetic characters.
+[:xdigit:] Valid hexadecimal characters.
+
+*/
+
+
 /* NOT EQUALS braket expression [^...] */
 SELECT REGEXP_REPLACE('aluminium', '[^am]', '.') AS THE_RESULT
 FROM DUAL;          -- a..m....m
