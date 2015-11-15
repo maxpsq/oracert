@@ -1,6 +1,12 @@
 GETTING CERTIFIED
 
-My goal
+Subscribe/purchase my exam
+
+http://pearsonvue.com/oracle/
+
+
+
+My goals
 
 1. Oracle Database SQL Certified Expert
 	** Requirements **
@@ -9,7 +15,15 @@ My goal
 	** Pass the exam **
 	> 1Z0-047 Oracle Database SQL Expert
 
-2. Oracle PL/SQL Developer Certified Associate
+2. Oracle Database 11g Release 2 SQL Tuning Certification
+	** Requirements **
+	> None
+
+	** Pass the exam **
+	> Oracle Database 11g Release 2: SQL Tuning 1Z0-117
+      https://education.oracle.com/pls/web_prod-plq-dad/db_pages.getpage?page_id=5001&get_params=p_exam_id:1Z0-117
+
+3. Oracle PL/SQL Developer Certified Associate
 	** Requiremets **
 	> Oracle Database 12c: SQL Fundamentals 1Z0-061
 	> Oracle Database 11g: SQL Fundamentals I 1Z0-051
@@ -17,18 +31,23 @@ My goal
 
 	** Pass one of this exams **
 	> Oracle Database 11g: Program with PL/SQL 1Z0-144
+	  http://education.oracle.com/pls/web_prod-plq-dad/db_pages.getpage?page_id=5001&get_params=p_exam_id:1Z0-144
+
 	> Program with PL/SQL 1Z0-147
 
-2. Oracle PL/SQL Developer Certified Professional
+4. Oracle PL/SQL Developer Certified Professional
 	** Requirements **
 	> Oracle PL/SQL Developer Certified Associate
 
 	** Pass the exam **
 	> Oracle Database 11g: Advanced PL/SQL 1Z0-146
+	  http://education.oracle.com/pls/web_prod-plq-dad/db_pages.getpage?page_id=5001&get_params=p_exam_id:1Z0-146&p_org_id=&lang=
 
+5. Oracle Data Warehousing 11g Certified Implementation Specialist
+	** Requirements **
+	> None
 
-http://www.gocertify.com/articles/oracle-sql-certification-1z0-051-or-1z0-047.html
-
-
-Prep test at
-http://www.iheadgo.com
+	** Pass the exam **
+	Oracle Database 11g Data Warehousing Essentials 1Z0-515
+	https://education.oracle.com/pls/web_prod-plq-dad/db_pages.getpage?page_id=5001&get_params=p_exam_id:1Z0-515
+	

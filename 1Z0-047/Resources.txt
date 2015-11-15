@@ -26,3 +26,13 @@ Oracle Certification
 Guia de estudos para certificação ORACLE by Tércio Costa
 
 https://oraclepress.wordpress.com
+
+
+===============================================================
+                 Exam Simulations
+===============================================================
+http://www.databasetraining.com/exam/list  (free)
+
+http://www.oraclecertificationprep.com/apex/f?p=OCPSG:Main
+
+http://www.gocertify.com/quizzes/oracle/exam-1z0-047-oracle-database-sql-certified-expert-free-practice-questions.html

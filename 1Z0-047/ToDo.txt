@@ -1,0 +1,12 @@
+TO DO
+================================================
+
+6. Connect by on two columns
+
+
+Weakness
+===================
+1. Manipulating lage datasets
+2. Hierarchical retrieval
+3. Managing Schema objects
+4. Controlling user Access

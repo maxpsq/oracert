@@ -1,0 +1,1 @@
+Please refer to file 12.Managing_Schema_objects/000.Manage_Schema_objects.sql

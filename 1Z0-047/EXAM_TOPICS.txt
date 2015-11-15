@@ -10,20 +10,20 @@ Restricting and Sorting Data
 - [OK] Sort the rows that are retrieved by a query
 - [OK] Use substitution variables
 - [OK] Use the SQL row limiting clause (https://oracle-base.com/articles/12c/row-limiting-clause-for-top-n-queries-12cr1)
-- [!!] Create queries using the PIVOT and UNPIVOT clause
-- [!!] Use pattern matching to recognize patterns across multiple rows in a table (http://docs.oracle.com/database/121/DWHSG/pattern.htm#DWHSG8957)
+- [OK] Create queries using the PIVOT and UNPIVOT clause
+- [..] Use pattern matching to recognize patterns across multiple rows in a table (http://docs.oracle.com/database/121/DWHSG/pattern.htm#DWHSG8957)
 
 
 Using Single-Row Functions to Customize Output
 
-- [..] Describe various types of functions that are available in SQL
-- [!!] Use character, number, and date and analytical (PERCENTILE_CONT, STDDEV, LAG, LEAD) functions in SELECT statements
-- [..] Describe the use of conversion functions 
+- [OK] Describe various types of functions that are available in SQL
+- [..] Use character, number, and date and analytical (PERCENTILE_CONT, STDDEV, LAG, LEAD) functions in SELECT statements
+- [OK] Describe the use of conversion functions 
 
 
 Reporting Aggregated Data Using the Group Functions
 
-- [..] Identify the available group functions
+- [..] Identify the available group functions (RANK WITHIN GROUP, etc...)
 - [OK] Describe the use of group functions 
 - [OK] Group data by using the GROUP BY clause 
 - [OK] Include or exclude grouped rows by using the HAVING clause 
@@ -66,12 +66,13 @@ Using DDL Statements to Create and Manage Tables
 
 - [OK] Categorize the main database objects
 - [OK] Review the table structure 
-- [..] Describe the data types that are available for columns 
+- [OK] Describe the data types that are available for columns 
 - [OK] Create tables
 - [OK] Create constraints for tables
 - [OK] Describe how schema objects work
 - [OK] Truncate tables, and recursively truncate child tables
-- [OK] Use 12c enhancements to the DEFAULT clause, invisible columns, virtual columns and identity columns in table creation/alteration
+- [OK] Use 12c enhancements to the DEFAULT clause, invisible columns, 
+       virtual columns and identity columns in table creation/alteration
 
 
 Creating Other Schema Objects
@@ -88,8 +89,8 @@ Managing Objects with Data Dictionary Views
 
 Controlling User Access
 
-- [..] Differentiate system privileges from object privileges
-- [..] Grant privileges on tables and on a user
+- [OK] Differentiate system privileges from object privileges
+- [OK] Grant privileges on tables and on a user (?? to a user?)
 - [..] View privileges in the data dictionary  
 - [OK] Grant roles  
 - [OK] Distinguish between privileges and roles 
@@ -97,13 +98,13 @@ Controlling User Access
 
 Managing Schema Objects
 
-- [..] Manage constraints
-- [!!] Create and maintain indexes including invisible indexes and multiple indexes on the same columns
+- [OK] Manage constraints
+- [OK] Create and maintain indexes including invisible indexes and multiple indexes on the same columns
 - [OK] Create indexes using the CREATE TABLE statement 
 - [OK] Create function-based indexes 
 - [OK] Drop columns and set column UNUSED 
-- [..] Perform FLASHBACK operations 
-- [..] Create and use external tables
+- [OK] Perform FLASHBACK operations 
+- [OK] Create and use external tables
 
 
 Manipulating Large Data Sets
@@ -115,8 +116,8 @@ Manipulating Large Data Sets
 - [OK] Pivoting INSERT
 - [OK] Conditional ALL INSERT
 - [OK] Conditional FIRST INSERT
-- [..] Merge rows in a table
-- [..] Track the changes to data over a period of time
+- [OK] Merge rows in a table
+- [OK] Track the changes to data over a period of time
 - [OK] Use explicit default values in INSERT and UPDATE statements (https://oraclepress.wordpress.com/2015/08/14/use-explicit-default-values-in-insert-and-update-statements/)
 
 
@@ -131,18 +132,18 @@ Generating Reports by Grouping Related Data
 Managing Data in Different Time Zones
 
 - Use Various datetime functions
-- [..] TZ_OFFSET
-- [..] FROM_TZ
-- [..] TO_TIMESTAMP
-- [..] TO_TIMESTAMP_TZ
-- [..] TO_YMINTERVAL
-- [..] TO_DSINTERVAL
-- [..] CURRENT_DATE
-- [..] CURRENT_TIMESTAMP
-- [..] LOCALTIMESTAMP
-- [..] DBTIMEZONE
-- [..] SESSIONTIMEZONE
-- [..] EXTRACT
+- [OK] TZ_OFFSET
+- [OK] FROM_TZ
+- [OK] TO_TIMESTAMP
+- [OK] TO_TIMESTAMP_TZ
+- [OK] TO_YMINTERVAL
+- [OK] TO_DSINTERVAL
+- [OK] CURRENT_DATE
+- [OK] CURRENT_TIMESTAMP
+- [OK] LOCALTIMESTAMP
+- [OK] DBTIMEZONE
+- [OK] SESSIONTIMEZONE
+- [OK] EXTRACT
 
 
 Retrieving Data Using Subqueries
@@ -158,8 +159,8 @@ Retrieving Data Using Subqueries
 Hierarchical Retrieval
 
 - [OK] Interpret the concept of a hierarchical query
-- [..] Create a tree-structured report 
-- [..] Format hierarchical data 
+- [OK] Create a tree-structured report 
+- [OK] Format hierarchical data 
 - [OK] Exclude branches from the tree structure
 
 
