@@ -17,7 +17,7 @@ Restricting and Sorting Data
 Using Single-Row Functions to Customize Output
 
 - [OK] Describe various types of functions that are available in SQL
-- [..] Use character, number, and date and analytical (PERCENTILE_CONT, STDDEV, LAG, LEAD) functions in SELECT statements
+- [OK] Use character, number, and date and analytic (PERCENTILE_CONT, STDDEV, LAG, LEAD) functions in SELECT statements
 - [OK] Describe the use of conversion functions 
 
 

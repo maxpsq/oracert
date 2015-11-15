@@ -20,15 +20,18 @@ GROUP BY department_id
 ORDER BY department_id;
 
 /*
-The aggregate function reduces the number of rows returned 
+
+The aggregate functions reduce the number of rows returned 
 by the query.
 
-Analytic functions also operate on subsets of rows, similar 
-to aggregate functions in GROUP BY queries, but they do not 
-reduce the number of rows returned by the query. For example, 
-the following query reports the salary for each employee, 
-along with the average salary of the employees within the 
-department.
+*** !!!
+Analytic functions also operate on subsets of rows, similar to aggregate 
+functions in GROUP BY queries, but THEY DO NOT REDUCE THE NUMBER OF ROWS 
+returned by the query. 
+*** !!!
+
+For example, the following query reports the salary for each employee, 
+along with the average salary of the employees within the department.
 */
 
 SELECT employee_id, department_id, salary,
@@ -38,14 +41,21 @@ FROM   hr.employees;
 /*
 This time AVG() is an analytic function.
 This brings out the main difference between aggregate and analytic functions. 
-Though analytic functions give aggregate result they do not group the result set. 
+Though analytic functions give aggregate result, they do not group the result set. 
 They return the group value multiple times with each record. As such any other 
 non-"group by" column or expression can be present in the select clause.
 
-Analytic functions are computed after all joins, WHERE clause, GROUP BY 
-and HAVING are computed on the query. 
-The main ORDER BY clause of the query operates after the analytic functions. So 
-analytic functions can only appear in the select list and in the main ORDER BY 
+Analytic functions are computed:
+
+ ** AFTER all joins, WHERE clause, GROUP BY and HAVING **
+ 
+are computed on the query. 
+ 
+The main ORDER BY clause of the query operates AFTER the analytic functions. 
+
+So ANALYTIC FUNCTIONS CAN ONLY APPEAR
+  - in the select list 
+  - in the main ORDER BY 
 clause of the query.
 */
 
@@ -66,8 +76,8 @@ shown here. Rather than repeat the syntax diagrams, the following sections
 describe what each section of the analytic_clause is used for.
 
 
-query_partition_clause
-
+QUERY_PARTITION_CLAUSE    (PARTITION BY columns)
+-------------------------------------------------
 The query_partition_clause divides the result set into partitions, or groups, 
 of data. The operation of the analytic function is restricted to the boundary 
 imposed by these partitions, similar to the way a GROUP BY clause affects the 
@@ -86,7 +96,7 @@ presented is based on all the rows of the result set.
 
 
 SELECT employee_id, department_id, salary,
-       AVG(salary) OVER () AS avg_dept_sal
+       AVG(salary) OVER () AS avg_dept_sal --> OVER is empty, so the result will be computed on just one partition
 FROM   hr.employees;
 
 /*
@@ -104,12 +114,19 @@ employee belongs too.
 
 SELECT employee_id, department_id, salary,
        AVG(salary) OVER (PARTITION BY department_id) AS avg_dept_sal
-FROM   hr.employees;
+FROM   hr.employees e
+where  e.department_id = 50;
+
+-- PARTITION BY can include columns not present in the projection
+SELECT employee_id, department_id, salary,
+       AVG(salary) OVER (PARTITION BY department_id, job_id) AS avg_dept_sal
+FROM   hr.employees e
+where  e.department_id = 50;
 
 
 /*
 order_by_clause
-
+-----------------------------------
 The order_by_clause is used to order rows, or siblings, within a partition. So 
 if an analytic function is sensitive to the order of the siblings in a partition 
 you should include an order_by_clause. The following query uses the FIRST_VALUE 
@@ -118,7 +135,7 @@ partitioned the result set by the department, but there is no order_by_clause.
 
 The general syntax of specifying the ORDER BY clause in analytic function is:
 
-ORDER BY <sql_expr> [ASC or DESC] NULLS [FIRST or LAST]
+ORDER BY <sql_expr> [ASC | DESC] NULLS [FIRST | LAST]
 
 Functions like LEAD, LAG, RANK, DENSE_RANK, ROW_NUMBER, FIRST, FIRST VALUE, 
 LAST, LAST VALUE depends on order of records. 
@@ -126,10 +143,17 @@ LAST, LAST VALUE depends on order of records.
 The functions SUM, COUNT, AVG, MIN, MAX are the common analytic functions the 
 result of which does not depend on the order of the records.
 
+***
+ORDER_BY_CLAUSE may be used without the PARTITION_CLAUSE
+
+   func(x) OVER( ORDER BY column)
+***
 */
 
+-- FIRST_VALUE without ORDER BY clause
 SELECT employee_id, department_id, salary, 
-       FIRST_VALUE(salary IGNORE NULLS) OVER (PARTITION BY department_id) AS first_sal_in_dept
+       FIRST_VALUE(salary IGNORE NULLS) 
+        OVER (PARTITION BY department_id) AS first_sal_in_dept
 FROM   HR.EMPLOYEES;
 
 /*
@@ -148,11 +172,17 @@ for an order_by_clause and NULLS LAST is the default for ASC orders.
 When ordering by DESC, the default is NULLS FIRST.
 
 It is important to understand how the order_by_clause affects display order. 
+
+****
 The order_by_clause is guaranteed to affect the order of the rows as they are 
 processed by the analytic function, but it may not always affect the display 
-order. As a result, you must always use a conventional ORDER BY clause in the 
+order. 
+****
+
+As a result, you must always use a conventional ORDER BY clause in the 
 query if display order is important. Do not rely on any implicit ordering done 
 by the analytic function. 
+
 Remember, the conventional ORDER BY clause is performed after the analytic 
 processing, so it will always take precedence.
 */
@@ -160,16 +190,22 @@ processing, so it will always take precedence.
 
 /*
 windowing_clause
-
+-----------------------------------
 We have seen previously the query_partition_clause controls the window, or group 
 of rows, the analytic operates on. The windowing_clause gives some analytic 
 functions a further degree of control over this window within the current partition. 
+
+****
 The windowing_clause is an extension of the order_by_clause and as such, it can 
 only be used if an order_by_clause is present. 
+****
+Not all analitic functions support the windowing_clause
+****
+
 The windowing_clause has two basic forms:
 
     RANGE BETWEEN start_point AND end_point
-    ROWS BETWEEN start_point AND end_point
+    ROWS  BETWEEN start_point AND end_point
 
 Possible values for "start_point" and "end_point" are:
 
@@ -191,6 +227,39 @@ value_expr FOLLOWING : As above, but an offset after the current row.
 The documentation states the start point must always be before the end point, 
 but this is not true, as demonstrated by this rather silly ( 0 .. 0), 
 but valid, query.
+
+ROWS vs RANGE
+-------------------
+
+ROWS consider the values specified by the ORDER BY clause coming from ALL THE ROWS
+extracted by the WINDOWING CLAUSE.
+
+RANGE consider the values specified by the ORDER BY clause enclosed between the 
+start_point and end_point of the WINDOWING CLAUSE.
+
+So that ...
+
+sum(salary) OVER ( PARTITION BY department_id ORDER BY salary      RANGE BETWEEN OUTBOUND PRECEEDING AND CURRENT ROW)
+
+... is different then ...
+
+sum(salary) OVER ( PARTITION BY department_id ORDER BY employee_id RANGE BETWEEN OUTBOUND PRECEEDING AND CURRENT ROW)
+
+
+
+but...
+
+sum(salary) OVER ( PARTITION BY department_id ORDER BY salary      ROWS BETWEEN OUTBOUND PRECEEDING AND CURRENT ROW)
+
+... is equal to --
+
+sum(salary) OVER ( PARTITION BY department_id ORDER BY employee_id ROWS BETWEEN OUTBOUND PRECEEDING AND CURRENT ROW)
+
+
+http://www.kibeha.dk/2013/02/rows-versus-default-range-in-analytic.html
+
+
+
 */
 
 SELECT employee_id, department_id, salary, 
@@ -200,12 +269,21 @@ SELECT employee_id, department_id, salary,
                          ) AS avg_of_current_sal
 FROM   hr.employees;
 /*
-In fact, the start point must be before or equal to the end point. In addition, 
+
+***
+In fact, the start point must be before or equal to the end point. 
+***
+
+In addition, 
+***
 the current row does not have to be part of the window. The window can be defined 
 to start and end before or after the current row.
+***
 
 For analytic functions that support the windowing_clause, the default action is 
-"RANGE BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW". 
+
+        "RANGE BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW" (default)
+
 The following query is similar to one used previously to report the employee 
 salary and average department salary, but now we have included an order_by_clause 
 so we also get the default windowing_clause.
@@ -227,7 +305,78 @@ There are two things to notice here.
    are only included in the average when the salary value changes. You can see 
    this in the last two records of department 20 and in the second and third 
    records of department 30.
+   
+**** 
+Adding a ORDER BY CLAUSE to an analitic function will affect the result compared
+to the same funcion called without ordering clause because of the variation on
+the partition caused by the DEFAULT WINDOWING_CLAUSE that restrict the partition
+from ... to RANGE BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW
+****
+
+Here are a few examples: 
 */
+
+select distinct x.* from (
+select department_id
+     , avg(salary) over(partition by job_id) as avgsal
+  from hr.employees
+ where department_id = 50
+) x; 
+
+-- The result changes due to the use of 'order by salary'....
+select distinct x.* from (
+select department_id
+     , avg(salary) over(partition by job_id order by salary) as avgsal
+  from hr.employees
+ where department_id = 50
+) x; 
+
+-- ... the injects a DEFAULT WINDOWING CLAUSE that corrsponds to...
+select distinct x.* from (
+select department_id
+     , avg(salary) over(partition by job_id order by salary RANGE BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) as avgsal
+  from hr.employees
+ where department_id = 50
+) x; 
+
+-- In order to get the same result as from the first query, whe have to change the
+-- WINDOWING CLAUSE like this
+select distinct x.* from (
+select department_id
+     , avg(salary) over(partition by job_id order by salary RANGE BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING) as avgsal
+  from hr.employees
+ where department_id = 50
+) x; 
+
+-- Selecting the preceding employee for each record basing the order on employee_id (v1)
+SELECT employee_id
+     , FIRST_VALUE(employee_id) OVER (order by employee_id rows between 1 preceding and current row) as x
+  from hr.employees e
+ where e.department_id = 50; 
+
+-- Selecting the preceding employee for each record basing the order on employee_id (v2)
+SELECT employee_id
+     , FIRST_VALUE(employee_id) OVER (order by employee_id rows between 1 preceding and 1 preceding) as x
+  from hr.employees e
+ where e.department_id = 50; 
+
+-- Selecting the preceding employee for each record basing the order on employee_id (v3)
+SELECT employee_id
+     , LAG(employee_id) OVER (order by employee_id ) as x
+  from hr.employees e
+ where e.department_id = 50; 
+
+-- Selecting a preceding employee for each record basing the order on employee_id and usin a offset
+SELECT employee_id
+     , FIRST_VALUE(employee_id) OVER (order by employee_id rows between (3+1) preceding and 4 preceding) as x
+  from hr.employees e
+ where e.department_id = 50; 
+
+-- Selecting a preceding employee for each record basing the order on employee_id and usin a offset
+SELECT employee_id
+     , FIRST_VALUE(employee_id) OVER (order by employee_id RANGE between (3+1) preceding and 4 preceding) as x
+  from hr.employees e
+ where e.department_id = 50; 
 
 /*                      Using Analytic Functions
 --------------------------------------------------------------------------------
@@ -319,12 +468,12 @@ LEAD (<sql_expr>, <offset>, <default>) OVER (<analytic_clause>)
 The syntax of LAG is similar except that the offset for LAG goes into the previous rows.
 */
 SELECT department_id, employee_id, salary
-     , LEAD(salary, 1, 0) OVER (PARTITION BY department_id ORDER BY salary DESC NULLS LAST) NEXT_LOWER_SAL
-     ,  LAG(salary, 1, 0) OVER (PARTITION BY department_id ORDER BY salary DESC NULLS LAST) PREV_HIGHER_SAL
-     , LEAD(salary) OVER (PARTITION BY department_id ORDER BY salary DESC NULLS LAST) NEXT_LOWER_SAL
-     ,  LAG(salary) OVER (PARTITION BY department_id ORDER BY salary DESC NULLS LAST) PREV_HIGHER_SAL
-     , LEAD(salary, 2, -1) OVER (PARTITION BY department_id ORDER BY salary DESC NULLS LAST) OFF2_LOWER_SAL
-     ,  LAG(salary, 2, -1) OVER (PARTITION BY department_id ORDER BY salary DESC NULLS LAST) OFF2_HIGHER_SAL
+     , LEAD(salary, 1, 0) OVER (PARTITION BY department_id ORDER BY salary DESC NULLS LAST) NEXT_SAL
+     ,  LAG(salary, 1, 0) OVER (PARTITION BY department_id ORDER BY salary DESC NULLS LAST) PREV_SAL
+     , LEAD(salary) OVER (PARTITION BY department_id ORDER BY salary DESC NULLS LAST) NEXT_SAL
+     ,  LAG(salary) OVER (PARTITION BY department_id ORDER BY salary DESC NULLS LAST) PREV_SAL
+     , LEAD(salary, 2, -1) OVER (PARTITION BY department_id ORDER BY salary DESC NULLS LAST) OFF2_SAL
+     ,  LAG(salary, 2, -1) OVER (PARTITION BY department_id ORDER BY salary DESC NULLS LAST) OFF2_SAL
 FROM hr.employees
 WHERE department_id IN (90, 20)
 ORDER BY department_id, salary DESC;
@@ -356,7 +505,7 @@ last record of the partition.
 */
 SELECT employee_id, department_id, hire_date
      , FIRST_VALUE(hire_date) OVER (PARTITION BY department_id ORDER BY hire_date) DAY_GAP1
-     ,  LAST_VALUE(hire_date) OVER (PARTITION BY department_id ORDER BY hire_date) DAY_GAP2
+     ,  LAST_VALUE(hire_date) OVER (PARTITION BY department_id ORDER BY hire_date ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING) DAY_GAP2
 FROM hr.employees
 WHERE department_id IN (20, 30)
 ORDER BY department_id, hire_date;
@@ -400,7 +549,7 @@ ORDER BY department_id, employee_id, HIRE_YR;
 
 
 /*
-How to specify the Window clause (ROW type or RANGE type windows)?
+How to specify the Window clause (ROWS type or RANGE type windows)?
 
 Some analytic functions (AVG, COUNT, FIRST_VALUE, LAST_VALUE, MAX, MIN and SUM 
 among the ones we discussed) can take a window clause to further sub-partition 
@@ -508,6 +657,8 @@ Calculate Row Number (R) of each row within the group using percentile value
   Get CEIL(C) and FLOOR(F) value for the row number
   If (C=F=R) then value at R
   Else, (C-R) * (Value at F) + (R-F) * (Value at C)
+  
+The ORDER_BY_CLAUSE and WINDOWING_CLAUSE are NOT ALLOWED.
 */
 SELECT EMPLOYEE_ID, DEPARTMENT_ID, SALARY, 
        PERCENTILE_CONT(0.5)  
@@ -531,7 +682,7 @@ SELECT EMPLOYEE_ID, DEPARTMENT_ID, SALARY,
 
 
 /*
-STDDEV( [ DISTINCT | ALL ] expression ) [ OVER ( analytical_clause ) 
+STDDEV( [ DISTINCT | ALL ] expression ) [ OVER ( analytical_clause ) ]
 
 this function returns the standard deviation of a set of numbers, i.e. the square 
 root of the variance for the input number set. 
@@ -546,7 +697,8 @@ large range of values.
 
 Note that STDDEV returns zero for input set which contains only one element.
 
-The order_by_clause and windowing_clause are not allowed.
+The ORDER_BY_CLAUSE and WINDOWING_CLAUSE are NOT ALLOWED.
+
 */
 
 SELECT EMPLOYEE_ID, DEPARTMENT_ID, SALARY, 
