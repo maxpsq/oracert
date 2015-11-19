@@ -580,7 +580,7 @@ SELECT fact_1_id,
        GROUP_ID() AS group_id
 FROM   dimension_tab
 GROUP BY GROUPING SETS(fact_1_id, CUBE (fact_1_id, fact_2_id))
-HAVING GROUP_ID() = 0
+HAVING GROUP_ID() = 0   --> *** NOTICE THIS ***
 ORDER BY fact_1_id, fact_2_id;
 
 
@@ -605,7 +605,7 @@ SELECT fact_1_id,
        SUM(sales_value) AS sales_value,
        GROUPING_ID(fact_1_id, fact_2_id, fact_3_id) AS grouping_id
 FROM   dimension_tab
-GROUP BY GROUPING SETS((fact_1_id, fact_2_id), (fact_1_id, fact_3_id))
+GROUP BY GROUPING SETS( (fact_1_id, fact_2_id), (fact_1_id, fact_3_id) )
 ORDER BY fact_1_id, fact_2_id, fact_3_id;
 
 /*
@@ -614,12 +614,17 @@ Composite Columns
 ROLLUP and CUBE consider each column independently when deciding which subtotals 
 must be calculated. For ROLLUP this means stepping back through the list to 
 determine the groupings.
+*****
+The effect of embracing columns in parentheses is to show only those results where
+the embraced columns appear together:
+*****
 
 ROLLUP (a, b, c)
 (a, b, c)
 (a, b)
 (a)
 ()
+
 CUBE creates a grouping for every possible combination of columns.
 
 CUBE (a, b, c)
@@ -639,10 +644,11 @@ column by the additional braces. As a result the group of "a" is not longer
 calculated as the column "a" is only present as part of the composite column in 
 the statement.
 
-ROLLUP ((a, b), c)
-(a, b, c)
-(a, b)
-()
+ROLLUP (a, b, c)    ROLLUP ((a, b), c)
+(a, b, c)           (a, b, c)
+(a, b)              (a, b)
+(a)                 ** here 'a' doesn't appear together with 'b', so it is skipped **
+()                  ()
 
 Not considered:
 (a)
@@ -651,11 +657,15 @@ In a similar way, the possible combinations of the following CUBE are reduced
 because references to "a" or "b" individually are not considered as they are 
 treated as a single column when the groupings are determined.
 
-CUBE ((a, b), c)
-(a, b, c)
-(a, b)
-(c)
-()
+CUBE (a, b, c)      CUBE ((a, b), c)
+(a, b, c)           (a, b, c)
+(a, b)              (a, b)
+(a, c)              ** here 'a' doesn't appear together with 'b', so it is skipped **
+(a)                 ** here 'a' doesn't appear together with 'b', so it is skipped **
+(b, c)              ** here 'b' doesn't appear together with 'a', so it is skipped **
+(b)                 ** here 'b' doesn't appear together with 'a', so it is skipped **
+(c)                 (c)
+()                  ()
 
 Not considered:
 (a, c)
@@ -667,6 +677,7 @@ The impact of this is shown clearly in the follow two statements, whose output
 is shown here and here. The regular cube returns 198 rows and 8 groups (0-7), 
 while the cube with the composite column returns only 121 rows with 4 
 groups (0, 1, 6, 7)
+
 */
 -- Regular Cube.
 SELECT fact_1_id,
@@ -795,6 +806,7 @@ GROUPING SETS(a, b), GROUPING SETS(c, d)
 (b, c)
 (b, d)
 */
+
 --==============================================================================
 -- TEAR DOWN
 --==============================================================================
