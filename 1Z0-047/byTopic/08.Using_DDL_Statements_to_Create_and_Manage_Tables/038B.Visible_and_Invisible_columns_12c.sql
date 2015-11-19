@@ -32,7 +32,7 @@ DESC test_visible_invisible ;
 -- COL2 is returned
 SELECT col2 FROM test_visible_invisible ;
 
--- SQL*Plus only hows INVISIBLE COLUMNS in DESC command.
+-- SQL*Plus only shows INVISIBLE COLUMNS in DESC command.
 SET COLINVISIBLE ON 
 
 DESC test_visible_invisible ;
