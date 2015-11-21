@@ -17,7 +17,7 @@ My goals
 
 2. Oracle Database 11g Release 2 SQL Tuning Certification
 	:: Requirements ::
-	[ ] None
+	[x] None
 
 	:: Pass the exam ::
 	[ ] Oracle Database 11g Release 2: SQL Tuning 1Z0-117

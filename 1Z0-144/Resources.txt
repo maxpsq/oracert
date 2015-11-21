@@ -1,3 +1,7 @@
+
+Oracle Database PL/SQL Language Reference
+http://docs.oracle.com/cd/E11882_01/appdev.112/e25519/toc.htm
+
 ===============================================================
         UPDATED TUTORIAL ON 1Z0-047 Exam    (portuguese)
 ===============================================================
