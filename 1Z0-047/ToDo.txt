@@ -6,7 +6,7 @@ TO DO
 
 Weakness
 ===================
-1. Manipulating lage datasets
+1. Manipulating large datasets
 2. Hierarchical retrieval
 3. Managing Schema objects
 4. Controlling user Access

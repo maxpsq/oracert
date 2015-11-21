@@ -1,0 +1,21 @@
+===============================================================
+        UPDATED TUTORIAL ON 1Z0-047 Exam    (portuguese)
+===============================================================
+Oracle Certification
+Guia de estudos para certificação ORACLE by Tércio Costa
+
+https://oraclepress.wordpress.com
+
+
+
+Oracle Certification Prep
+
+http://www.oraclecertificationprep.com/apex/f?p=OCPSG:EXAM_DETAILS:0::NO::P2_EXAM:1Z0-144
+
+===============================================================
+                 Exam Simulations
+===============================================================
+
+First attempt $ 14.50 / Retake $ 11.00
+http://www.oraclecertificationprep.com/apex/f?p=149:PRACTICE_TEST_DETAILS:::NO::P19_PXM_ID:5
+
