@@ -169,3 +169,6 @@ To make comparisons case-insensitive, append _CI to the value of the NLS_SORT
 parameter (for example, BINARY_CI or XGERMAN_CI).
 
 */
+
+
+

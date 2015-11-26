@@ -1,24 +1,29 @@
 /*
 Lexical Units
-The lexical units of PL/SQL are its smallest individual components—delimiters, identifiers, literals, and comments.
+======================================
+The lexical units of PL/SQL are its smallest individual 
+components—delimiters, identifiers, literals, and comments.
 
-Topics
+- Delimiters
+- Identifiers
+- Literals
+- Comments
+- Whitespace Characters Between Lexical Units
+
 
 Delimiters
-Identifiers
-Literals
-Comments
-Whitespace Characters Between Lexical Units
-Delimiters
-A delimiter is a character, or character combination, that has a special meaning in PL/SQL. Do not embed any others characters (including whitespace characters) inside a delimiter.
+------------
+A delimiter is a character, or character combination, that 
+has a special meaning in PL/SQL. Do not embed any others characters 
+(including whitespace characters) inside a delimiter.
 
 
 Delimiter	Meaning
 +			Addition operator
 
-:=			Assignment operator
+:=		Assignment operator
 
-=>			Association operator
+=>		Association operator
 
 %			Attribute indicator
 
@@ -26,55 +31,59 @@ Delimiter	Meaning
 
 .			Component indicator
 
-||			Concatenation operator
+||		Concatenation operator
 
 /			Division operator
 
-**			Exponentiation operator
+**		Exponentiation operator
 
 (			Expression or list delimiter (begin)
 
 )			Expression or list delimiter (end)
 
 :			Host variable indicator
+Host variables are the key to communication between your host program and Oracle. 
+Typically, a precompiler program inputs data from a host variable to Oracle, and 
+Oracle outputs data to a host variable in the program. Oracle stores input data 
+in database columns, and stores output data in program host variables.
 
 ,			Item separator
 
-<<			Label delimiter (begin)
+<<		Label delimiter (begin)
 
->>			Label delimiter (end)
+>>		Label delimiter (end)
 
-/*			Multiline comment delimiter (begin)
+/*		Multiline comment delimiter (begin)
 
-*/			Multiline comment delimiter (end)
+*/		Multiline comment delimiter (end)
 
 *			Multiplication operator
 
 "			Quoted identifier delimiter
 
-..			Range operator
+..		Range operator
 
 =			Relational operator (equal)
 
-<>			Relational operator (not equal)
+<>		Relational operator (not equal)
 
-!=			Relational operator (not equal)
+!=		Relational operator (not equal)
 
-~=			Relational operator (not equal)
+~=		Relational operator (not equal)
 
-^=			Relational operator (not equal)
+^=		Relational operator (not equal)
 
 <			Relational operator (less than)
 
 >			Relational operator (greater than)
 
-<=			Relational operator (less than or equal)
+<=		Relational operator (less than or equal)
 
->=			Relational operator (greater than or equal)
+>=		Relational operator (greater than or equal)
 
 @			Remote access indicator
 
---			Single-line comment indicator
+--		Single-line comment indicator
 
 ;			Statement terminator
 

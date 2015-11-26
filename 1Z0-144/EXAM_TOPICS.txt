@@ -7,11 +7,11 @@
 [OK] Recognize valid and invalid identifiers
 [OK] List the uses of variables, declare and initialize variables, use bind variables
 [OK] List and describe various data types using the %TYPE attribute
-[>>] Writing Executable Statements
-[!!] Identify lexical units in a PL/SQL block
+[..] Writing Executable Statements
+[OK] Identify lexical units in a PL/SQL block
 [..] Use built-in SQL functions in PL/SQL and sequences in PL/SQL expressions
-[>>] Describe when implicit conversions take place and when explicit conversions have to be dealt with
-[??] Write nested blocks and qualify variables with labels
+[..] Describe when implicit conversions take place and when explicit conversions have to be dealt with
+[OK] Write nested blocks and qualify variables with labels
 [..] Write readable code with appropriate indentation
 [>>] Interacting with the Oracle Database Server
 [..] Create PL/SQL executable blocks using DML and transaction control statements
