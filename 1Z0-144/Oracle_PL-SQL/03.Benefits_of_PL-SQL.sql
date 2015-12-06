@@ -1,4 +1,12 @@
 /*
+
+Thight integration with SQL
+========================================
+- You can execute DML, TCL, cursor control
+- PL/SQL can use existing SQL functions
+- PL/SQL supports SQl data types without need of conversion
+
+
 High Performance
 ========================================
 

@@ -4,8 +4,10 @@
 Using DBMS OUTPUT package
 --------------------------------
 
-The DBMS_OUTPUT package can be invoked only within a PL/SQL block. To see t
-he output returned from this statement you have set the serveroutput on. 
+The DBMS_OUTPUT package can be invoked only within a PL/SQL block. To see 
+the output returned from this statement you have set the serveroutput on. 
+
+
 You can do that by simply writing and executing 
 
 SET SERVEROUTPUT ON ;
@@ -14,11 +16,6 @@ BEGIN
   DBMS_OUTPUT.PUT_LINE(:v_bind1);
 END;
 /
-
-
-SET SERVEROUTPUT ON|OFF ;
-SET SERVEROUTPUT  1|0 ;
-
 
 
 Using Print command

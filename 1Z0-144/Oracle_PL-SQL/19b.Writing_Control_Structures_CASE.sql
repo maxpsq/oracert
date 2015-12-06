@@ -10,11 +10,19 @@ WHEN selector_value_n THEN statements_n
 [ ELSE
   else_statements ]
 END CASE;]
-The selector is an expression (typically a single variable). Each selector_value can be either a literal or an expression. (For complete syntax, see "CASE Statement".)
 
-The simple CASE statement runs the first statements for which selector_value equals selector. Remaining conditions are not evaluated. If no selector_value equals selector, the CASE statement runs else_statements if they exist and raises the predefined exception CASE_NOT_FOUND otherwise.
+The selector is an expression (typically a single variable). Each selector_value 
+can be either a literal or an expression. 
+(For complete syntax, see "CASE Statement".)
 
-Example 4-6 uses a simple CASE statement to compare a single value to many possible values. The CASE statement in Example 4-6 is logically equivalent to the IF THEN ELSIF statement in Example 4-5.
+The simple CASE statement runs the first statements for which selector_value 
+equals selector. Remaining conditions are not evaluated. If no selector_value 
+equals selector, the CASE statement runs else_statements if they exist and 
+raises the predefined exception CASE_NOT_FOUND otherwise.
+
+Example 4-6 uses a simple CASE statement to compare a single value to many 
+possible values. The CASE statement in Example 4-6 is logically equivalent to 
+the IF THEN ELSIF statement in Example 4-5.
 
 
 Example 4-6 Simple CASE Statement
@@ -47,9 +55,14 @@ WHEN condition_n THEN statements_n
 [ ELSE
   else_statements ]
 END CASE;]
-The searched CASE statement runs the first statements for which condition is true. Remaining conditions are not evaluated. If no condition is true, the CASE statement runs else_statements if they exist and raises the predefined exception CASE_NOT_FOUND otherwise. (For complete syntax, see "CASE Statement".)
 
-The searched CASE statement in Example 4-7 is logically equivalent to the simple CASE statement in Example 4-6.
+The searched CASE statement runs the first statements for which condition is true. 
+Remaining conditions are not evaluated. If no condition is true, the CASE statement 
+runs else_statements if they exist and raises the predefined exception CASE_NOT_FOUND 
+otherwise. (For complete syntax, see "CASE Statement".)
+
+The searched CASE statement in Example 4-7 is logically equivalent to the simple 
+CASE statement in Example 4-6.
 
 */
 
@@ -84,8 +97,9 @@ BEGIN
     WHEN grade = 'F' THEN DBMS_OUTPUT.PUT_LINE('Poor');
   END CASE;
 EXCEPTION
-  WHEN CASE_NOT_FOUND THEN
+  WHEN CASE_NOT_FOUND THEN --> specific EXCEPTION
     DBMS_OUTPUT.PUT_LINE('No such grade');
 END;
 /
- 
+
+

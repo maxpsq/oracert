@@ -9,27 +9,27 @@
 [OK] List and describe various data types using the %TYPE attribute
 [..] Writing Executable Statements
 [OK] Identify lexical units in a PL/SQL block
-[..] Use built-in SQL functions in PL/SQL and sequences in PL/SQL expressions
-[..] Describe when implicit conversions take place and when explicit conversions have to be dealt with
+[OK] Use built-in SQL functions in PL/SQL and sequences in PL/SQL expressions
+[OK] Describe when implicit conversions take place and when explicit conversions have to be dealt with
 [OK] Write nested blocks and qualify variables with labels
-[..] Write readable code with appropriate indentation
-[>>] Interacting with the Oracle Database Server
+[OK] Write readable code with appropriate indentation
+[..] Interacting with the Oracle Database Server
 [..] Create PL/SQL executable blocks using DML and transaction control statements
-[..] Make use of the INTO clause to hold the values returned by a SQL statement
+[OK] Make use of the INTO clause to hold the values returned by a SQL statement
 [..] Writing Control Structures
-[..] Identify the uses and types of control structures (IF, CASE statements and expressions)
-[..] Construct and identify loop statements
-[>>] Apply guidelines when using conditional control structures
-[!!] Working with Composite Data Types
-[!!] Create user-defined PL/SQL records
-[..] Create a record with the %ROWTYPE attribute
-[!!] Create an INDEX BY table and INDEX BY table of records
-[!!] Describe the differences among records, tables, and tables of records
-[..] Using Explicit Cursors
-[>>] Distinguish between usage of implicit and explicit cursors, use SQL cursor attributes
-[>>] Declare and control explicit cursors, use simple loops and cursor FOR loops to fetch data
-[..] Declare and use cursors with parameters
-[>>] Lock rows with the FOR UPDATE clause and reference the current row with the WHERE CURRENT OF clause
+[OK] Identify the uses and types of control structures (IF, CASE statements and expressions)
+[OK] Construct and identify loop statements
+[OK] Apply guidelines when using conditional control structures
+[OK] Working with Composite Data Types
+[OK] Create user-defined PL/SQL records
+[OK] Create a record with the %ROWTYPE attribute
+[OK] Create an INDEX BY table and INDEX BY table of records
+[OK] Describe the differences among records, tables, and tables of records
+[OK] Using Explicit Cursors
+[OK] Distinguish between usage of implicit and explicit cursors, use SQL cursor attributes
+[OK] Declare and control explicit cursors, use simple loops and cursor FOR loops to fetch data
+[OK] Declare and use cursors with parameters
+[OK] Lock rows with the FOR UPDATE clause and reference the current row with the WHERE CURRENT OF clause
 [..] Handling Exceptions
 [>>] Define PL/SQL exceptions
 [..] Recognize unhandled exceptions
@@ -61,7 +61,7 @@ Oracle Database 11g: Develop PL/SQL Program Units
 [>>] Create an initialization block in a package body
 [>>] Manage persistent package data states for the life of a session and use PL/SQL tables and records in packages
 [!!] Using Oracle-Supplied Packages in Application Development
-[!!] Describe how the DBMS_OUTPUT package works
+[OK] Describe how the DBMS_OUTPUT package works
 [..] Use UTL_FILE to direct output to operating system files
 [!!] Describe the main features of UTL_MAIL
 [!!] Using Dynamic SQL
@@ -92,7 +92,8 @@ Oracle Database 11g: Develop PL/SQL Program Units
 [!!] Managing Dependencies
 [!!] Track and manage procedural dependencies
 
-
+From time to time, check the exam topics list for updates:
+http://education.oracle.com/pls/web_prod-plq-dad/db_pages.getpage?page_id=5001&get_params=p_exam_id:1Z0-144
 
 Following are topics not explicitly listed in the exam but likely to be tested
 [  ] Distinguish between SQL and PL/SQL data types

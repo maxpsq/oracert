@@ -5,9 +5,10 @@ OBJECTIVE: Recognize valid and invalid identifiers
 =================================================================================
 Valid variable names are bound to the same rules as database objects
 They must 
+  - be composed of characters from the database charactr set
   - begin with a letter 
   - contain a letters, digits or the symbols $ _ #
-  - not exceed 30 characters in length
+  - not exceed 30 characters (30 bytes) in length
 
 A valid PL/SQL variable can be validated against the following regular expression
 
@@ -162,11 +163,6 @@ The referencing item inherits the following from the referenced item:
 The referencing item does not inherit the initial value of the referenced 
 item. Therefore, if the referencing item specifies or inherits the NOT NULL 
 constraint, you must specify an initial value for it.
-
-*** NOT TRUE ***
-The referencing item INHERITS THE DEFAULT VALUE only if the referencing item 
-is not a database column and does not have the NOT NULL constraint.
-***
 
 In Example 2-10, the variable debit inherits the data type of the variable credit. 
 The variables upper_name, lower_name, and init_name inherit the data type and default 

@@ -18,6 +18,7 @@ exception  -- (optional)
   ...
 end;       -- (required)
 
+
 KEYWORDS: ANONYMOUS BLOCK
 A block as the one shown above can be executed by many tools like SQL*Plus. 
 The block will be executed only one time and it will not be stored in
@@ -29,7 +30,9 @@ compilation has three stages:
 
   1. Syntax checking: PL/SQL syntax is checked, and a parse tree is generated.
   2. Semantic checking: Type checking and further processing on the parse tree.
-  3. Code generation
+  3. Code generation: the compiled code is generated
+
+An anaonymous block cannot be invoked from other PL/SQL blocks.
 
 
 KEYWORDS: NEMED BLOCK
@@ -80,6 +83,7 @@ end;
 EXECUTION block
 ---------------------
 starts with the word BEGIN and terminates with the word END followed by a semicolon.
+IT MUST CONTAIN AT LEAST ONE STATEMENT.
 It may contains executable statements and call to functions and procedures.
 
 DECLARATION block
