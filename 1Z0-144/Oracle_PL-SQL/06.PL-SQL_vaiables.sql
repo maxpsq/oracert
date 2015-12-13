@@ -282,3 +282,120 @@ Accessing the vale of a bind variable
   DBMS_OUTPUT.PUT_LINE(:v_bind1);
 
 */
+
+
+/*
+the RANGE constraint
+-----------------------------
+Note:
+The only base types for which you can specify a range of values are PLS_INTEGER 
+and its subtypes (both predefined and user-defined).
+*/
+declare
+   l_constrained  NUMBER(2)  RANGE  7..10 ; --> ERROR: it's not applied on PLS_INTEGER or its subtype
+begin
+   l_constrained := 9;
+end ;
+/
+
+
+declare
+   subtype my_type is simple_integer range 10..20 ;
+   
+   l_constrained_int  my_type := 10 ;
+
+   procedure print(msg varchar2, v number) is
+   begin
+      dbms_output.put_line(msg||': '||v);
+   end ;   
+  
+begin
+   l_constrained_int := 12 ;
+   print('12',l_constrained_int); --> OK
+
+   l_constrained_int := 4 ;
+   print('4',l_constrained_int);  --> ERROR: out of range
+   
+end;
+/
+
+declare
+   subtype my_type is pls_integer range 10..20 ;
+   
+   l_constrained_int  my_type ; --> This is NULL when defined. Range allows NULL numbers
+
+   procedure print(msg varchar2, v number) is
+   begin
+      dbms_output.put_line(msg||': '||v);
+   end ;   
+  
+begin
+   l_constrained_int := 12 ;
+   print('12',l_constrained_int); --> OK
+
+end;
+/
+
+declare
+   C_MIN  constant pls_integer := 10 ;
+   C_MAX  constant pls_integer := 20 ;
+   
+   --> Numeric literals are required using RANGE
+   --> Compilation ERROR !!!
+   subtype my_type is simple_integer range C_MIN..C_MAX ; 
+begin
+   null;
+end;
+/
+
+
+declare
+   l_sub_int    SIMPLE_INTEGER := 8 ;
+   l_anc_int    l_sub_int%type ;   --> thi will fail due to the NOT NULL constraint from SIMPLE_INTEGER
+begin
+   null;
+end;
+/
+
+/*
+From Steven Feuerstein book "Oracle PL/SQL Programming, 5th Ed." page 183:
+"Be aware that an anchored subtype does not carry over the NOT NULL constraint 
+to the variables it defines"
+I cannot demonstrate that. I wrote an e-mail to Steven on 12 Dec 2015. Hope
+he'll reply...
+*/
+declare
+   subtype my_type  is pls_integer not null range  12 .. 15 ;
+   l_sub_int    my_type  := 13 ;
+   l_anc_int    l_sub_int%type ;   --> thi will fail due to the NOT NULL constraint from SIMPLE_INTEGER
+begin
+   null;
+end;
+/
+
+/*
+from Steven Feuerstein:
+
+Massimo,
+
+Here’s what I meant: 
+
+The NOT NULL constraint from the column definition is not carried over to the 
+subtype.
+
+Best of luck wiht the 1X0-144 exam! Are you by any chance testing your SQL and 
+PL/SQL knowledge at plsqlchallenge.oracle.com?
+
+This code will run without an error:
+*/
+create table tst (n number not null)
+/
+
+declare
+   subtype my_type  is tst.n%type  ;
+   l_sub_int    my_type ;
+begin
+   null;
+end;
+/
+

@@ -102,4 +102,4 @@ Following are topics not explicitly listed in the exam but likely to be tested
      (remember SQL function can be made available in PL/SQL using the SELECT INTO clause)
 
 QUESTIONS
-001. Are DEFAULT and (:=) always interchangeble in PL/SQL ?
+001. Are DEFAULT and (:=) always interchangeble in PL/SQL ? YES, they are.

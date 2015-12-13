@@ -1,3 +1,4 @@
+/*
 IMPLICIT TYPE CONVERSION
 =================================
 
@@ -34,4 +35,25 @@ functions for the following reasons:
   the same way in every case
 - Algorithms for implicit conversion are subject to change across software releases
   and among Oracle products.
+
+*/
+
+alter session set NLS_TERRITORY='AMERICA';
+alter session set NLS_NUMERIC_CHARACTERS='.,';
+DECLARE
+   a NUMBER;
+BEGIN
+   a := '123.400' || 999;  --> explicitely: to_number('123.400' || to_char(999) );
+   dbms_output.put_line(a);
+end ;
+/
+
+declare
+  a   number;
+begin
+   a := 3 ** 3 ; -- 3^3
+   dbms_output.put_line(a);
+end;
+/
+
 
