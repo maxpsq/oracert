@@ -712,3 +712,35 @@ BEGIN
   DBMS_OUTPUT.PUT_LINE( TO_CHAR(shares_sold,'999G9V99') );
 END;
 /
+
+
+/*==============================================================================
+
+--==============================================================================
+
+
+*/
+set serveroutput on;
+
+create or replace procedure aa as
+  dts1    INTERVAL year TO month := '2-2'; 
+  dts2    INTERVAL year TO month; 
+  ratio   number;
+BEGIN
+  dts2 := dts1 * 2 ; 
+  ratio := dts2 / dts1 ;
+END;
+/
+
+
+set serveroutput on;
+DECLARE
+  dts1    INTERVAL DAY TO SECOND := '2 3:4:5.6'; 
+  dts2    INTERVAL DAY TO SECOND; 
+  ratio   number;
+BEGIN
+  dts2 := dts1 * 2 ; 
+  ratio := dts2 / dts1 ;
+END;
+/
+

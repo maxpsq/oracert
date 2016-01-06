@@ -168,15 +168,15 @@ In Example 2-10, the variable debit inherits the data type of the variable credi
 The variables upper_name, lower_name, and init_name inherit the data type and default 
 value of the variable name.
 */
-
+set serveroutput on;
 DECLARE
   credit  PLS_INTEGER RANGE 1000..25000;
   debit   credit%TYPE;  -- inherits data type
 
-  name1        VARCHAR2(20) := 'JoHn SmItH';
-  upper_name1  name1%TYPE;  -- inherits data type and default value
-  lower_name1  name1%TYPE;  -- inherits data type and default value
-  init_name1   name1%TYPE;  -- inherits data type and default value
+  name1        VARCHAR2(20) default 'JoHn SmItH';
+  upper_name1  name1%TYPE;  -- inherits data type but NOT the default value
+  lower_name1  name1%TYPE;  -- inherits data type but NOT the default value
+  init_name1   name1%TYPE;  -- inherits data type but NOT the default value
 BEGIN
   DBMS_OUTPUT.PUT_LINE ('name:       ' || name1);
   DBMS_OUTPUT.PUT_LINE ('upper_name: ' || UPPER(upper_name1));
@@ -190,6 +190,18 @@ DECLARE
   
   -- inherits data type and constraint, therefore it will raise an error
   -- because of the NOT NULL constraint
+  upper_name1  name1%TYPE;  
+BEGIN
+  DBMS_OUTPUT.PUT_LINE ('name:       ' || name1);
+  DBMS_OUTPUT.PUT_LINE ('upper_name: ' || UPPER(upper_name1));
+END;
+/
+
+DECLARE
+  name1   constant     VARCHAR2(20)  := 'JoHn SmItH';
+  
+  -- %TYPE cannot be used with CONSTANTS. It will raise a compilation error: 
+  -- PLS-00206: %TYPE must be applied to a variable, column, field or attribute, not to "NAME1"
   upper_name1  name1%TYPE;  
 BEGIN
   DBMS_OUTPUT.PUT_LINE ('name:       ' || name1);

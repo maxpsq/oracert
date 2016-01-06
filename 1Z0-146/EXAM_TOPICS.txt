@@ -1,0 +1,72 @@
+1Z0-146 EXAM TOPICS
+
+1. Oracle11g: Advanced PL/SQL
+[ ] 1.1 Introduction to PL/SQL
+
+2. PL/SQL Programming Concepts: Review
+[ ] 2.1 List restrictions on calling functions from SQL expressions
+[ ] 2.2 Hand exceptions
+[ ] 2.3 Manage dependencies
+[ ] 2.4 Use Oracle-supplied packages
+
+3. Designing PL/SQL Code
+[ ] 3.1 Identify guidelines for cursor design
+[ ] 3.2 Use cursor variables
+[ ] 3.3 Create subtypes based on existing types
+
+4. Working with Collections
+[*] 4.1 Create collections (nested table, array and associative arrays, PL SQL tables)
+[*] 4.2 Use collections methods
+[ ] 4.3 Manipulate collections
+[*] 4.4 Distinguish between the different types of collections and their uses
+
+5. Using Advanced Interface Methods
+[ ] 5.1 Execute external C programs from PL/SQL
+[ ] 5.2 Execute Java programs from PL/SQL
+
+6. Implementing Fine-Grained Access Control for VPD
+[ ] 6.1 Explain the process of fine-grained access control
+[ ] 6.2 Implement and test fine-grained access control
+
+7. Manipulating Large Objects
+[ ] 7.1 Create and manage LOB data types
+[ ] 7.2 Use the DBMS_LOB PL/SQL package
+[ ] 7.3 Use of temporary LOBs
+
+8. Administering SecureFile LOBs
+[ ] 8.1 Describe SecureFile LOB features
+[ ] 8.2 Enable SecureFile LOB deduplication, compression, and encryption
+[ ] 8.3 Migrate BasicFile LOBs to the SecureFile LOB format
+
+9. Performance and Tuning
+[ ] 9.1 Use native and interpreted compilation methods
+[ ] 9.2 Tune PL/SQL code
+[ ] 9.3 Enable intraunit inlining
+
+10. Improving Performance with Caching
+[ ] 10.1 Improve memory usage by caching SQL result sets and using the DBMS_RESULT_CACHE package
+[ ] 10.2 Write queries that use the result cache hint
+[ ] 10.3 Set up PL/SQL functions to use PL/SQL result caching
+
+11. Analyzing PL/SQL Code
+[ ] 11.1 Run reports on source code
+[ ] 11.2 Determine identifier types and usages
+[ ] 11.3 Use DBMS_METADATA to retrieve object definitions
+
+12. Profiling and Tracing PL/SQL Code
+[ ] 12.1 Trace PL/SQL program execution
+[ ] 12.2 Profile PL/SQL applications
+
+13. Safeguarding Your Code Against SQL Injection Attacks
+[ ] 13.1 Describe SQL injections
+[ ] 13.2 Reduce attack surfaces
+[ ] 13.3 Use DBMS_ASSERT
+[ ] 13.4 Design immune code
+[ ] 13.5 Test code for SQL injection flaws
+
+
+===========================================
+
+From time to time, check the exam topics list at the this page 
+ttp://education.oracle.com/pls/web_prod-plq-dad/db_pages.getpage?page_id=5001&get_params=p_exam_id:1Z0-146&p_org_id=&lang=
+

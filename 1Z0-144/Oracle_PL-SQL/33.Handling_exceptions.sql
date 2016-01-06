@@ -10,7 +10,7 @@ exception
   then
      null;
 end;
-
+/
 
 begin
   null;
@@ -19,12 +19,27 @@ exception                            --> Using the AND operator, causes a
   then
      null;
 end;
+/
 
+/* 
+Exception raised in declarative sections won't be trapped within the exception
+handling section of thr same PL/SQL block.
+They can be trapped by enclosing block thoug.
+*/
 set serveroutput on;
 begin
-  raise ZERO_DIVIDE ;
-exception                            --> Using the AND operator, causes a
-  when ZERO_DIVIDE    --> compilation ERROR !!
+  declare
+    l_ratio  NUMBER := 23/0 ;  
+  begin
+    null ;
+  exception
+    when ZERO_DIVIDE
+    then
+       dbms_output.put_line(q'|Zero divide won't be trapped here|');
+  end;
+exception
+  when ZERO_DIVIDE
   then
-     dbms_output.put_line('EXPR');
+     dbms_output.put_line('TRAPPED!!');
 end;
+/

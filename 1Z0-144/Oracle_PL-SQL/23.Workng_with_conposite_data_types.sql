@@ -35,3 +35,17 @@ A collection type defined at schema level is a standalone type. You create it wi
 "CREATE TYPE Statement". It is stored in the database until you drop it with the "DROP TYPE Statement".
 
 */
+
+declare
+  subtype employee_rt  is  hr.employees%rowtype ;
+  employee1   employee_rt ;
+  employee2   employee_rt ;
+begin
+   if ( employee1 = employee2 ) then -- COMPILATION ERROR LS-00306: wrong number or types of arguments in call to '='
+     null;
+   end if;
+exception
+   when others then
+      raise;
+end;
+/

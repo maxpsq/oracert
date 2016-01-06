@@ -1,41 +1,42 @@
-[..] Introduction to PL/SQL
+Introduction to PL/SQL
 [..] Explain the need for PL/SQL
 [..] Explain the benefits of PL/SQL
 [OK] Identify the different types of PL/SQL blocks
 [OK] Output messages in PL/SQL
-[OK] Declaring PL/SQL Variables
+Declaring PL/SQL Variables
 [OK] Recognize valid and invalid identifiers
 [OK] List the uses of variables, declare and initialize variables, use bind variables
 [OK] List and describe various data types using the %TYPE attribute
-[..] Writing Executable Statements
+Writing Executable Statements
 [OK] Identify lexical units in a PL/SQL block
 [OK] Use built-in SQL functions in PL/SQL and sequences in PL/SQL expressions
 [OK] Describe when implicit conversions take place and when explicit conversions have to be dealt with
 [OK] Write nested blocks and qualify variables with labels
 [OK] Write readable code with appropriate indentation
-[..] Interacting with the Oracle Database Server
+Interacting with the Oracle Database Server
 [..] Create PL/SQL executable blocks using DML and transaction control statements
 [OK] Make use of the INTO clause to hold the values returned by a SQL statement
-[..] Writing Control Structures
+Writing Control Structures
 [OK] Identify the uses and types of control structures (IF, CASE statements and expressions)
 [OK] Construct and identify loop statements
 [OK] Apply guidelines when using conditional control structures
-[OK] Working with Composite Data Types
+Working with Composite Data Types
 [OK] Create user-defined PL/SQL records
 [OK] Create a record with the %ROWTYPE attribute
 [OK] Create an INDEX BY table and INDEX BY table of records
 [OK] Describe the differences among records, tables, and tables of records
-[OK] Using Explicit Cursors
+Using Explicit Cursors
 [OK] Distinguish between usage of implicit and explicit cursors, use SQL cursor attributes
 [OK] Declare and control explicit cursors, use simple loops and cursor FOR loops to fetch data
 [OK] Declare and use cursors with parameters
 [OK] Lock rows with the FOR UPDATE clause and reference the current row with the WHERE CURRENT OF clause
-[..] Handling Exceptions
-[>>] Define PL/SQL exceptions
-[..] Recognize unhandled exceptions
-[>>] Handle different types of exceptions (pre-defined exceptions, non-predefined exceptions and user-defined exceptions)
-[..] Propagate exceptions in nested blocks and call applications
-[>>] Creating Stored Procedures and Functions
+Handling Exceptions
+[OK] Define PL/SQL exceptions
+[OK] Recognize unhandled exceptions
+[OK] Handle different types of exceptions (pre-defined exceptions, non-predefined exceptions and user-defined exceptions)
+[OK] Propagate exceptions in nested blocks and call applications
+
+Creating Stored Procedures and Functions
 [..] Differentiate between anonymous blocks and subprograms
 [..] Create a simple procedure and invoke it from an anonymous block
 [..] Create a simple function
@@ -44,52 +45,52 @@
 
 Oracle Database 11g: Develop PL/SQL Program Units
 
-[>>] Creating Procedures
+Creating Procedures
 [>>] Differentiate between anonymous blocks and subprograms, use a modularized and layered subprogram design, and identify the benefits of subprograms
 [>>] Create a simple procedure and invoke it from an anonymous block
 [>>] Work with procedures
 [>>] Handle exceptions in procedures, remove a procedure, and display a procedure's information
-[>>] Creating Functions
+Creating Functions
 [>>] Differentiate between a procedure and a function
 [>>] Describe the uses of functions
 [>>] Work with functions (create, invoke and remove functions)
-[>>] Creating Packages
+Creating Packages
 [>>] Identify the benefits and the components of packages
 [>>] Work with packages (create package specification and body, invoke package subprograms, remove a package and display package information)
-[>>] Working with Packages
+Working with Packages
 [>>] Overload package subprograms, use forward declarations
-[>>] Create an initialization block in a package body
+[OK] Create an initialization block in a package body
 [>>] Manage persistent package data states for the life of a session and use PL/SQL tables and records in packages
-[!!] Using Oracle-Supplied Packages in Application Development
+Using Oracle-Supplied Packages in Application Development
 [OK] Describe how the DBMS_OUTPUT package works
-[..] Use UTL_FILE to direct output to operating system files
+[OK] Use UTL_FILE to direct output to operating system files
 [!!] Describe the main features of UTL_MAIL
-[!!] Using Dynamic SQL
+Using Dynamic SQL
 [!!] Describe the execution flow of SQL statements
 [!!] Use Native Dynamic SQL (NDS)
 [!!] Use the DBMS_SQL package
-[!!] Design Considerations for PL/SQL Code
+Design Considerations for PL/SQL Code
 [!!] Create standard constants and exceptions
 [!!] Write and call local subprograms
 [!!] Control the run-time privileges of a subprogram
-[..] Perform autonomous transactions
+[OK] Perform autonomous transactions
 [!!] Use NOCOPY hint, PARALLEL ENABLE hint and DETERMINISTIC clause
 [!!] Use bulk binding and the RETURNING clause with DML
-[>>] Creating Triggers
+Creating Triggers
 [>>] Describe different types of triggers and their uses
 [>>] Create database triggers
 [>>] Manage triggers
-[>>] Creating Compound, DDL, and Event Database Triggers
+Creating Compound, DDL, and Event Database Triggers
 [>>] Create triggers on DDL statements
 [!!] Create triggers on system events
-[!!] Using the PL/SQL Compiler
+Using the PL/SQL Compiler
 [!!] Describe the new PL/SQL compiler and features
 [!!] Use the new PL/SQL compiler initialization parameters
 [!!] Use the new PL/SQL compile time warnings
-[!!] Managing PL/SQL Code
+Managing PL/SQL Code
 [!!] Describe and use conditional compilation
 [!!] Hide PL/SQL source code using dynamic obfuscation and the Wrap utility
-[!!] Managing Dependencies
+Managing Dependencies
 [!!] Track and manage procedural dependencies
 
 From time to time, check the exam topics list for updates:
