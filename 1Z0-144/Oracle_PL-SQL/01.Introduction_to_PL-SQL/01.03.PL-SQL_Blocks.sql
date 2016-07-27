@@ -88,7 +88,7 @@ It may contains executable statements and call to functions and procedures.
 
 DECLARATION block
 ---------------------
-For an anonymour block, starts with the word DECLARE
+For an anonymous block, starts with the word DECLARE
 For a FUNCTION or PROCEDURE is delimited in between the routine signature and the 
 outermost execution block (BEGIN .. END;)
 It may contain local variables and constants declaration, local routines declaration,
@@ -106,9 +106,58 @@ Exceptions are trapped using
       ..
 
 The exception block can handle only errors raised within the EXECUTION BLOCK it belongs to 
-during runtime. It's not possible for a EXCEPTION block to trap exception raised at 
+during runtime. It's not possible for an EXCEPTION block to trap exception raised at 
 runtime within the DECLARATION block within the same PL/SQL block.
 
+
+FORWARD DECLARATION
+==========================
+
+The code below will raise an error because of the invocation of procedure PR1
+inside PR2 before PR1 is declared
 */
 
+DECLARE
 
+  PROCEDURE PR2(MSG   VARCHAR2) IS
+  BEGIN
+    PR1(MSG);
+    DBMS_OUTPUT.PUT_LINE('PR2 > '||MSG);
+  END;
+  
+  PROCEDURE PR1(MSG   VARCHAR2) IS
+  BEGIN
+    DBMS_OUTPUT.PUT_LINE('PR1 > '||MSG);
+  END;
+  
+
+BEGIN
+  PR2('CIAO');
+END;
+/
+
+/*
+The issue above can be avoided just declaring the signature of procedure PR1 before
+the implementation of PR2
+*/
+
+DECLARE
+
+  PROCEDURE PR1(MSG   VARCHAR2);
+
+  PROCEDURE PR2(MSG   VARCHAR2) IS
+  BEGIN
+    PR1(MSG);
+    DBMS_OUTPUT.PUT_LINE('PR2 > '||MSG);
+  END;
+  
+  PROCEDURE PR1(MSG   VARCHAR2) IS
+  BEGIN
+    DBMS_OUTPUT.PUT_LINE('PR1 > '||MSG);
+  END;
+  
+
+BEGIN
+  PR2('CIAO');
+END;
+/

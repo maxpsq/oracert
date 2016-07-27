@@ -23,7 +23,9 @@ You can create a record variable in any of these ways:
    previously declared record variable.
 
 3. Use %ROWTYPE to declare a record variable that represents either 
-   a full or partial row of a database table or view.
+   a full or partial(*) row of a database table or view.
+   (*) You define a partial record when using a %ROWTYPE against a cursor that
+   include only some of the columns in a table.
 
 For a record variable of a RECORD type, the initial value of each 
 field is NULL unless you specify a different initial value for it 
@@ -34,8 +36,7 @@ the referenced record.
 RECORD Types
 ---------------
 A RECORD type defined in a PL/SQL block is a local type. It is available 
-only in the block, and is stored in the database only if the block is in 
-a standalone or package subprogram. 
+only in the block. 
 
 A RECORD type defined in a package specification is a public item. You 
 can reference it from outside the package by qualifying it with the package 
@@ -62,6 +63,9 @@ DECLARE
  
   dept_rec     DeptRecTyp;
   dept_rec_2   dept_rec%TYPE;  --> CONSTRAINTS and DEFAULT VALUES are inherited
+                               --> NOTICE: I'm using %TYPE **NOT** %ROWTYPE !!!
+                               --> ROWTYPE is vaild only against TABLES and Cursors:
+                               --> using %ROWTYPE here would have raised an error !
 BEGIN
   DBMS_OUTPUT.PUT_LINE('dept_rec:');
   DBMS_OUTPUT.PUT_LINE('---------');
@@ -169,16 +173,18 @@ a full or partial row of a database table or view. For every column of the full
 or partial row, the record has a field with the same name and data type. If the 
 structure of the row changes, then the structure of the record changes accordingly.
 
-The record fields do not inherit the constraints or initial values of the 
-corresponding columns (see Example 5-39).
+Using %ROWTYPE, the record fields **DO NOT** inherit the constraints or initial 
+values of the corresponding columns (see Example 5-39).
 
 Record Variable that Always Represents Full Row
 To declare a record variable that always represents a full row of a database table or view, use this syntax:
 
 variable_name table_or_view_name%ROWTYPE;
+
 For every column of the table or view, the record has a field with the same name and data type.
 
 %ROWTYPE Variable Does Not Inherit Initial Values or Constraints
+
 */
 
 
@@ -210,7 +216,7 @@ A cursor is associated with a query. For every column that the query selects, th
 record variable must have a corresponding, type-compatible field. If the query 
 selects every column of the table or view, then the variable represents a full 
 row; otherwise, the variable represents a partial row. The cursor must be either 
-an EXPLICIT CURSOR or a "strong" CURSOR VARIABLE [??].
+an EXPLICIT CURSOR or a "strong" CURSOR VARIABLE.
 
 */
 SET SERVEROUTPUT ON;
@@ -357,7 +363,7 @@ END;
 
 /*
 
-Example 5-45 Assigning "%ROWTYPE record" to "RECORD Type record"
+Example 5-45 Assigning "%ROWTYPE record" to "RECORD Type record" and viceversa
 */
 
 DECLARE
@@ -386,17 +392,32 @@ BEGIN
     'source: ' || source.first_name || ' ' || source.last_name
   );
  
- target1 := source; -- the two variables have the same structure
+ target1 := source; -- the two variables have the same structure ( ROWTYPE -> RECORD )
  
  DBMS_OUTPUT.PUT_LINE (
    'target1: ' || target1.first || ' ' || target1.last
  );
 
- target2 := source; -- the two variables have compatible structures
+ target2 := source; -- the two variables have compatible structures  ( ROWTYPE -> RECORD )
  
  DBMS_OUTPUT.PUT_LINE (
-   'target2: ' || target2.first || ' ' || target2.last
+   'target2: ' || target2.first || ' ' || target2.last  
  );
+
+ target1.first := 'Helmut';
+ source := target1; -- the two variables have the same structure  ( RECORD -> ROWTYPE )
+ 
+ DBMS_OUTPUT.PUT_LINE (
+   'source: ' || source.first_name || ' ' || source.last_name
+ );
+ 
+ target2.first := 'Robert';
+ source := target2; -- the two variables have compatible structure  ( RECORD -> ROWTYPE )
+ 
+ DBMS_OUTPUT.PUT_LINE (
+   'source: ' || source.first_name || ' ' || source.last_name
+ );
+ 
 END;
 /
 
@@ -493,7 +514,7 @@ DECLARE
     salary  hr.employees.salary%TYPE
   );
   
-  CURSOR desc_salary RETURN EmpRecTyp IS --> NOTICE the RETURN clause
+  CURSOR desc_salary RETURN EmpRecTyp IS --> NOTICE: the RETURN clause here is not mandatory!!
     SELECT employee_id, salary
     FROM hr.employees
     ORDER BY salary DESC;

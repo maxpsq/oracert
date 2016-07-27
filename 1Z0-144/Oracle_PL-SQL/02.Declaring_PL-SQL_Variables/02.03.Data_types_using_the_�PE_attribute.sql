@@ -1,145 +1,7 @@
-
 /*
-=================================================================================
-OBJECTIVE: Recognize valid and invalid identifiers
-=================================================================================
-Valid variable names are bound to the same rules as database objects
-They must 
-  - be composed of characters from the database charactr set
-  - begin with a letter 
-  - contain a letters, digits or the symbols $ _ #
-  - not exceed 30 characters (30 bytes) in length
-
-A valid PL/SQL variable can be validated against the following regular expression
-
-^[A-Za-z][A-Za-z0-9$#_]{,29}$
-
-
-=================================================================================
-OBJECTIVE: Declaring PL/SQL Variables
-=================================================================================
-
-KEYWORDS: INITIALIZATION, DEFAULT
-
-A variable declaration always specifies 
-  - the name
-  - the data type
-  - a constraint (optional)
-  - a initial value (optional)
-
-***
-The data type can be both a PL/SQL data type or a any SQL data type. A data type is 
-either scalar (without internal components) or composite (with internal components).
-***
-
-INITIALIZATION
-To specify the initial value, use either the assignment operator (:=) or the 
-keyword DEFAULT, followed by an expression. The expression can include previously 
-declared constants and previously initialized variables.
-
-Use DEFAULT for variables that have a typical value.
-
-Use the ASSIGNEMENT OPERATOR for variables (such as counters and accumulators) 
-that have no typical value.
-
-ASSIGNEMENT OPERATOR and DEFAULT have the same effect on a variable declaration.
-
-
-Scalar Variable Declaration Syntax:
-
-variable  datatype [ NOT NULL ] [ [ DEFAULT | := ] expression ];
-
-*/
-
-DECLARE
-  blood_type      CHAR DEFAULT 'O';    -- Same as blood_type CHAR := 'O';
-  hours_worked    INTEGER DEFAULT 40;  -- Typical value
-  employee_count  INTEGER := 0;        -- No typical value
-BEGIN
-  NULL;
-END;
-/
-
-
-/*
-KEYWORDS: NOT NULL, NATURALN, POSITIVEN, SIMPLE_INTEGER
-
-A declaration can impose the NOT NULL constraint, which prevents you from 
-assigning a null value to the variable. Because variables are initialized 
-to NULL by default, a declaration that specifies NOT NULL must also specify 
-a default value.
-
-*** NOTICE ***
-PL/SQL subtypes NATURALN, POSITIVEN, and SIMPLE_INTEGER are predefined as 
-NOT NULL. When declaring a variable of one of these subtypes, you can omit 
-the NOT NULL constraint, and you must specify a default value (ndr, either 
-using "DEFAULT value" or " := value ").
-
-
-*/
-DECLARE
-  acct_id INTEGER(4)       NOT NULL := 9999;
-  a       NATURALN                  := 9999;
-  b       POSITIVEN                 := 9999;
-  c       SIMPLE_INTEGER            := 9999;
-BEGIN
-  NULL;
-END;
-/
-
-DECLARE
--- The following declarations will raise the exception
--- PLS-00218: a variable declared NOT NULL must have an initialization assignment  
-  a       NATURALN                  ; 
-  b       POSITIVEN                 ;
-  c       SIMPLE_INTEGER            ;
-BEGIN
-  NULL;
-END;
-/
-
-/*
-CONSTANTS
-----------------------------
-In a constant declaration, the initial value is required. 
-A constant can be initialized with NULL.
-
-Constant declaration syntax
-
-value  CONSTANT datatype  [ DEFAULT | := ] expression ];
-*/
-declare
-   c   CONSTANT  number;  --> PLS-00322: declaration of a constant 'C' must contain an initialization assignment
-begin
-  NULL;
-end;
-/
-
-declare
--- But notice this !!
-   c1   CONSTANT  number :=      NULL;  -- Success!
-   c2   CONSTANT  number DEFAULT NULL;  -- Success!
-begin
-  NULL;
-end;
-/
-
-/*
-Initial Values of Variables and Constants
------------------------------------------
-If the declaration is in a BLOCK or SUBPROGRAM, the initial value is 
-assigned to the variable or constant every time control passes to the 
-block or subprogram. 
-
-If the declaration is in a PACKAGE SPECIFICATION, 
-the initial value is assigned to the variable or constant for each 
-session (whether the variable or constant is PUBLIC or PRIVATE).
-
-*/
-
-/*
+================================================================================
 Using the %TYPE Attribute
-----------------------------
+================================================================================
 The %TYPE attribute lets you declare a 
   - constant
   - variable
@@ -291,7 +153,10 @@ Bind variable assignment within a PL/SQL block
 
 Accessing the vale of a bind variable
 
+BEGIN
   DBMS_OUTPUT.PUT_LINE(:v_bind1);
+END;
+/
 
 */
 
@@ -299,7 +164,7 @@ Accessing the vale of a bind variable
 /*
 the RANGE constraint
 -----------------------------
-Note:
+Note 1:
 The only base types for which you can specify a range of values are PLS_INTEGER 
 and its subtypes (both predefined and user-defined).
 */
@@ -360,6 +225,18 @@ begin
 end;
 /
 
+/*
+Note 2:
+in case you want to apply the NOT NULL contraint, it must follow the RANGE operator
+*/
+declare
+   l_constrained1  PLS_INTEGER  RANGE 7..10  NOT NULL;
+   l_constrained2  PLS_INTEGER  NOT NULL  RANGE 7..10 ; --> COMPILATION ERROR
+begin
+   NULL;
+end ;
+/
+
 
 declare
    l_sub_int    SIMPLE_INTEGER := 8 ;
@@ -369,6 +246,7 @@ begin
 end;
 /
 
+
 /*
 From Steven Feuerstein book "Oracle PL/SQL Programming, 5th Ed." page 183:
 "Be aware that an anchored subtype does not carry over the NOT NULL constraint 
@@ -377,9 +255,9 @@ I cannot demonstrate that. I wrote an e-mail to Steven on 12 Dec 2015. Hope
 he'll reply...
 */
 declare
-   subtype my_type  is pls_integer not null range  12 .. 15 ;
+   subtype my_type  is pls_integer range  12 .. 15 not null ;
    l_sub_int    my_type  := 13 ;
-   l_anc_int    l_sub_int%type ;   --> thi will fail due to the NOT NULL constraint from SIMPLE_INTEGER
+   l_anc_int    l_sub_int%type ;   --> this will fail due to the NOT NULL constraint from SIMPLE_INTEGER
 begin
    null;
 end;
@@ -395,7 +273,7 @@ Here’s what I meant:
 The NOT NULL constraint from the column definition is not carried over to the 
 subtype.
 
-Best of luck wiht the 1X0-144 exam! Are you by any chance testing your SQL and 
+Best of luck wiht the 1Z0-144 exam! Are you by any chance testing your SQL and 
 PL/SQL knowledge at plsqlchallenge.oracle.com?
 
 This code will run without an error:
@@ -410,4 +288,3 @@ begin
    null;
 end;
 /
-

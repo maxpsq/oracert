@@ -7,13 +7,14 @@ http://docs.oracle.com/cd/E11882_01/appdev.112/e25519/toc.htm
 ===============================================================
 Oracle Certification
 Guia de estudos para certificação ORACLE by Tércio Costa
-
 https://oraclepress.wordpress.com
 
 
+Study Guide For 1Z0-144 by Srikanth Pragada 
+http://srikanthtechnologies.com/blog/personal/1Z0-144-Study-Guide.pdf
+
 
 Oracle Certification Prep
-
 http://www.oraclecertificationprep.com/apex/f?p=OCPSG:EXAM_DETAILS:0::NO::P2_EXAM:1Z0-144
 
 ===============================================================

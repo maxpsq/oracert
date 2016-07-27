@@ -1,6 +1,6 @@
 Introduction to PL/SQL
-[..] Explain the need for PL/SQL
-[..] Explain the benefits of PL/SQL
+[OK] Explain the need for PL/SQL
+[OK] Explain the benefits of PL/SQL
 [OK] Identify the different types of PL/SQL blocks
 [OK] Output messages in PL/SQL
 Declaring PL/SQL Variables
@@ -14,7 +14,7 @@ Writing Executable Statements
 [OK] Write nested blocks and qualify variables with labels
 [OK] Write readable code with appropriate indentation
 Interacting with the Oracle Database Server
-[..] Create PL/SQL executable blocks using DML and transaction control statements
+[OK] Create PL/SQL executable blocks using DML and transaction control statements (ch. 14)
 [OK] Make use of the INTO clause to hold the values returned by a SQL statement
 Writing Control Structures
 [OK] Identify the uses and types of control structures (IF, CASE statements and expressions)
@@ -23,7 +23,7 @@ Writing Control Structures
 Working with Composite Data Types
 [OK] Create user-defined PL/SQL records
 [OK] Create a record with the %ROWTYPE attribute
-[OK] Create an INDEX BY table and INDEX BY table of records
+[OK] Create an INDEX BY table and INDEX BY table of records (associative arrays)
 [OK] Describe the differences among records, tables, and tables of records
 Using Explicit Cursors
 [OK] Distinguish between usage of implicit and explicit cursors, use SQL cursor attributes
@@ -73,7 +73,7 @@ Design Considerations for PL/SQL Code
 [!!] Create standard constants and exceptions
 [!!] Write and call local subprograms
 [!!] Control the run-time privileges of a subprogram
-[OK] Perform autonomous transactions
+[OK] Perform autonomous transactions (ch. 14)
 [!!] Use NOCOPY hint, PARALLEL ENABLE hint and DETERMINISTIC clause
 [!!] Use bulk binding and the RETURNING clause with DML
 Creating Triggers

@@ -7,17 +7,17 @@
 [ ] 2.1 List restrictions on calling functions from SQL expressions
 [ ] 2.2 Hand exceptions
 [ ] 2.3 Manage dependencies
-[ ] 2.4 Use Oracle-supplied packages
+[ ] 2.4 Use Oracle-supplied packages (read "Oracle built-in packages" O'Reilly)
 
 3. Designing PL/SQL Code
 [ ] 3.1 Identify guidelines for cursor design
 [ ] 3.2 Use cursor variables
 [ ] 3.3 Create subtypes based on existing types
 
-4. Working with Collections
+4. Working with Collections (Ch. 12)
 [*] 4.1 Create collections (nested table, array and associative arrays, PL SQL tables)
 [*] 4.2 Use collections methods
-[ ] 4.3 Manipulate collections
+[*] 4.3 Manipulate collections
 [*] 4.4 Distinguish between the different types of collections and their uses
 
 5. Using Advanced Interface Methods
@@ -28,12 +28,12 @@
 [ ] 6.1 Explain the process of fine-grained access control
 [ ] 6.2 Implement and test fine-grained access control
 
-7. Manipulating Large Objects
+7. Manipulating Large Objects (Ch. 13)
 [ ] 7.1 Create and manage LOB data types
 [ ] 7.2 Use the DBMS_LOB PL/SQL package
 [ ] 7.3 Use of temporary LOBs
 
-8. Administering SecureFile LOBs
+8. Administering SecureFile LOBs (Ch. 13)
 [ ] 8.1 Describe SecureFile LOB features
 [ ] 8.2 Enable SecureFile LOB deduplication, compression, and encryption
 [ ] 8.3 Migrate BasicFile LOBs to the SecureFile LOB format

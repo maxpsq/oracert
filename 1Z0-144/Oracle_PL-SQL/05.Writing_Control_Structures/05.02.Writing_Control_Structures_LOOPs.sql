@@ -56,8 +56,8 @@ BEGIN
       s := s + i * j; -- Sum several products
       EXIT inner_loop WHEN (j > 5);
       EXIT outer_loop WHEN ((i * j) > 15);
-    END LOOP inner_loop;
-  END LOOP outer_loop;
+    END LOOP inner_loop; --> the label here is NOT mandatory, it just improves readability
+  END LOOP outer_loop; --> the label here is NOT mandatory, it just improves readability
   DBMS_OUTPUT.PUT_LINE
     ('The sum of products equals: ' || TO_CHAR(s));
 END;
@@ -206,10 +206,8 @@ numeric variables, or numeric expressions. If a bound does not have a numeric va
 then PL/SQL raises the predefined exception VALUE_ERROR.
 */
 
-DECLARE
-  i NUMBER := 5;
 BEGIN
-  FOR i IN 1..null LOOP --> Error
+  FOR i IN 1..null LOOP --> Error !
     DBMS_OUTPUT.PUT_LINE ('hello');
   END LOOP;
 END;
@@ -331,7 +329,7 @@ BEGIN
   GOTO mylabel;
   
   IF true THEN
-    <<mylabel>>  -- cannot transfer control into an IF statement
+    <<mylabel>>  -- ERROR: cannot transfer control into an IF statement
     null;
   END IF;
 END;
@@ -348,7 +346,7 @@ BEGIN
     WHEN false THEN
       null;
     else
-      <<mylabel>>  -- cannot transfer control into a CASE statement
+      <<mylabel>>  -- ERROR: cannot transfer control into a CASE statement
       null;
   END case;
 END;
@@ -358,7 +356,7 @@ BEGIN
   GOTO mylabel;
   
   while false loop
-    <<mylabel>>  -- cannot transfer control inside a LOOP
+    <<mylabel>>  -- ERROR: cannot transfer control inside a LOOP
     null;
   END loop;
 END;
@@ -368,7 +366,7 @@ BEGIN
   GOTO mylabel;
   
   begin
-    <<mylabel>>  -- cannot transfer control to a sub-block
+    <<mylabel>>  -- ERROR: cannot transfer control to a sub-block
     null;
   END ;
 END;
@@ -379,7 +377,7 @@ BEGIN
     GOTO mylabel;
   end if ;
   if true then
-    <<mylabel>>  -- cannot transfer control froma IF statement to another
+    <<mylabel>>  -- ERROR: cannot transfer control froma IF statement to another
     null;
   END if;
 END;
@@ -389,7 +387,7 @@ BEGIN
   if true then
     GOTO mylabel;
   else
-    <<mylabel>>  -- cannot transfer control from a IF statement to another
+    <<mylabel>>  -- ERROR: cannot transfer control from a IF statement to another
     null;
   end if ;
 END;
@@ -400,9 +398,10 @@ BEGIN
     when true then
       GOTO mylabel;
     else
-      <<mylabel>>  -- cannot transfer control from a CASE statement to another
+      <<mylabel>>  -- ERROR: cannot transfer control from a CASE statement to another
        null ;
   end case ;
+  
   case true 
     when true then
       null;
@@ -419,7 +418,7 @@ declare
    end;
 BEGIN
   loc ;
-  <<mylabel>>  -- cannot transfer control out of a sub-program
+  <<mylabel>>  -- ERROR: cannot transfer control out of a sub-program
   null;
 END;
 /
@@ -428,14 +427,14 @@ BEGIN
   GOTO mylabel;
 EXCEPTION
   WHEN NO_DATA_FOUND THEN
-    <<mylabel>>  -- cannot transfer control into an exception handler
+    <<mylabel>>  -- ERROR: cannot transfer control into an exception handler
     NULL;
 END;
 /
 
 
 BEGIN
-  <<mylabel>>  -- from an exception handler back into the current block (but it can transfer control from an exception handler into an enclosing block).
+  <<mylabel>>  -- ERROR: cannot transfer control from an exception handler back into the current block 
   NULL;
 EXCEPTION
   WHEN NO_DATA_FOUND THEN
@@ -447,16 +446,32 @@ BEGIN
   NULL;
 EXCEPTION
   WHEN NO_DATA_FOUND THEN
-    GOTO mylabel;
+    GOTO mylabel;   -- SUCCESS it can transfer control within an exception handler block.
     begin
       null;
-    end ;        --  SUCCESS
-    <<mylabel>>  --  it can transfer control from an exception handler into an enclosing block.
+    end ;       
+    <<mylabel>>
     begin
       null;
     end ;
 END;
 /
+
+BEGIN
+  BEGIN
+    RAISE NO_DATA_FOUND;
+  EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+      GOTO mylabel; -- SUCCESS: it can transfer control from an exception handler to an enclosing block.
+  END;
+
+  <<mylabel>>  
+  begin
+    null;
+  end ;
+END;
+/
+
 
 
 /*

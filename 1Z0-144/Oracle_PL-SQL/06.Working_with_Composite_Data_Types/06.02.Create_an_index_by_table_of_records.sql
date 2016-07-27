@@ -24,8 +24,8 @@ BEGIN
 END;
 /
 /*
-Values are sorted by the index value rather in wich they were added
-to the collection.
+Values are sorted by the index value rather than the order in wich they were 
+added to the collection.
 
 For this reason, string type indexes are affected by NLS_SORT and NLS_COMP
 parameters.
