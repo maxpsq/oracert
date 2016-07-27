@@ -37,11 +37,11 @@ Handling Exceptions
 [OK] Propagate exceptions in nested blocks and call applications
 
 Creating Stored Procedures and Functions
-[..] Differentiate between anonymous blocks and subprograms
-[..] Create a simple procedure and invoke it from an anonymous block
-[..] Create a simple function
-[..] Create a simple function that accepts a parameter
-[>>] Differentiate between procedures and functions
+[OK] Differentiate between anonymous blocks and subprograms
+[OK] Create a simple procedure and invoke it from an anonymous block
+[OK] Create a simple function
+[OK] Create a simple function that accepts a parameter
+[OK] Differentiate between procedures and functions
 
 Oracle Database 11g: Develop PL/SQL Program Units
 
