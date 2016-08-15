@@ -46,28 +46,28 @@ Creating Stored Procedures and Functions
 Oracle Database 11g: Develop PL/SQL Program Units
 
 Creating Procedures
-[>>] Differentiate between anonymous blocks and subprograms, use a modularized and layered subprogram design, and identify the benefits of subprograms
-[>>] Create a simple procedure and invoke it from an anonymous block
-[>>] Work with procedures
-[>>] Handle exceptions in procedures, remove a procedure, and display a procedure's information
+[OK] Differentiate between anonymous blocks and subprograms, use a modularized and layered subprogram design, and identify the benefits of subprograms
+[OK] Create a simple procedure and invoke it from an anonymous block
+[OK] Work with procedures
+[OK] Handle exceptions in procedures, remove a procedure, and display a procedure's information
 Creating Functions
-[>>] Differentiate between a procedure and a function
-[>>] Describe the uses of functions
-[>>] Work with functions (create, invoke and remove functions)
+[OK] Differentiate between a procedure and a function
+[OK] Describe the uses of functions
+[OK] Work with functions (create, invoke and remove functions)
 Creating Packages
-[>>] Identify the benefits and the components of packages
-[>>] Work with packages (create package specification and body, invoke package subprograms, remove a package and display package information)
+[OK] Identify the benefits and the components of packages
+[OK] Work with packages (create package specification and body, invoke package subprograms, remove a package and display package information)
 Working with Packages
-[>>] Overload package subprograms, use forward declarations
+[OK] Overload package subprograms, use forward declarations
 [OK] Create an initialization block in a package body
-[>>] Manage persistent package data states for the life of a session and use PL/SQL tables and records in packages
+[OK] Manage persistent package data states for the life of a session and use PL/SQL tables and records in packages
 Using Oracle-Supplied Packages in Application Development
 [OK] Describe how the DBMS_OUTPUT package works
 [OK] Use UTL_FILE to direct output to operating system files
-[!!] Describe the main features of UTL_MAIL
+[OK] Describe the main features of UTL_MAIL
 Using Dynamic SQL
 [!!] Describe the execution flow of SQL statements
-[!!] Use Native Dynamic SQL (NDS)
+[OK] Use Native Dynamic SQL (NDS)
 [!!] Use the DBMS_SQL package
 Design Considerations for PL/SQL Code
 [!!] Create standard constants and exceptions
@@ -88,7 +88,7 @@ Using the PL/SQL Compiler
 [!!] Use the new PL/SQL compiler initialization parameters
 [!!] Use the new PL/SQL compile time warnings
 Managing PL/SQL Code
-[!!] Describe and use conditional compilation
+[OK] Describe and use conditional compilation
 [!!] Hide PL/SQL source code using dynamic obfuscation and the Wrap utility
 Managing Dependencies
 [!!] Track and manage procedural dependencies
@@ -101,6 +101,10 @@ Following are topics not explicitly listed in the exam but likely to be tested
 [  ] SQL and PL/SQL types that have an implicit NOT NULL constraint
 [  ] Which SQL functions are available in PL/SQL and which are not 
      (remember SQL function can be made available in PL/SQL using the SELECT INTO clause)
+[  ] Values returned by the RETURNING clause when performing a DML on a table 
+     whose rows are affected by TRIGGERS.
+[  ] Working with TABLE functions, STREAMING functions, PIPELINED functions 
+     (can them be declared in packages?) [see page 602 Oracle PL/SQL programming 5th]
 
 QUESTIONS
 001. Are DEFAULT and (:=) always interchangeble in PL/SQL ? YES, they are.

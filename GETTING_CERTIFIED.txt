@@ -24,7 +24,7 @@ My goals
       https://education.oracle.com/pls/web_prod-plq-dad/db_pages.getpage?page_id=5001&get_params=p_exam_id:1Z0-117
 
 3. Oracle PL/SQL Developer Certified Associate
-	:: Requiremets ::
+	:: Requirements ::
 	[ ] Oracle Database 12c: SQL Fundamentals 1Z0-061
 	[ ] Oracle Database 11g: SQL Fundamentals I 1Z0-051
 	[x] Oracle Database SQL Expert 1Z0-047
@@ -45,7 +45,7 @@ My goals
 
 5. Oracle Data Warehousing 11g Certified Implementation Specialist
 	:: Requirements ::
-	[ ] None
+	[x] None
 
 	:: Pass the exam ::
 	Oracle Database 11g Data Warehousing Essentials 1Z0-515

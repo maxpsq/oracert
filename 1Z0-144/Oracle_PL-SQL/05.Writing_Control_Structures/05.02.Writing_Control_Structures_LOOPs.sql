@@ -118,8 +118,21 @@ BEGIN
   FOR i IN 3..1 LOOP
     DBMS_OUTPUT.PUT_LINE (i); --> NO ITERATION AT ALL
   END LOOP;
+    
 END;
 /
+
+-- Lower and upper bounds must be NOT NULL !!
+BEGIN
+  FOR i IN Null..1 LOOP
+    DBMS_OUTPUT.PUT_LINE (i); --> Runtime ERROR: ORA-06502 PL/SQL: numeric or value error%s
+  END LOOP;
+  FOR i IN 1..null LOOP
+    DBMS_OUTPUT.PUT_LINE (i); --> Runtime ERROR: ORA-06502 PL/SQL: numeric or value error%s
+  END LOOP;
+END;
+/
+
 
 BEGIN
   DBMS_OUTPUT.PUT_LINE ('upper_bound > lower_bound');
