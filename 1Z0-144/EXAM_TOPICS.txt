@@ -77,9 +77,9 @@ Design Considerations for PL/SQL Code
 [!!] Use NOCOPY hint, PARALLEL ENABLE hint and DETERMINISTIC clause
 [!!] Use bulk binding and the RETURNING clause with DML
 Creating Triggers
-[>>] Describe different types of triggers and their uses
-[>>] Create database triggers
-[>>] Manage triggers
+[OK] Describe different types of triggers and their uses
+[OK] Create database triggers
+[OK] Manage triggers
 Creating Compound, DDL, and Event Database Triggers
 [>>] Create triggers on DDL statements
 [!!] Create triggers on system events
