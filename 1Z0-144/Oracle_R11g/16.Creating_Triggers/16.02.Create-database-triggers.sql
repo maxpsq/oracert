@@ -94,9 +94,6 @@ end;
 select * from with_dml_trigger;
 
 
--- tear down
--- drop table with_dml_trigger purge;
-
 
 /*
 DML TRIGGERS: OLD/NEW pseudo-records
@@ -302,4 +299,54 @@ BEGIN
   insert into incremented_values values(2,2);
 END;
 /
+
+
+/*
+DML Triggers: MUTATING TABLE ERROR
+
+1. Ingeneral, a row-level trigger may not read or write the table from which it 
+   has been fired. The restriction applies only to row-level triggers, however. 
+   Statement-level triggers are free to both read and modify the triggering table; 
+   this fact gives us a way to avoid the mutating table error.
+
+2. If you make your trigger an autonomous transaction, then you will be able
+   to query the contents of the firing table. 
+   However, you will still ** not ** be allowed to modify the contents of the table.
+*/
+
+
+/*
+ISTEAD OF triggers
+Control the insertion, deletion, update on VIEWS
+
+CREATE [OR REPLACE] TRIGGER trigger_name
+INSTEAD OF operation
+ON view_name
+FOR EACH ROW
+BEGIN
+...code goes here...
+END;
+
+
+INSTEAD OF triggers cannot be compound and you need to create one for each event
+on the same table
+
+*/
+
+
+
+CREATE OR REPLACE TRIGGER trg77
+INSTEAD OF insert
+ON with_dml_trigger --> ORA-25002: impossibile creare i trigger INSTEAD OF su tabelle
+FOR EACH ROW
+BEGIN
+  dbms_output('hello!');
+END;
+/
+
+
+select * from with_dml_trigger;
+
+-- tear down
+-- drop table with_dml_trigger purge;
 

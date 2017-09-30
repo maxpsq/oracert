@@ -89,9 +89,10 @@ Using the PL/SQL Compiler
 [!!] Use the new PL/SQL compile time warnings
 Managing PL/SQL Code
 [OK] Describe and use conditional compilation
-[!!] Hide PL/SQL source code using dynamic obfuscation and the Wrap utility
+[OK] Hide PL/SQL source code using dynamic obfuscation and the Wrap utility
 Managing Dependencies
-[!!] Track and manage procedural dependencies
+[OK] Track and manage procedural dependencies
+
 
 From time to time, check the exam topics list for updates:
 http://education.oracle.com/pls/web_prod-plq-dad/db_pages.getpage?page_id=5001&get_params=p_exam_id:1Z0-144
@@ -105,6 +106,7 @@ Following are topics not explicitly listed in the exam but likely to be tested
      whose rows are affected by TRIGGERS.
 [  ] Working with TABLE functions, STREAMING functions, PIPELINED functions 
      (can them be declared in packages?) [see page 602 Oracle PL/SQL programming 5th]
+[  ] Restrictions on using FOLLOWS clause in triggers
 
 QUESTIONS
 001. Are DEFAULT and (:=) always interchangeble in PL/SQL ? YES, they are.
