@@ -1,6 +1,6 @@
 # Exploring the Oracle Database architecture
 
-##Processes
+## Processes
 
 **User process**: Process running on the _user's machine_.  
 - It requests to connect to the Database instance.  
@@ -20,9 +20,9 @@
 - The most of them are completely self-administering, although in some cases it is possible for the DBA to influence the number of them and their operation.  
 - background processes also have a PGA
 
-#Memory structures
+# Memory structures
 
-##System Global Area (SGA) 
+## System Global Area (SGA) 
 consists of memory structures which are implemented in  shared memory segments provided by the OS.  
 
 - is allocated at instance startup and released at shutdown  
@@ -71,7 +71,7 @@ Also when querying, the blocks are copied from the datafiles to the buffer cache
   - the _change vectors_ have been written to the _redo log_ on disk. 
 - The change of data blocks and writing of the logs on disk will ensure transaction recovery.
 
-###Shared pool
+### Shared pool
 
 Shared pool is part of the SGA and contains _hundreds of structures_ all internally managed by the Oracle instance. We'll take a look at only four of them:
 - must be properly sized to contain all the frequently used code and frequently needed object definitions, not so large that it caches statements that have only been executed once.
@@ -100,10 +100,10 @@ Shared pool is part of the SGA and contains _hundreds of structures_ all interna
  It is good practice to create the Large pool when using shared server processes or parallel execution servers (if no large pool is present they will use the shared pool, possibly causing bad contention).  
 Other I/O operation may use this area like Recovery Manager when backing up to a tape device.
 
-###Java pool
+### Java pool
  it is used as heap space to instantiate Java objects. Notice it is not used for caching code. Java code is cached in the Library cache in the same way as PL/SQL code.
 
-###Streams pool
+### Streams pool
 The Streams technology involves extracting change vectors from redo logs and apply them to remote databases. The process that read from redo logs and the process that applies changes require memory. Since 10g onward the Streams pool can be resized at any time.
 
 ### Shared I/O pool
