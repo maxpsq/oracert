@@ -1,26 +1,4 @@
-# Exploring the Oracle Database architecture
-
-## Processes
-
-**User process**: Process running on the _user's machine_.  
-- It requests to connect to the Database instance.  
-- It generates SQL statements  
-
-
-**Server process**: process in the _Instance_ that serves the user process' SQL statements. Server processes are classified as **Foreground process** because they're not vital for the instance existence.  
-- Each _server process_ has a _PGA_ when the instance is running in _dedicated mode_
-
-**User session**:  
-- is made up by a **user process** connecting to a **server process**.  
-- The connection uses Oracle proprietary Oracle Net protocol.  
-- the user/server split implements the _client-server architecture_
-
-**Background processes**: processes that make up the instance.  
-- They're present and running all time since the instance startup to shutdown.  
-- The most of them are completely self-administering, although in some cases it is possible for the DBA to influence the number of them and their operation.  
-- background processes also have a PGA
-
-# Memory structures
+# Explain the memory structures
 
 ## System Global Area (SGA) 
 consists of memory structures which are implemented in  shared memory segments provided by the OS.  
@@ -32,12 +10,12 @@ consists of memory structures which are implemented in  shared memory segments p
      + the **database buffer cache** default pool [always]
      + the **log buffer** [always]
      + the **shared pool** [always]
-     + a **large pool** [optional]
+     + a **Large pool** [optional]
      + a **Java pool** [optional]
      + a **Streams pool** [optional]
      + the **additional buffer cache** pools [optional]
 
-**Database buffer cache**
+### Database buffer cache
 When executing SQL statements, the data blocks containing the records of interest, are first copied to the buffer cache and then eventual changes are applied to these copies. The blocks remain in the cache for some time afterards until the buffer they are occupying is needed for another block.  
 Also when querying, the blocks are copied from the datafiles to the buffer cache. The projection of the relevent rows is then transfered to the session's PGA for further processing.
 
@@ -45,13 +23,14 @@ Also when querying, the blocks are copied from the datafiles to the buffer cache
 
 - the size of the buffer cache is critical for performance and it should be sized for caching all the frequently accessed blocks.
 
-- an underszed buffer cache will cause intensive I/O activity for excessive block transfer from and to the datafiles.
+- an undersized buffer cache will cause intensive I/O activity for excessive block transfer from and to the datafiles.
 
 - an oversized buffer cache is not bad but may lead to memory swap if larger then the available RAM.
 
 - the buffer cache can be resized manually or automatically at any time.
 
-**Log Buffer** is a small, short-term staging area for **change vectors** before they are written to **redo logs** on disk.
+### Log Buffer
+is a small, short-term staging area for **change vectors** before they are written to **redo logs** on disk.
 
 - it is written by **server processes**
 - it is written out to **redo logs** on disk in batches made of transactions from many different sessions.
@@ -106,6 +85,9 @@ Other I/O operation may use this area like Recovery Manager when backing up to a
 ### Streams pool
 The Streams technology involves extracting change vectors from redo logs and apply them to remote databases. The process that read from redo logs and the process that applies changes require memory. Since 10g onward the Streams pool can be resized at any time.
 
+### Additional buffer cache pools
+Additional buffer cache pools are memory areas formatted with specific block sizes, different from the block size set during the creation of the database.
+They are used as the default database buffer cache.
 ### Shared I/O pool
 Used for Securfile LOBs operations if NOCACHE (default) is used for the LOBs
 
@@ -118,100 +100,7 @@ non-sharable memory area associated with each _server process_.
 - Oracle manage the allocation dynamically  
 - The DBA can limit the total size of all PGAs  
 
-## Distributed systems architectures
-
-They offer various possibilities of grouping instances and databases
-
-- **Real Application Cluster (RAC)**: multiple instances open one database.
-- **Streams**: multiple Oracle servers propagate transactions between each other. The Streams technology involves extracting change vectors from redo logs and apply them to remote databases.
-- **Oracle Data Guard**: a primary database updates one or more standby databases in order to keep them all synchronized.
-
-# Describe the Background processes
-
-On Linux and Unix systems, all the Oracle processes runs as separete operating system processes, each with a unique process ID number (PID).  
-On Windows, there is a single operating system process called ORACLE.EXE for the whole instance, and the Oracle processes run as separate threads within this one process.  
-Since 12c is possible to run Linux/Unix instances in a multithreaded modes as on Windows. This is enabled by the THREADED_EXECUTION instance parameter.
-
-### SMON, the System Monitor
-- it _mounts_ a database by locating and validating the control file.
-- it _opens_ a database by locating all datafiles and online redo log files.
-- once the database is open and in use, SMON is responsible of various houskeeping tasks such as collating free space in datafiles.
-
-### PMON, the Process Monitor
-- PMON monitors all server processes and detects any problem with the sessions.
-- if a user's session terminates abnormally (no logout) PMON will destroy the server process, return its PGA to the OS's free memory pool and roll back any incomplete transaction.
-
-### DBWn, the Database Writer
-- The sessions (server processes) do not as a general rule write do disk. They always write to the _database buffer cache_. An instance can have up to 100 DBWn called DBW0..DBW9, DBWa..DBWz, BW36..BW99. The default number is one database writer for eight CPUs, rounded up.
-- DBWn writes dirty buffer from the database buffer cache to the datafiles
-- It writes as few buffers as it can get away with, as rarely as possible, in order to reduce I/O.
-- The algorithm will select buffers that have not been recently used
-- Circumstances that forse DBWn to write are:
-    - no free buffers
-    - too many dirty buffers
-    - three seconds timeout
-    - a checkpoint request
-
-**no free buffers**: a server process that needs to copy a block in memory needs to find a _free buffer_ that is a buffer that is neither dirty nor pinned (used by another session at that very moment).
-- a dirty buffer cannot be overwritten in order to prevent data loss
-- a pinned buffer cannot be written because the OS memory protection mecanism will not permit this.
-If a server process takes to long to find a _free buffer_ it signals the DBWn to write some dirty buffers to disk. Once this is done, they will be cleaned and ready for use.  
-** too many dirty buffers**: if "too many" (is defined by an internal threshold) dirty buffers are found, a few of them are written to disk.  
-** three seconds timeout **: every three seconds DBWn will write a few buffers. This means that writes will happen even if the system is idle.  
-**a checkpoint request**: on checkpoint requests _all_ dirty buffers are written to disk.
-
-**incremental checkpoint** or **advancing the incremental checkpoint position** is the writing of buffers that happens for _no free buffers_, _too many dirty buffers_ and _three seconds timeout_ events. This is what can happen during normal running.
-
-** full checkpoint** is the writing of all the dirty buffers to disk and happens when _closing the database_ on instance shutdown. Automatic checpoints occours only on shutdown, but can also be forced with
-
-    ALTER SYSTEM CHECKPOINT;
-
-** partial checkpoint ** force DBWn to write all dirty buffers containing block from just one or more datafiles rather then the whole database. They happen when
- 
-- a datafile or a tablespace is taken offline
-- a tablespace is put into backup mode
-- a talespace is made read-only
-
-### LGWR, the Log Writer
-LGWR writes the content of the LOG buffer to the online redo log files (_flushing the log buffer_).  
-When a session makes any change to blocks in the database buffer cache, before it (the server process, NdR) applies the change to the blocks it (again, the server process, NdR) writes out the change vector that it is about to apply to the log buffer.
-LGWR will flush to redo logs when
-- the session issues a COMMIT
-- when Log buffer is 1/3 full
-- when DBWn needs to write buffers to datafiles, it will signal LGWR to flush the Log buffers. This is to ensure that will always be possible to revert an uncommitted transaction. Generating UNDO data also generates change vectors	 and because these will be in the redo log files before the datafiles are updated, teh undo data needed to roll back the transaction can be reconstructed as needed.
-- Because LGWR alwais write before DBWn, we can say there is a three seconds timeout also on LGWR.
-
-### CKPT, the Checkpoint Process
-The CKPT keeps track of where in the redo stream the incremental checkpoint position is. If necessary, instructs the DBWn to write out some dirty buffers in order to put the porition forward. The current checkpoint position is the point from which recovery must begin in the event of an instance crash.
-
-- continually updates the controlfile with the current checkpoint position.
-
-# Exercises
-
-1.  Determine if the instance is part of a RAC database:
-
-         SELECT parallel FROM v$instance;
-
-    This will return `NO` for single-instance databases.
-
-2. Determine if the database is protected against data-loss by a Data Guard standby database:
-
-        SELECT protection_level FROM v$database;
-
-   This will return `UNPROTECTED` if the database is needed unprotected
-
-3. Determine whether Streams has been configured in the database:
-
-        SELECT * FROM dba_streams_administrator;
-
-    This will return no rows if Streams has never been configured.
-
-4. Identify the phisical structures of the database:
-
-        SELECT name, bytes FROM v$datafile;
-        SELECT name, bytes FROM v$tempfile;
-        SELECT member FROM v$logfile;
-        SELECT * FROM v$controlfile;
+# Execises
 
 5. Issue the command `SHOW SGA` FROM SQL*Plus
 
