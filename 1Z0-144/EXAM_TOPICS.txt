@@ -95,7 +95,7 @@ Managing Dependencies
 
 
 From time to time, check the exam topics list for updates:
-http://education.oracle.com/pls/web_prod-plq-dad/db_pages.getpage?page_id=5001&get_params=p_exam_id:1Z0-144
+https://education.oracle.com/oracle-database-11g-program-with-pl-sql/pexam_1Z0-144
 
 Following are topics not explicitly listed in the exam but likely to be tested
 [  ] Distinguish between SQL and PL/SQL data types
